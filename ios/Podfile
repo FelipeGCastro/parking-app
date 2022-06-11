@@ -10,6 +10,9 @@ install! 'cocoapods',
   :deterministic_uuids => false
 
 target 'parkingapp' do
+  # React Native Maps dependencies
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
   use_expo_modules!
   config = use_native_modules!
 

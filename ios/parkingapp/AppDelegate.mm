@@ -1,5 +1,5 @@
 #import "AppDelegate.h"
-
+#import <GoogleMaps/GoogleMaps.h>
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -31,8 +31,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [GMSServices provideAPIKey:@"AIzaSyCXZnngCOqs0Qb5Sc7VtPH_L-2bXzEC5xs"]; // add this line using the api key obtained from Google Console
   RCTAppSetupPrepareApp(application);
-
   RCTBridge *bridge = [self.reactDelegate createBridgeWithDelegate:self launchOptions:launchOptions];
 
 #if RCT_NEW_ARCH_ENABLED
