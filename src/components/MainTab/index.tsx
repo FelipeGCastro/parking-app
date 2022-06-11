@@ -23,7 +23,12 @@ const MainTab = () => {
       transition={transition}
       style={[styles.container, { paddingBottom: bottomSafeArea + 35 }]}>
       <View style={[styles.content, collapsed && styles.collapsedContainer]}>
-        <ButtonDefault />
+        <ButtonDefault
+          onPress={() => ({})}
+          icon={{ name: 'time-to-leave', size: 32, color: '#313131' }}
+          title="Estou saindo"
+          description="Espaço ficará vazio"
+        />
       </View>
     </Transitioning.View>
   )

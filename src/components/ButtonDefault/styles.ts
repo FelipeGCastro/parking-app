@@ -13,6 +13,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  icon: {
+    marginRight: 8,
+  },
   textContainer: {},
   textTitle: {
     fontSize: 14,

@@ -1,22 +1,33 @@
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { styles } from './styles'
-import { MaterialIcons } from '@expo/vector-icons'
+import Icon, { IconNames } from '../Icon'
 
 interface Props {
   title: string
   description: string
-  onPress: string
-  icon: string
+  onPress: () => void
+  icon?: {
+    name: IconNames
+    size: number
+    color: string
+  }
 }
 
 const ButtonDefault = ({ title, description, onPress, icon }: Props) => {
   return (
-    <TouchableOpacity style={styles.container}>
-      <MaterialIcons name="time-to-leave" size={24} color="black" />
+    <TouchableOpacity onPress={onPress} style={styles.container}>
+      {icon.name && (
+        <Icon
+          style={styles.icon}
+          name={icon.name}
+          size={icon.size}
+          color={icon.color}
+        />
+      )}
       <View style={styles.textContainer}>
-        <Text style={styles.textTitle}>Estou saindo</Text>
-        <Text style={styles.textDescription}>Espaço ficará vazio</Text>
+        <Text style={styles.textTitle}>{title}</Text>
+        <Text style={styles.textDescription}>{description}</Text>
       </View>
     </TouchableOpacity>
   )
