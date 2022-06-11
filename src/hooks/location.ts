@@ -23,8 +23,8 @@ export const useMyLocation = () => {
     setLocation({
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
-      longitudeDelta: 0.000421,
-      latitudeDelta: 0.000922,
+      longitudeDelta: 0.00922,
+      latitudeDelta: 0.00421,
     })
   }
 
