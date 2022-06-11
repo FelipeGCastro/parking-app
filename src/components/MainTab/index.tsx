@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import { Transitioning, Transition } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ButtonDefault from '../ButtonDefault'
@@ -11,7 +11,7 @@ const transition = <Transition.Change interpolation="easeInOut" />
 const MainTab = () => {
   const [collapsed, setCollapsed] = useState(false)
   const ref = useRef(null)
-  const { buttons } = useMainButtons()
+  const { buttons, leftText } = useMainButtons()
   const bottomSafeArea = useSafeAreaInsets().bottom
 
   useEffect(() => {
@@ -25,6 +25,7 @@ const MainTab = () => {
       transition={transition}
       style={[styles.container, { paddingBottom: bottomSafeArea + 35 }]}>
       <View style={[styles.content, collapsed && styles.collapsedContainer]}>
+        {!!leftText && <Text style={styles.leftText}>{leftText}</Text>}
         {buttons.map(item => (
           <ButtonDefault
             key={item.title}
@@ -32,6 +33,8 @@ const MainTab = () => {
             icon={item.icon}
             title={item.title}
             description={item.description}
+            timer={item.timer}
+            onTimerOut={item.onTimerOut}
           />
         ))}
       </View>

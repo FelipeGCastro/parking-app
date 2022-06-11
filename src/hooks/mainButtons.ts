@@ -5,6 +5,8 @@ interface Button {
   title: string
   description: string
   onPress: () => void
+  timer?: number
+  onTimerOut?: () => void
   icon: {
     name: IconNames
     size?: number
@@ -14,9 +16,15 @@ interface Button {
 
 export const useMainButtons = () => {
   const [buttons, setButtons] = useState([])
+  const [leftText, setLeftText] = useState('Está vendo alguma vaga por perto?')
   useEffect(() => {
-    setButtons(initialButtons)
+    setButtons(otherSpotButton)
   }, [])
+
+  const handleTimerOut = () => {
+    setLeftText('')
+    setButtons(initialButtons)
+  }
 
   const initialButtons: Button[] = [
     {
@@ -62,8 +70,21 @@ export const useMainButtons = () => {
       },
     },
   ]
-
+  const otherSpotButton: Button[] = [
+    {
+      title: 'Sim, estou a ver!',
+      description: 'Bem perto',
+      onPress: () => ({}),
+      onTimerOut: handleTimerOut,
+      timer: 15,
+      icon: {
+        name: 'check',
+        color: '#06C615',
+      },
+    },
+  ]
   return {
     buttons,
+    leftText,
   }
 }

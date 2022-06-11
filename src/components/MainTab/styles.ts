@@ -18,6 +18,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  leftText: {
+    flexShrink: 1,
+    color: '#313131',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   collapsedContainer: {
     height: 10,
   },

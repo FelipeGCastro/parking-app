@@ -2,15 +2,18 @@ import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     backgroundColor: '#F2F2F2',
-    flexShrink: 1,
+    flexShrink: 0,
     alignSelf: 'center',
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  contentContainer: {
+    flexGrow: 1,
+    flexDirection: 'row',
   },
   icon: {
     marginRight: 8,
@@ -24,5 +27,20 @@ export const styles = StyleSheet.create({
   textDescription: {
     fontSize: 12,
     color: '#5F5F5F',
+  },
+  paddingBottomZero: {
+    paddingBottom: 2,
+  },
+  timerContainer: {
+    marginTop: 8,
+    height: 6,
+    borderRadius: 3,
+    width: '100%',
+  },
+  timerValue: {
+    height: 6,
+    borderRadius: 3,
+    width: '100%',
+    backgroundColor: '#707070',
   },
 })
