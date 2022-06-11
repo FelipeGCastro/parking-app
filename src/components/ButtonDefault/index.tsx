@@ -9,8 +9,8 @@ interface Props {
   onPress: () => void
   icon?: {
     name: IconNames
-    size: number
-    color: string
+    size?: number
+    color?: string
   }
 }
 

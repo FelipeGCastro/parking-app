@@ -12,7 +12,11 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   content: {
-    paddingVertical: 16,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    paddingVertical: 24,
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   collapsedContainer: {
     height: 10,
