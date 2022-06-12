@@ -14,8 +14,8 @@ export const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 16,
     flexDirection: 'row',
-    paddingTop: 24,
-    paddingVertical: 8,
+    paddingBottom: 24,
+    paddingTop: 16,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
