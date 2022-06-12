@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 const LabelBar = () => {
   const topSafeArea = useSafeAreaInsets().top
   return (
-    <View style={[styles.container, { paddingTop: topSafeArea + 20 }]}>
+    <View style={[styles.container, { paddingTop: topSafeArea }]}>
       <View style={styles.labelContainer}>
         <View style={[styles.labelIcon, styles.labelConfirmed]} />
         <Text style={styles.labelText}>Confirmado</Text>

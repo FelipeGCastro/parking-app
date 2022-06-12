@@ -26,19 +26,23 @@ const ButtonDefault = ({
 }: Props) => {
   const [time, setTime] = useState(timer * 5)
   useEffect(() => {
+    let valid = true
     let startTimer
     if (timer) {
       startTimer = setInterval(() => {
-        setTime(prev => {
-          if (prev === 1) {
-            clearInterval(startTimer)
-            onTimerOut && onTimerOut()
-          }
-          return prev - 1
-        })
+        if (valid) {
+          setTime(prev => {
+            if (prev === 1) {
+              clearInterval(startTimer)
+              onTimerOut && onTimerOut()
+            }
+            return prev - 1
+          })
+        }
       }, 200)
     }
     return () => {
+      valid = false
       clearInterval(startTimer)
     }
   }, [])

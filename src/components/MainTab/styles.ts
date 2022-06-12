@@ -14,7 +14,8 @@ export const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 16,
     flexDirection: 'row',
-    paddingVertical: 24,
+    paddingTop: 24,
+    paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -23,6 +24,9 @@ export const styles = StyleSheet.create({
     color: '#313131',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  centered: {
+    justifyContent: 'center',
   },
   collapsedContainer: {
     height: 10,

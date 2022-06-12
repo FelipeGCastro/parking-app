@@ -1,5 +1,5 @@
 import { IconNames } from 'components/Icon'
-import { useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 interface Button {
   title: string
@@ -14,11 +14,20 @@ interface Button {
   }
 }
 
-export const useMainButtons = () => {
+interface MainContext {
+  buttons: Button[]
+  leftText: string
+  showPositionMarker: boolean
+}
+
+const MainControllerContext = createContext({} as MainContext)
+
+export const MainControllerProvider = ({ children }) => {
   const [buttons, setButtons] = useState([])
-  const [leftText, setLeftText] = useState('Está vendo alguma vaga por perto?')
+  const [leftText, setLeftText] = useState('')
+  const [showPositionMarker, setShowPositionMarker] = useState(false)
   useEffect(() => {
-    setButtons(otherSpotButton)
+    setButtons(initialButtons)
   }, [])
 
   const handleTimerOut = () => {
@@ -26,11 +35,16 @@ export const useMainButtons = () => {
     setButtons(initialButtons)
   }
 
+  const handleAddPosition = () => {
+    setShowPositionMarker(true)
+    setButtons(addSpotButton)
+  }
+
   const initialButtons: Button[] = [
     {
       title: 'Estou saindo',
       description: 'Espaço ficará vazio',
-      onPress: () => ({}),
+      onPress: handleAddPosition,
       icon: {
         name: 'time-to-leave',
         size: undefined,
@@ -83,8 +97,30 @@ export const useMainButtons = () => {
       },
     },
   ]
-  return {
-    buttons,
-    leftText,
-  }
+  const addSpotButton: Button[] = [
+    {
+      title: 'Marcar espaço disponivel!',
+      description: 'Tem aqui um espaço para estacionar',
+      onPress: () => ({}),
+      icon: {
+        name: 'location',
+        color: '#06C615',
+      },
+    },
+  ]
+  return (
+    <MainControllerContext.Provider
+      value={{
+        buttons,
+        leftText,
+        showPositionMarker,
+      }}>
+      {children}
+    </MainControllerContext.Provider>
+  )
+}
+
+export const useMainController = () => {
+  const context = useContext(MainControllerContext)
+  return context
 }
