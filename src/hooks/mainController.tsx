@@ -1,10 +1,17 @@
 import { IconNames } from 'components/Icon'
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 interface Button {
   title: string
   description: string
-  onPress: () => void
+  onPress: string
   timer?: number
   onTimerOut?: () => void
   icon: {
@@ -14,10 +21,26 @@ interface Button {
   }
 }
 
+interface IMarker {
+  position: {
+    longitude: number
+    latitude: number
+  }
+  type: string
+}
+interface IPosition {
+  longitude: number
+  latitude: number
+}
 interface MainContext {
   buttons: Button[]
   leftText: string
   showPositionMarker: boolean
+  addMarker: (marker: IMarker) => void
+  markers: IMarker[]
+  addCurrentPosition: (position: IPosition) => void
+  handleAddPosition: () => void
+  handleAddSpot: () => void
 }
 
 const MainControllerContext = createContext({} as MainContext)
@@ -26,6 +49,15 @@ export const MainControllerProvider = ({ children }) => {
   const [buttons, setButtons] = useState([])
   const [leftText, setLeftText] = useState('')
   const [showPositionMarker, setShowPositionMarker] = useState(false)
+  const [markers, setMarkers] = useState<IMarker[]>([])
+  const [currentPosition, setCurrentPosition] = useState<IPosition>(
+    {} as IPosition,
+  )
+
+  const addMarker = (mark: IMarker) => {
+    setMarkers(prev => [...prev, mark])
+  }
+
   useEffect(() => {
     setButtons(initialButtons)
   }, [])
@@ -40,11 +72,25 @@ export const MainControllerProvider = ({ children }) => {
     setButtons(addSpotButton)
   }
 
+  const handleAddSpot = useCallback(() => {
+    if (currentPosition?.latitude) {
+      addMarker({ type: '', position: currentPosition })
+      setShowPositionMarker(false)
+      setButtons(initialButtons)
+    } else {
+      console.log('Error to add current position')
+    }
+  }, [currentPosition])
+
+  const addCurrentPosition = (pos: IPosition) => {
+    setCurrentPosition(pos)
+  }
+
   const initialButtons: Button[] = [
     {
       title: 'Estou saindo',
       description: 'Espaço ficará vazio',
-      onPress: handleAddPosition,
+      onPress: 'handleAddPosition',
       icon: {
         name: 'time-to-leave',
         size: undefined,
@@ -54,7 +100,7 @@ export const MainControllerProvider = ({ children }) => {
     {
       title: 'Ir Mais Próximo',
       description: 'Direções automáticas',
-      onPress: () => ({}),
+      onPress: '',
       icon: {
         name: 'location',
         size: undefined,
@@ -66,7 +112,7 @@ export const MainControllerProvider = ({ children }) => {
     {
       title: 'Oh não, já não há!',
       description: 'Alguém já estacionou!',
-      onPress: () => ({}),
+      onPress: '',
       icon: {
         name: 'error-outline',
         size: undefined,
@@ -76,7 +122,7 @@ export const MainControllerProvider = ({ children }) => {
     {
       title: 'Fixe, deu certo!',
       description: 'Obrigado!',
-      onPress: () => ({}),
+      onPress: '',
       icon: {
         name: 'check',
         size: undefined,
@@ -88,7 +134,7 @@ export const MainControllerProvider = ({ children }) => {
     {
       title: 'Sim, estou a ver!',
       description: 'Bem perto',
-      onPress: () => ({}),
+      onPress: '',
       onTimerOut: handleTimerOut,
       timer: 15,
       icon: {
@@ -101,19 +147,25 @@ export const MainControllerProvider = ({ children }) => {
     {
       title: 'Marcar espaço disponivel!',
       description: 'Tem aqui um espaço para estacionar',
-      onPress: () => ({}),
+      onPress: 'handleAddSpot',
       icon: {
         name: 'location',
         color: '#06C615',
       },
     },
   ]
+
   return (
     <MainControllerContext.Provider
       value={{
         buttons,
         leftText,
         showPositionMarker,
+        addMarker,
+        markers,
+        addCurrentPosition,
+        handleAddPosition,
+        handleAddSpot,
       }}>
       {children}
     </MainControllerContext.Provider>

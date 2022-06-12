@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     zIndex: 3,
     width: 24,
     position: 'absolute',
-    marginTop: -37,
+    marginTop: -45,
     marginLeft: -11,
     left: '50%',
     top: '50%',

@@ -19,6 +19,7 @@ const MainTab = () => {
     ref?.current?.animateNextTransition()
     setCollapsed(false)
   }, [])
+
   return (
     <>
       {showPositionMarker && <SetMarker />}

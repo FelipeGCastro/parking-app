@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { styles } from './styles'
 import Icon, { IconNames } from '../Icon'
+import { useMainController } from '/hooks/mainController'
 
 interface Props {
   title: string
   description: string
-  onPress: () => void
+  onPress: string | (() => void)
   icon?: {
     name: IconNames
     size?: number
@@ -24,6 +25,7 @@ const ButtonDefault = ({
   timer,
   onTimerOut,
 }: Props) => {
+  const mainController = useMainController()
   const [time, setTime] = useState(timer * 5)
   useEffect(() => {
     let valid = true
@@ -58,9 +60,19 @@ const ButtonDefault = ({
       />
     </View>
   )
+
+  const handleOnPress = () => {
+    if (typeof onPress === 'string') {
+      if (mainController[onPress]) {
+        mainController[onPress]()
+      }
+    } else {
+      onPress()
+    }
+  }
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={handleOnPress}
       style={[styles.container, timer && styles.paddingBottomZero]}>
       <View style={styles.contentContainer}>
         {icon.name && (

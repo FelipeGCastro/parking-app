@@ -6,13 +6,15 @@ import { styles } from './styles'
 import LabelBar from '/components/LabelBar'
 import MainTab from '/components/MainTab'
 import { useMainController } from '/hooks/mainController'
+import SpotMarker from '/components/SpotMarker'
 
 const Home = () => {
   const { location, askLocationPermissions } = useMyLocation()
-  const { showPositionMarker } = useMainController()
-  const [currentPosition, setCurrentPosition] =
-    useState<typeof location>(location)
+  const { markers, addCurrentPosition } = useMainController()
 
+  useEffect(() => {
+    addCurrentPosition(location)
+  }, [])
   return (
     <View style={styles.container}>
       <MapView
@@ -20,11 +22,13 @@ const Home = () => {
         provider={PROVIDER_GOOGLE}
         initialRegion={location}
         showsUserLocation
-        onRegionChange={
-          showPositionMarker ? region => setCurrentPosition(region) : undefined
-        }
+        onRegionChange={addCurrentPosition}
         style={styles.map}
-        loadingEnabled></MapView>
+        loadingEnabled>
+        {markers.map((item, index) => (
+          <SpotMarker key={index} type={item.type} position={item.position} />
+        ))}
+      </MapView>
       <MainTab />
       <LabelBar />
     </View>
