@@ -7,6 +7,11 @@ export const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center',
   },
+  loadingContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,

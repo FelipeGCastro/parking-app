@@ -31,6 +31,8 @@ interface IMarker {
 interface IPosition {
   longitude: number
   latitude: number
+  longitudeDelta: number
+  latitudeDelta: number
 }
 interface MainContext {
   buttons: Button[]
@@ -39,6 +41,7 @@ interface MainContext {
   addMarker: (marker: IMarker) => void
   markers: IMarker[]
   addCurrentPosition: (position: IPosition) => void
+  currentPosition: IPosition
   handleAddPosition: () => void
   handleAddSpot: () => void
 }
@@ -164,6 +167,7 @@ export const MainControllerProvider = ({ children }) => {
         addMarker,
         markers,
         addCurrentPosition,
+        currentPosition,
         handleAddPosition,
         handleAddSpot,
       }}>
