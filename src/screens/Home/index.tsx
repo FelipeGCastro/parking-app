@@ -9,6 +9,7 @@ import SpotMarker from '/components/SpotMarker'
 import TopBar from '/components/TopBar'
 import UserMarker from '/components/UserMarker'
 import Icon from '/components/Icon'
+import LocationButton from './LocationButton'
 
 const Home = () => {
   const { location, currentLocation, permissionsLoading } = useUserLocation()
@@ -60,15 +61,9 @@ const Home = () => {
           ))}
         </MapView>
       )}
-      <TouchableOpacity
-        style={{
-          position: 'absolute',
-          bottom: 140,
-          right: 10,
-        }}
-        onPress={() => setUserLocationIsFocused(true)}>
-        <Icon name="location" />
-      </TouchableOpacity>
+      {!userLocationIsFocused && (
+        <LocationButton onPress={() => setUserLocationIsFocused(true)} />
+      )}
       <MainTab />
       <TopBar />
     </View>

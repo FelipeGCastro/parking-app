@@ -8,6 +8,7 @@ const iconNames = {
   ['error-outline']: MaterialIcons,
   location: Entypo,
   check: FontAwesome5,
+  ['my-location']: MaterialIcons,
 } as const
 
 export type IconNames = keyof typeof iconNames
