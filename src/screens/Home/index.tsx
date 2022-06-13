@@ -11,12 +11,7 @@ import UserMarker from '/components/UserMarker'
 import Icon from '/components/Icon'
 
 const Home = () => {
-  const {
-    location,
-    askLocationPermissions,
-    currentLocation,
-    permissionsLoading,
-  } = useUserLocation()
+  const { location, currentLocation, permissionsLoading } = useUserLocation()
   const { markers, addCurrentPosition, currentPosition } = useMainController()
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
 
@@ -24,10 +19,6 @@ const Home = () => {
     longitudeDelta: 0.00922,
     latitudeDelta: 0.00421,
   }
-  useEffect(() => {
-    askLocationPermissions()
-    addCurrentPosition({ ...location, ...defaultDelta })
-  }, [])
 
   const userLocation = currentLocation?.latitude ? currentLocation : location
   const userRegion = { ...userLocation, ...defaultDelta }
@@ -46,7 +37,6 @@ const Home = () => {
     }
   }
 
-  console.log('details.isGesture')
   return (
     <View style={styles.container}>
       {permissionsLoading || !location?.latitude ? (
