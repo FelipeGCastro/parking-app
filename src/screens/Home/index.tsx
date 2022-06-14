@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ActivityIndicator, TouchableOpacity, View } from 'react-native'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { useUserLocation } from 'hooks/location'
@@ -13,17 +13,36 @@ import LocationButton from './LocationButton'
 
 const Home = () => {
   const { location, currentLocation, permissionsLoading } = useUserLocation()
-  const { markers, addCurrentPosition, currentPosition } = useMainController()
+  const { markers, addCurrentPosition, positionToGo } = useMainController()
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
+  const mapRef = useRef<MapView>(null)
 
   const defaultDelta = {
     longitudeDelta: 0.00922,
     latitudeDelta: 0.00421,
   }
 
-  const userLocation = currentLocation?.latitude ? currentLocation : location
-  const userRegion = { ...userLocation, ...defaultDelta }
-  const region = userLocationIsFocused ? userRegion : currentPosition
+  useEffect(() => {
+    if (userLocationIsFocused) {
+      mapRef?.current?.animateToRegion({ ...currentLocation, ...defaultDelta })
+    }
+  }, [userLocationIsFocused])
+
+  useEffect(() => {
+    if (positionToGo?.latitude && mapRef?.current) {
+      const handleCamera = async () => {
+        const camera = await mapRef.current.getCamera()
+        mapRef?.current?.animateCamera(
+          {
+            ...camera,
+            center: { ...positionToGo },
+          },
+          { duration: 750 },
+        )
+      }
+      handleCamera()
+    }
+  }, [positionToGo])
 
   const initialRegion = {
     ...location,
@@ -46,13 +65,12 @@ const Home = () => {
         </View>
       ) : (
         <MapView
+          ref={mapRef}
           // onMapReady={askLocationPermissions}
           provider={PROVIDER_GOOGLE}
           initialRegion={initialRegion}
-          region={region}
           onRegionChangeComplete={handleOnChangeFocus}
-          style={styles.map}
-          loadingEnabled>
+          style={styles.map}>
           {currentLocation?.latitude && (
             <UserMarker position={currentLocation} />
           )}

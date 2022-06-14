@@ -3,6 +3,10 @@ import { StyleSheet } from 'react-native'
 export const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
+    alignItems: 'center',
+  },
+  content: {
+    flexGrow: 1,
     flexDirection: 'row',
   },
   markerContainer: {
@@ -32,5 +36,48 @@ export const styles = StyleSheet.create({
   },
   textTime: {
     fontSize: 13,
+  },
+  containerOptions: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonWrapper: {
+    borderRadius: 10,
+    backgroundColor: '#313131',
+    padding: 8,
+    flexDirection: 'row',
+    marginBottom: -8,
+  },
+  buttonInvalid: {
+    backgroundColor: '#5F5F5F',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginHorizontal: 5,
+    width: 95,
+  },
+  buttonValid: {
+    backgroundColor: '#1A1A1A',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginHorizontal: 5,
+    width: 95,
+  },
+  buttonText: {
+    marginTop: 2,
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: '#fff',
+  },
+  detail: {
+    width: 16,
+    height: 16,
+    backgroundColor: '#313131',
+    transform: [{ rotate: '45deg' }],
   },
 })

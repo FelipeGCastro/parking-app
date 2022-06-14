@@ -31,6 +31,10 @@ interface IMarker {
 interface IPosition {
   longitude: number
   latitude: number
+}
+interface IRegion {
+  longitude: number
+  latitude: number
   longitudeDelta: number
   latitudeDelta: number
 }
@@ -40,10 +44,13 @@ interface MainContext {
   showPositionMarker: boolean
   addMarker: (marker: IMarker) => void
   markers: IMarker[]
-  addCurrentPosition: (position: IPosition) => void
-  currentPosition: IPosition
+  addCurrentPosition: (position: IRegion) => void
+  currentPosition: IRegion
   handleAddPosition: () => void
   handleAddSpot: () => void
+  handleValidateAndInvalidate: () => void
+  positionToGo: IPosition
+  handleSetPositionToGo: (pos: IPosition) => void
 }
 
 const MainControllerContext = createContext({} as MainContext)
@@ -53,9 +60,8 @@ export const MainControllerProvider = ({ children }) => {
   const [leftText, setLeftText] = useState('')
   const [showPositionMarker, setShowPositionMarker] = useState(false)
   const [markers, setMarkers] = useState<IMarker[]>([])
-  const [currentPosition, setCurrentPosition] = useState<IPosition>(
-    {} as IPosition,
-  )
+  const [positionToGo, setPositionToGo] = useState<IPosition>({} as IPosition)
+  const [currentPosition, setCurrentPosition] = useState<IRegion>({} as IRegion)
 
   const addMarker = (mark: IMarker) => {
     setMarkers(prev => [...prev, mark])
@@ -85,8 +91,16 @@ export const MainControllerProvider = ({ children }) => {
     }
   }, [currentPosition])
 
-  const addCurrentPosition = (pos: IPosition) => {
+  const addCurrentPosition = (pos: IRegion) => {
     setCurrentPosition(pos)
+  }
+
+  const handleValidateAndInvalidate = () => {
+    setButtons(validateAndInvalidate)
+  }
+
+  const handleSetPositionToGo = (pos: IPosition) => {
+    setPositionToGo(pos)
   }
 
   const initialButtons: Button[] = [
@@ -133,6 +147,28 @@ export const MainControllerProvider = ({ children }) => {
       },
     },
   ]
+  const validateAndInvalidate: Button[] = [
+    {
+      title: 'Invalidar',
+      description: 'Alguém já estacionou!',
+      onPress: '',
+      icon: {
+        name: 'error-outline',
+        size: undefined,
+        color: '#C60606',
+      },
+    },
+    {
+      title: 'Espaço Vago!',
+      description: 'Espaço Livre Aqui!',
+      onPress: '',
+      icon: {
+        name: 'check',
+        size: undefined,
+        color: '#06C615',
+      },
+    },
+  ]
   const otherSpotButton: Button[] = [
     {
       title: 'Sim, estou a ver!',
@@ -170,6 +206,9 @@ export const MainControllerProvider = ({ children }) => {
         currentPosition,
         handleAddPosition,
         handleAddSpot,
+        handleValidateAndInvalidate,
+        positionToGo,
+        handleSetPositionToGo,
       }}>
       {children}
     </MainControllerContext.Provider>
