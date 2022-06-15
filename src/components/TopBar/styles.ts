@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#0673C6',
   },
   labelReindicated: {
-    backgroundColor: '#C6A606',
+    backgroundColor: '#C60606',
   },
   labelText: {
     fontSize: 13,

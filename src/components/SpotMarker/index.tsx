@@ -7,18 +7,19 @@ import { styles } from './styles'
 import { useMainController } from '/hooks/mainController'
 
 import { Transition, Transitioning } from 'react-native-reanimated'
+import { MarkerStatus } from '/hooks/markers'
 
 const transition = <Transition.Change interpolation="easeInOut" />
 
 interface Props {
-  type: string
-  position: {
+  marker: {
+    status: MarkerStatus
     longitude: number
     latitude: number
   }
 }
 
-const SpotMarker = ({ type, position }: Props) => {
+const SpotMarker = ({ marker }: Props) => {
   const [showOptions, setShowOptions] = useState(false)
   const [showOptionsDelayed, setShowOptionsDelayed] = useState(false)
   const { handleValidateAndInvalidate, handleSetPositionToGo } =
@@ -27,11 +28,11 @@ const SpotMarker = ({ type, position }: Props) => {
   const ref = useRef(null)
 
   const imageObj = {
-    indicated: '#0673C6',
-    reindicated: '#C6A606',
-    confirmed: '#06C615',
+    created: '#0673C6',
+    invalided: '#C60606',
+    valided: '#06C615',
   }
-  const color = imageObj[type] || imageObj.indicated
+  const color = imageObj[marker.status] || imageObj.created
 
   const handlePressMarker = (
     event: MapEvent<{
@@ -89,7 +90,7 @@ const SpotMarker = ({ type, position }: Props) => {
     <Marker
       style={styles.container}
       onPress={handlePressMarker}
-      coordinate={position}>
+      coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}>
       {showOptions && renderOptions()}
       <View style={styles.content}>
         <View style={[styles.markerContainer, { backgroundColor: color }]}>

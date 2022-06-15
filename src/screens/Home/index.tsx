@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ActivityIndicator, TouchableOpacity, View } from 'react-native'
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
+import { ActivityIndicator, View } from 'react-native'
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import { useUserLocation } from 'hooks/location'
 import { styles } from './styles'
 import MainTab from '/components/MainTab'
@@ -8,12 +8,13 @@ import { useMainController } from '/hooks/mainController'
 import SpotMarker from '/components/SpotMarker'
 import TopBar from '/components/TopBar'
 import UserMarker from '/components/UserMarker'
-import Icon from '/components/Icon'
 import LocationButton from './LocationButton'
+import { useMarkers } from '/hooks/markers'
 
 const Home = () => {
   const { location, currentLocation, permissionsLoading } = useUserLocation()
-  const { markers, addCurrentPosition, positionToGo } = useMainController()
+  const { addCurrentPosition, positionToGo } = useMainController()
+  const { markers } = useMarkers()
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
   const mapRef = useRef<MapView>(null)
 
@@ -74,8 +75,8 @@ const Home = () => {
           {currentLocation?.latitude && (
             <UserMarker position={currentLocation} />
           )}
-          {markers.map((item, index) => (
-            <SpotMarker key={index} type={item.type} position={item.position} />
+          {markers.map((marker, index) => (
+            <SpotMarker key={index} marker={marker} />
           ))}
         </MapView>
       )}
