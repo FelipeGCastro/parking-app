@@ -37,7 +37,6 @@ interface MainContext {
   leftText: string
   addCurrentPosition: (position: IRegion) => void
   currentPosition: IRegion
-  handleValidateAndInvalidate: () => void
   positionToGo: IPosition
   handleSetPositionToGo: (pos: IPosition) => void
   changeButtons: (buttons?: IButton[]) => void
@@ -69,10 +68,6 @@ export const MainControllerProvider = ({ children }) => {
 
   const addCurrentPosition = (pos: IRegion) => {
     setCurrentPosition(pos)
-  }
-
-  const handleValidateAndInvalidate = () => {
-    setButtons(validateAndInvalidate)
   }
 
   const handleSetPositionToGo = (pos: IPosition) => {
@@ -123,28 +118,7 @@ export const MainControllerProvider = ({ children }) => {
       },
     },
   ]
-  const validateAndInvalidate: IButton[] = [
-    {
-      title: 'Invalidar',
-      description: 'Alguém já estacionou!',
-      onPress: '',
-      icon: {
-        name: 'error-outline',
-        size: undefined,
-        color: '#C60606',
-      },
-    },
-    {
-      title: 'Espaço Vago!',
-      description: 'Espaço Livre Aqui!',
-      onPress: '',
-      icon: {
-        name: 'check',
-        size: undefined,
-        color: '#06C615',
-      },
-    },
-  ]
+
   const otherSpotButton: IButton[] = [
     {
       title: 'Sim, estou a ver!',
@@ -166,7 +140,6 @@ export const MainControllerProvider = ({ children }) => {
         leftText,
         addCurrentPosition,
         currentPosition,
-        handleValidateAndInvalidate,
         positionToGo,
         handleSetPositionToGo,
         changeButtons,

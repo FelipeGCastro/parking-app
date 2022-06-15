@@ -7,12 +7,13 @@ import { styles } from './styles'
 import { useMainController } from '/hooks/mainController'
 
 import { Transition, Transitioning } from 'react-native-reanimated'
-import { MarkerStatus } from '/hooks/markers'
+import { MarkerStatus, useMarkers } from '/hooks/markers'
 
 const transition = <Transition.Change interpolation="easeInOut" />
 
 interface Props {
   marker: {
+    id: number
     status: MarkerStatus
     longitude: number
     latitude: number
@@ -22,8 +23,9 @@ interface Props {
 const SpotMarker = ({ marker }: Props) => {
   const [showOptions, setShowOptions] = useState(false)
   const [showOptionsDelayed, setShowOptionsDelayed] = useState(false)
-  const { handleValidateAndInvalidate, handleSetPositionToGo } =
-    useMainController()
+  const { handleSetPositionToGo } = useMainController()
+  const { invalidateMarker, validateMarker, showValidateAndInvalidate } =
+    useMarkers()
 
   const ref = useRef(null)
 
@@ -41,7 +43,7 @@ const SpotMarker = ({ marker }: Props) => {
     }>,
   ) => {
     if (Platform.OS === 'android') {
-      handleValidateAndInvalidate()
+      showValidateAndInvalidate()
     } else {
       setShowOptions(true)
       handleSetPositionToGo(event.nativeEvent?.coordinate)
@@ -68,13 +70,13 @@ const SpotMarker = ({ marker }: Props) => {
           ]}>
           <View style={styles.buttonWrapper}>
             <CalloutSubview
-              onPress={() => console.log('Invalidar Pressed')}
+              onPress={() => invalidateMarker(marker.id)}
               style={styles.buttonInvalid}>
               <Icon name="error-outline" color="#C60606" />
               <Text style={styles.buttonText}>Invalidar</Text>
             </CalloutSubview>
             <CalloutSubview
-              onPress={() => console.log('Validar Pressed')}
+              onPress={() => validateMarker(marker.id)}
               style={styles.buttonValid}>
               <Icon name="check" color="#06C615" />
               <Text style={styles.buttonText}>Validar</Text>

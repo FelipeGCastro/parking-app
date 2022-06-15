@@ -6,13 +6,15 @@ import ButtonDefault from '../ButtonDefault'
 import { SetMarker } from '../SetMarker'
 import { styles } from './styles'
 import { useMainController } from '/hooks/mainController'
+import { useMarkers } from '/hooks/markers'
 
 const transition = <Transition.Change interpolation="easeInOut" />
 
 const MainTab = () => {
   const [collapsed, setCollapsed] = useState(false)
   const ref = useRef(null)
-  const { buttons, leftText, showPositionMarker } = useMainController()
+  const { buttons, leftText } = useMainController()
+  const { showPositionMarker } = useMarkers()
   const bottomSafeArea = useSafeAreaInsets().bottom
 
   useEffect(() => {

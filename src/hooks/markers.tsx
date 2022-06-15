@@ -14,18 +14,21 @@ interface IMarker {
   status: MarkerStatus
 }
 interface IMarkerContext {
-  handleAddSpot: (currentPosition: IPosition) => void
+  addSpot: () => void
   addMarker: (marker: IMarker) => void
   markers: IMarker[]
   handleAddPosition: () => void
+  showValidateAndInvalidate: () => void
   showPositionMarker: boolean
+  validateMarker: (id: number) => void
+  invalidateMarker: (id: number) => void
 }
 const MarkersContext = createContext({} as IMarkerContext)
 
 export const MarkersProvider = ({ children }) => {
   const [markers, setMarkers] = useState<IMarker[]>([])
   const [showPositionMarker, setShowPositionMarker] = useState(false)
-  const { changeButtons } = useMainController()
+  const { changeButtons, currentPosition } = useMainController()
 
   const addMarker = (mark: IMarker) => {
     setMarkers(prev => [...prev, mark])
@@ -36,7 +39,31 @@ export const MarkersProvider = ({ children }) => {
     changeButtons(addSpotButton)
   }
 
-  const handleAddSpot = useCallback(async currentPosition => {
+  const updateMarker = async ({
+    id,
+    status,
+    position,
+  }: {
+    id: number
+    status: MarkerStatus
+    position: IPosition
+  }) => {
+    try {
+      const result = await api.patch('/spots', { id, status, position })
+      setMarkers(result.data)
+    } catch (error) {
+      console.log('ERROR UPDATING MARKER')
+    }
+  }
+
+  const validateMarker = (id: number) => {
+    updateMarker({ id, status: 'valided', position: currentPosition })
+  }
+  const invalidateMarker = (id: number) => {
+    updateMarker({ id, status: 'invalided', position: currentPosition })
+  }
+
+  const addSpot = useCallback(async () => {
     if (currentPosition?.latitude) {
       try {
         const result = await api.post('/spots', {
@@ -57,13 +84,40 @@ export const MarkersProvider = ({ children }) => {
     }
   }, [])
 
+  const showValidateAndInvalidate = () => {
+    changeButtons(validateAndInvalidate)
+  }
+
   const addSpotButton: IButton[] = [
     {
       title: 'Marcar espaço disponivel!',
       description: 'Tem aqui um espaço para estacionar',
-      onPress: 'handleAddSpot',
+      onPress: 'addSpot',
       icon: {
         name: 'location',
+        color: '#06C615',
+      },
+    },
+  ]
+
+  const validateAndInvalidate: IButton[] = [
+    {
+      title: 'Invalidar',
+      description: 'Alguém já estacionou!',
+      onPress: '',
+      icon: {
+        name: 'error-outline',
+        size: undefined,
+        color: '#C60606',
+      },
+    },
+    {
+      title: 'Espaço Vago!',
+      description: 'Espaço Livre Aqui!',
+      onPress: '',
+      icon: {
+        name: 'check',
+        size: undefined,
         color: '#06C615',
       },
     },
@@ -72,11 +126,14 @@ export const MarkersProvider = ({ children }) => {
   return (
     <MarkersContext.Provider
       value={{
-        handleAddSpot,
+        addSpot,
         addMarker,
         markers,
         handleAddPosition,
         showPositionMarker,
+        validateMarker,
+        invalidateMarker,
+        showValidateAndInvalidate,
       }}>
       {children}
     </MarkersContext.Provider>

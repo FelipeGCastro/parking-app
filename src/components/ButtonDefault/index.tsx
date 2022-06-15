@@ -3,6 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native'
 import { styles } from './styles'
 import Icon, { IconNames } from '../Icon'
 import { useMainController } from '/hooks/mainController'
+import { useMarkers } from '/hooks/markers'
 
 interface Props {
   title: string
@@ -26,6 +27,7 @@ const ButtonDefault = ({
   onTimerOut,
 }: Props) => {
   const mainController = useMainController()
+  const { addSpot } = useMarkers()
   const [time, setTime] = useState(timer * 5)
   useEffect(() => {
     let valid = true
@@ -63,7 +65,9 @@ const ButtonDefault = ({
 
   const handleOnPress = () => {
     if (typeof onPress === 'string') {
-      if (mainController[onPress]) {
+      if (onPress === 'addSpot') {
+        addSpot()
+      } else if (mainController[onPress]) {
         mainController[onPress]()
       }
     } else {
