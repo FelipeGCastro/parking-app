@@ -10,10 +10,12 @@ import TopBar from '/components/TopBar'
 import UserMarker from '/components/UserMarker'
 import LocationButton from './LocationButton'
 import { useMarkers } from '/hooks/markers'
+import MapViewDirections from 'react-native-maps-directions'
 
 const Home = () => {
   const { location, currentLocation, permissionsLoading } = useUserLocation()
-  const { addCurrentPosition, positionToGo } = useMainController()
+  const { addCurrentPosition, positionToGo, destination, currentPosition } =
+    useMainController()
   const { markers, hideValidateAndInvalidate, selectedMarker, getMarkers } =
     useMarkers()
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
@@ -54,7 +56,6 @@ const Home = () => {
 
   const handleOnChangeFocus = (reg, details) => {
     if (details.isGesture) {
-      addCurrentPosition(reg)
       getMarkers()
     }
   }
@@ -68,6 +69,10 @@ const Home = () => {
     }
   }
 
+  const handleMapReady = () => {
+    getMarkers(location)
+  }
+
   return (
     <View style={styles.container}>
       {permissionsLoading || !location?.latitude ? (
@@ -77,7 +82,7 @@ const Home = () => {
       ) : (
         <MapView
           ref={mapRef}
-          // onMapReady={askLocationPermissions}
+          onMapReady={handleMapReady}
           provider={PROVIDER_GOOGLE}
           initialRegion={initialRegion}
           onRegionChangeComplete={handleOnChangeFocus}
@@ -87,9 +92,17 @@ const Home = () => {
           {currentLocation?.latitude && (
             <UserMarker position={currentLocation} />
           )}
-          {markers.map((marker, index) => (
-            <SpotMarker key={index} marker={marker} />
+          {markers.map(marker => (
+            <SpotMarker key={marker.id} marker={marker} />
           ))}
+          {destination?.latitude && (
+            <MapViewDirections
+              origin={currentLocation}
+              destination={destination}
+              apikey={process.env.GOOGLE_API_KEY}
+              strokeWidth={3}
+            />
+          )}
         </MapView>
       )}
       {!userLocationIsFocused && (

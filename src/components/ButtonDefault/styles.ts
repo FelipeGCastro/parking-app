@@ -31,6 +31,9 @@ export const styles = StyleSheet.create({
   paddingBottomZero: {
     paddingBottom: 2,
   },
+  disabled: {
+    opacity: 0.2,
+  },
   timerContainer: {
     marginTop: 8,
     height: 6,

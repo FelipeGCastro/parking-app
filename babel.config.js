@@ -10,6 +10,7 @@ module.exports = function (api) {
           extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
         },
       ],
+      ['module:react-native-dotenv'],
       'react-native-reanimated/plugin',
     ],
   }

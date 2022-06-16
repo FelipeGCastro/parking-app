@@ -29,6 +29,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   collapsedContainer: {
-    height: 10,
+    height: 0,
+    padding: 0,
+    paddingBottom: 0,
+    paddingTop: 0,
   },
 })

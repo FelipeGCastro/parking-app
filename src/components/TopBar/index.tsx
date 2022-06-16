@@ -39,7 +39,7 @@ const TopBar = () => {
       </View>
     </>
   )
-  console.log('showPositionMarker', selectedMarker)
+
   return (
     <Transitioning.View
       ref={ref}

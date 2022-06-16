@@ -1,11 +1,19 @@
 import { IconNames } from 'components/Icon'
+import { findNearest } from 'geolib'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { api } from '/services/api'
 
 export interface IButton {
   title: string
   description: string
-  onPress: string
+  onPress:
+    | 'handleAddPosition'
+    | 'cancelAddSpot'
+    | 'invalidateMarker'
+    | 'validateMarker'
+    | 'addSpot'
+    | 'handleDirection'
+    | ''
+    | (() => void)
   timer?: number
   onTimerOut?: () => void
   icon: {
@@ -40,6 +48,9 @@ interface MainContext {
   positionToGo: IPosition
   handleSetPositionToGo: (pos: IPosition) => void
   changeButtons: (buttons?: IButton[]) => void
+  destination: IPosition
+  handleDirection: (destination: IPosition) => void
+  resetDestination: () => void
 }
 
 const MainControllerContext = createContext({} as MainContext)
@@ -49,6 +60,7 @@ export const MainControllerProvider = ({ children }) => {
   const [leftText, setLeftText] = useState('')
   const [positionToGo, setPositionToGo] = useState<IPosition>({} as IPosition)
   const [currentPosition, setCurrentPosition] = useState<IRegion>({} as IRegion)
+  const [destination, setDestination] = useState({} as IPosition)
 
   useEffect(() => {
     setButtons(initialButtons)
@@ -75,6 +87,15 @@ export const MainControllerProvider = ({ children }) => {
     setPositionToGo(pos)
   }
 
+  const handleDirection = (destination: IPosition) => {
+    if (destination?.latitude) {
+      setDestination(destination)
+    }
+  }
+  const resetDestination = () => {
+    setDestination({} as IPosition)
+  }
+
   const initialButtons: IButton[] = [
     {
       title: 'Estou saindo',
@@ -89,7 +110,7 @@ export const MainControllerProvider = ({ children }) => {
     {
       title: 'Ir Mais Próximo',
       description: 'Direções automáticas',
-      onPress: '',
+      onPress: 'handleDirection',
       icon: {
         name: 'location',
         size: undefined,
@@ -144,6 +165,9 @@ export const MainControllerProvider = ({ children }) => {
         positionToGo,
         handleSetPositionToGo,
         changeButtons,
+        handleDirection,
+        destination,
+        resetDestination,
       }}>
       {children}
     </MainControllerContext.Provider>

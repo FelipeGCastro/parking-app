@@ -2,20 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { styles } from './styles'
 import Icon, { IconNames } from '../Icon'
-import { useMainController } from '/hooks/mainController'
+import { IButton, useMainController } from '/hooks/mainController'
 import { useMarkers } from '/hooks/markers'
+import { useUserLocation } from '/hooks/location'
+import { findNearest } from 'geolib'
 
-interface Props {
-  title: string
-  description: string
-  onPress: string | (() => void)
-  icon?: {
-    name: IconNames
-    size?: number
-    color?: string
-  }
-  timer?: number
-  onTimerOut?: () => void
+interface Props extends IButton {
+  disabled?: boolean
 }
 
 const ButtonDefault = ({
@@ -25,9 +18,11 @@ const ButtonDefault = ({
   icon,
   timer,
   onTimerOut,
+  disabled,
 }: Props) => {
   const mainController = useMainController()
-  const markersPress = useMarkers()
+  const useMarkersObj = useMarkers()
+  const { currentLocation, location } = useUserLocation()
   const [time, setTime] = useState(timer * 5)
   useEffect(() => {
     let valid = true
@@ -50,6 +45,7 @@ const ButtonDefault = ({
       clearInterval(startTimer)
     }
   }, [])
+
   const renderTimer = () => (
     <View style={styles.timerContainer}>
       <View
@@ -65,8 +61,16 @@ const ButtonDefault = ({
 
   const handleOnPress = () => {
     if (typeof onPress === 'string') {
-      if (markersPress[onPress]) {
-        markersPress[onPress]()
+      if (onPress === 'handleDirection') {
+        const userPos = currentLocation.latitude ? currentLocation : location
+        if (userPos?.latitude && useMarkersObj.markers?.length > 0) {
+          const nearest = findNearest(userPos, useMarkersObj.markers)
+          mainController[onPress](
+            nearest as { latitude: number; longitude: number },
+          )
+        }
+      } else if (useMarkersObj[onPress]) {
+        useMarkersObj[onPress]()
       } else if (mainController[onPress]) {
         mainController[onPress]()
       }
@@ -77,7 +81,12 @@ const ButtonDefault = ({
   return (
     <TouchableOpacity
       onPress={handleOnPress}
-      style={[styles.container, timer && styles.paddingBottomZero]}>
+      disabled={disabled}
+      style={[
+        styles.container,
+        timer && styles.paddingBottomZero,
+        disabled && styles.disabled,
+      ]}>
       <View style={styles.contentContainer}>
         {icon.name && (
           <Icon

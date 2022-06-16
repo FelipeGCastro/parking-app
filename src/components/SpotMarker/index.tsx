@@ -42,7 +42,6 @@ const SpotMarker = ({ marker }: Props) => {
   const color = selectedMarker ? selected : normalColor
 
   const handleDeselectMarker = () => {
-    console.log('handleDeselectMarker')
     hideValidateAndInvalidate()
   }
 
@@ -52,13 +51,6 @@ const SpotMarker = ({ marker }: Props) => {
       id: string
     }>,
   ) => {
-    // if (Platform.OS === 'android') {
-    //   showValidateAndInvalidate(marker.id)
-    // } else {
-    //   setShowOptions(true)
-    //   handleSetPositionToGo(event.nativeEvent?.coordinate)
-    // }
-    console.log('handlePressMarker')
     if (Platform.OS === 'ios') {
       handleSetPositionToGo(event.nativeEvent?.coordinate)
     }
@@ -66,10 +58,17 @@ const SpotMarker = ({ marker }: Props) => {
   }
 
   useEffect(() => {
+    let valid = true
     setTimeout(() => {
-      setShowOptionsDelayed(showOptions)
-      ref?.current?.animateNextTransition()
+      if (valid) {
+        setShowOptionsDelayed(showOptions)
+        ref?.current?.animateNextTransition()
+      }
     }, 1000)
+
+    return () => {
+      valid = false
+    }
   }, [showOptions])
 
   const handleInvalidatePress = () => {

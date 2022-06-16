@@ -1,7 +1,12 @@
 import React from 'react'
 import { StyleProp, TextStyle, View } from 'react-native'
 
-import { MaterialIcons, Entypo, FontAwesome5 } from '@expo/vector-icons'
+import {
+  MaterialIcons,
+  Entypo,
+  FontAwesome5,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons'
 
 const iconNames = {
   ['time-to-leave']: MaterialIcons,
@@ -9,6 +14,7 @@ const iconNames = {
   location: Entypo,
   check: FontAwesome5,
   ['my-location']: MaterialIcons,
+  ['close-circle-outline']: MaterialCommunityIcons,
 } as const
 
 export type IconNames = keyof typeof iconNames

@@ -3,9 +3,12 @@ import localeBr from 'date-fns/locale/pt-BR'
 
 export const formatDistanceLocal = (date: string) => {
   const formatDistanceLocale = {
-    lessThanXSeconds: '{{count}}s',
-    xSeconds: '{{count}}s',
-    halfAMinute: '30s',
+    lessThanXSeconds: '<1m',
+    xSeconds: '<1m',
+    halfAMinute: '<1m',
+    // lessThanXSeconds: '{{count}}s',
+    // xSeconds: '{{count}}s',
+    // halfAMinute: '30s',
     lessThanXMinutes: '{{count}}m',
     xMinutes: '{{count}}m',
     aboutXHours: '{{count}}h',

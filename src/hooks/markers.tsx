@@ -32,7 +32,7 @@ interface IMarkerContext {
   showPositionMarker: boolean
   validateMarker: (id: string) => void
   invalidateMarker: (id: string) => void
-  getMarkers: () => Promise<void>
+  getMarkers: (location?: IPosition) => Promise<void>
   selectedMarker: undefined | string
 }
 const MarkersContext = createContext({} as IMarkerContext)
@@ -61,13 +61,14 @@ export const MarkersProvider = ({ children }) => {
     }
   }, [])
 
-  const getMarkers = async () => {
+  const getMarkers = async (location?: IPosition) => {
     try {
-      if (currentPosition?.latitude) {
+      const pos = location?.latitude ? location : currentPosition
+      if (pos?.latitude) {
         const result = await api.get('/spots', {
           params: {
-            latitude: currentPosition.latitude,
-            longitude: currentPosition.longitude,
+            latitude: pos.latitude,
+            longitude: pos.longitude,
           },
         })
         setMarkers(result.data)
@@ -120,10 +121,7 @@ export const MarkersProvider = ({ children }) => {
           latitude: currentPosition.latitude,
           position: currentPosition,
         })
-        console.log('result markers:', result.data)
         setMarkers(result.data)
-
-        console.log('result', result.data)
       } catch (error) {
         console.log(error)
       }

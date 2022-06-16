@@ -6,13 +6,13 @@ import Icon from '/components/Icon'
 interface Props {
   onPress: () => void
 }
-const LocationButton = ({ onPress }: Props) => {
+const CloseButton = ({ onPress }: Props) => {
   const bottomSafeArea = useSafeAreaInsets().bottom
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.container, { bottom: bottomSafeArea + 120 }]}>
-      <Icon name="my-location" />
+      style={[styles.container, { bottom: bottomSafeArea + 50 }]}>
+      <Icon name="close-circle-outline" color="#C60606" />
     </TouchableOpacity>
   )
 }
@@ -28,4 +28,4 @@ export const styles = StyleSheet.create({
   },
 })
 
-export default LocationButton
+export default CloseButton

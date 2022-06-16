@@ -1,47 +1,76 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Text, View } from 'react-native'
 import { Transitioning, Transition } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ButtonDefault from '../ButtonDefault'
 import { SetMarker } from '../SetMarker'
+import CloseButton from './CloseButton'
 import { styles } from './styles'
-import { useMainController } from '/hooks/mainController'
+import { useUserLocation } from '/hooks/location'
+import { IButton, useMainController } from '/hooks/mainController'
 import { useMarkers } from '/hooks/markers'
 
 const transition = <Transition.Change interpolation="easeInOut" />
 
 const MainTab = () => {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
   const ref = useRef(null)
-  const { buttons, leftText } = useMainController()
-  const { showPositionMarker } = useMarkers()
+  const { buttons, leftText, destination, resetDestination } =
+    useMainController()
+  const { permissionsLoading, location } = useUserLocation()
+  const { showPositionMarker, markers } = useMarkers()
   const bottomSafeArea = useSafeAreaInsets().bottom
 
   useEffect(() => {
-    ref?.current?.animateNextTransition()
-    setCollapsed(false)
-  }, [])
+    if (!permissionsLoading && !!location?.latitude) {
+      ref?.current?.animateNextTransition()
+      setCollapsed(false)
+    }
+  }, [permissionsLoading, location])
+
+  useEffect(() => {
+    if (destination.latitude) {
+      ref?.current?.animateNextTransition()
+      setCollapsed(true)
+    } else {
+      setCollapsed(false)
+    }
+  }, [destination])
+
+  const renderButtons = (item: IButton) => {
+    let disabled
+    if (item.onPress === 'handleDirection') {
+      disabled = !(markers.length > 0)
+    }
+    return (
+      <ButtonDefault
+        key={item.title}
+        onPress={item.onPress}
+        icon={item.icon}
+        title={item.title}
+        description={item.description}
+        timer={item.timer}
+        onTimerOut={item.onTimerOut}
+        disabled={disabled}
+      />
+    )
+  }
 
   return (
     <>
       {showPositionMarker && <SetMarker />}
+      {destination && collapsed && <CloseButton onPress={resetDestination} />}
       <Transitioning.View
         ref={ref}
         transition={transition}
-        style={[styles.container, { paddingBottom: bottomSafeArea }]}>
+        style={[
+          styles.container,
+          { paddingBottom: bottomSafeArea },
+          collapsed && styles.collapsedContainer,
+        ]}>
         <View style={[styles.content, collapsed && styles.collapsedContainer]}>
           {!!leftText && <Text style={styles.leftText}>{leftText}</Text>}
-          {buttons.map(item => (
-            <ButtonDefault
-              key={item.title}
-              onPress={item.onPress}
-              icon={item.icon}
-              title={item.title}
-              description={item.description}
-              timer={item.timer}
-              onTimerOut={item.onTimerOut}
-            />
-          ))}
+          {!collapsed && buttons.map(renderButtons)}
         </View>
       </Transitioning.View>
     </>
