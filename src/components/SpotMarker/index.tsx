@@ -1,28 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { Platform, Text, View } from 'react-native'
-import { Marker, Callout, CalloutSubview, MapEvent } from 'react-native-maps'
+import { Marker, Callout, MapEvent } from 'react-native-maps'
 import Icon from '../Icon'
 
 import { styles } from './styles'
 import { useMainController } from '/hooks/mainController'
-
-import { Transition, Transitioning } from 'react-native-reanimated'
 import { IMarker, useMarkers } from '/hooks/markers'
 import { formatDistanceLocal } from '/utils/date'
-
-const transition = <Transition.Change interpolation="easeInOut" />
 
 interface Props {
   marker: IMarker
 }
 
 const SpotMarker = ({ marker }: Props) => {
-  const [showOptions, setShowOptions] = useState(false)
-  const [showOptionsDelayed, setShowOptionsDelayed] = useState(false)
-  const { handleSetPositionToGo } = useMainController()
+  const { handleSetPositionToGo, handleDirection } = useMainController()
   const {
-    invalidateMarker,
-    validateMarker,
     showValidateAndInvalidate,
     hideValidateAndInvalidate,
     selectedMarker,
@@ -54,60 +46,28 @@ const SpotMarker = ({ marker }: Props) => {
     if (Platform.OS === 'ios') {
       handleSetPositionToGo(event.nativeEvent?.coordinate)
     }
+
     showValidateAndInvalidate(marker.id)
   }
 
-  useEffect(() => {
-    let valid = true
-    setTimeout(() => {
-      if (valid) {
-        setShowOptionsDelayed(showOptions)
-        ref?.current?.animateNextTransition()
-      }
-    }, 1000)
-
-    return () => {
-      valid = false
-    }
-  }, [showOptions])
-
-  const handleInvalidatePress = () => {
-    setShowOptions(false)
-    invalidateMarker(marker.id)
+  const handleCalloutPress = () => {
+    console.log('handleCalloutPress')
+    handleDirection(marker)
   }
-  const handleValidatePress = () => {
-    setShowOptions(false)
-    validateMarker(marker.id)
-  }
-
   const renderOptions = () => (
-    <Callout tooltip style={{ width: 220, height: 85 }}>
-      <Transitioning.View
-        style={{ flexGrow: 1 }}
-        ref={ref}
-        transition={transition}>
-        <View
-          style={[
-            styles.containerOptions,
-            { height: showOptionsDelayed ? 'auto' : 0 },
-          ]}>
-          <View style={styles.buttonWrapper}>
-            <CalloutSubview
-              onPress={handleInvalidatePress}
-              style={styles.buttonInvalid}>
-              <Icon name="error-outline" color="#C60606" />
-              <Text style={styles.buttonText}>Invalidar</Text>
-            </CalloutSubview>
-            <CalloutSubview
-              onPress={handleValidatePress}
-              style={styles.buttonValid}>
-              <Icon name="check" color="#06C615" />
-              <Text style={styles.buttonText}>Validar</Text>
-            </CalloutSubview>
+    <Callout
+      onPress={handleCalloutPress}
+      tooltip
+      style={{ width: 220, height: 85 }}>
+      <View style={[styles.containerOptions]}>
+        <View style={styles.buttonWrapper}>
+          <View style={styles.buttonValid}>
+            <Icon name="check" color="#06C615" />
+            <Text style={styles.buttonText}>Ir aqui!</Text>
           </View>
-          <View style={styles.detail}></View>
         </View>
-      </Transitioning.View>
+        <View style={styles.detail}></View>
+      </View>
     </Callout>
   )
 
@@ -116,8 +76,9 @@ const SpotMarker = ({ marker }: Props) => {
       style={styles.container}
       onPress={handlePressMarker}
       onDeselect={handleDeselectMarker}
-      coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}>
-      {showOptions && renderOptions()}
+      coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+      // onCalloutPress={handleCalloutPress}
+    >
       <View style={styles.content}>
         <View style={[styles.markerContainer, { backgroundColor: color }]}>
           <Text style={styles.markerLetter}>P</Text>
@@ -128,6 +89,7 @@ const SpotMarker = ({ marker }: Props) => {
           </Text>
         </View>
       </View>
+      {renderOptions()}
     </Marker>
   )
 }
