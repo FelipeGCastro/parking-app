@@ -67,14 +67,6 @@ const Home = () => {
       }
     }
   }
-  const handleMapPress = () => {
-    if (selectedMarker) {
-      console.log('handleMapPress')
-      setTimeout(() => {
-        hideValidateAndInvalidate()
-      }, 500)
-    }
-  }
 
   return (
     <View style={styles.container}>
