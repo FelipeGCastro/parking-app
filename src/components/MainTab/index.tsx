@@ -29,12 +29,7 @@ const MainTab = () => {
         ref={ref}
         transition={transition}
         style={[styles.container, { paddingBottom: bottomSafeArea }]}>
-        <View
-          style={[
-            styles.content,
-            collapsed && styles.collapsedContainer,
-            showPositionMarker && styles.centered,
-          ]}>
+        <View style={[styles.content, collapsed && styles.collapsedContainer]}>
           {!!leftText && <Text style={styles.leftText}>{leftText}</Text>}
           {buttons.map(item => (
             <ButtonDefault

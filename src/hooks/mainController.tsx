@@ -62,6 +62,7 @@ export const MainControllerProvider = ({ children }) => {
   const changeButtons = (buttons: IButton[]) => {
     if (!buttons) {
       setButtons(initialButtons)
+      return
     }
     setButtons(buttons)
   }

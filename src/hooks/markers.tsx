@@ -1,4 +1,10 @@
-import { createContext, useCallback, useContext, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { IButton, useMainController } from './mainController'
 import { api } from '/services/api'
 
@@ -8,30 +14,67 @@ interface IPosition {
   longitude: number
   latitude: number
 }
-interface IMarker {
+export interface IMarker {
+  id: string
   longitude: number
   latitude: number
   status: MarkerStatus
+  createdAt: string
+  updatedAt: string
 }
 interface IMarkerContext {
   addSpot: () => void
-  addMarker: (marker: IMarker) => void
   markers: IMarker[]
   handleAddPosition: () => void
-  showValidateAndInvalidate: () => void
+  showValidateAndInvalidate: (id: string) => void
+  hideValidateAndInvalidate: () => void
+  cancelAddSpot: () => void
   showPositionMarker: boolean
-  validateMarker: (id: number) => void
-  invalidateMarker: (id: number) => void
+  validateMarker: (id: string) => void
+  invalidateMarker: (id: string) => void
+  getMarkers: () => Promise<void>
+  selectedMarker: undefined | string
 }
 const MarkersContext = createContext({} as IMarkerContext)
 
 export const MarkersProvider = ({ children }) => {
   const [markers, setMarkers] = useState<IMarker[]>([])
   const [showPositionMarker, setShowPositionMarker] = useState(false)
+  const [preventDoubleCall, setPreventDoubleCall] = useState(false)
+  const [selectedMarker, setSelectedMarker] = useState<undefined | string>()
   const { changeButtons, currentPosition } = useMainController()
 
-  const addMarker = (mark: IMarker) => {
-    setMarkers(prev => [...prev, mark])
+  useEffect(() => {
+    let valid = true
+    function refresh() {
+      if (valid) {
+        getMarkers()
+      }
+      setTimeout(refresh, 1000 * 30)
+      // ...
+    }
+
+    // initial call, or just call refresh directly
+    setTimeout(refresh, 1000 * 30)
+    return () => {
+      valid = false
+    }
+  }, [])
+
+  const getMarkers = async () => {
+    try {
+      if (currentPosition?.latitude) {
+        const result = await api.get('/spots', {
+          params: {
+            latitude: currentPosition.latitude,
+            longitude: currentPosition.longitude,
+          },
+        })
+        setMarkers(result.data)
+      }
+    } catch (error) {
+      console.log('ERROR GETTING SPOTS')
+    }
   }
 
   const handleAddPosition = () => {
@@ -44,7 +87,7 @@ export const MarkersProvider = ({ children }) => {
     status,
     position,
   }: {
-    id: number
+    id: string
     status: MarkerStatus
     position: IPosition
   }) => {
@@ -56,10 +99,16 @@ export const MarkersProvider = ({ children }) => {
     }
   }
 
-  const validateMarker = (id: number) => {
+  const validateMarker = (id: string) => {
+    if (!id) {
+      id = selectedMarker
+    }
     updateMarker({ id, status: 'valided', position: currentPosition })
   }
-  const invalidateMarker = (id: number) => {
+  const invalidateMarker = (id: string) => {
+    if (!id) {
+      id = selectedMarker
+    }
     updateMarker({ id, status: 'invalided', position: currentPosition })
   }
 
@@ -69,9 +118,10 @@ export const MarkersProvider = ({ children }) => {
         const result = await api.post('/spots', {
           longitude: currentPosition.longitude,
           latitude: currentPosition.latitude,
+          position: currentPosition,
         })
         console.log('result markers:', result.data)
-        addMarker({ status: 'created', ...currentPosition })
+        setMarkers(result.data)
 
         console.log('result', result.data)
       } catch (error) {
@@ -82,16 +132,42 @@ export const MarkersProvider = ({ children }) => {
     } else {
       console.log('Error to add current position')
     }
-  }, [])
+  }, [currentPosition])
 
-  const showValidateAndInvalidate = () => {
+  const hideValidateAndInvalidate = () => {
+    if (!preventDoubleCall) {
+      setSelectedMarker(undefined)
+      changeButtons()
+    }
+  }
+
+  const showValidateAndInvalidate = (id: string) => {
+    setPreventDoubleCall(true)
+    setTimeout(() => {
+      setPreventDoubleCall(false)
+    }, 750)
+    setSelectedMarker(id)
+
     changeButtons(validateAndInvalidate)
+  }
+  const cancelAddSpot = () => {
+    setShowPositionMarker(false)
+    changeButtons()
   }
 
   const addSpotButton: IButton[] = [
     {
-      title: 'Marcar espaço disponivel!',
-      description: 'Tem aqui um espaço para estacionar',
+      title: 'Cancelar!',
+      description: 'Não quero mais!',
+      onPress: 'cancelAddSpot',
+      icon: {
+        name: 'error-outline',
+        color: '#C60606',
+      },
+    },
+    {
+      title: 'Marcar espaço!',
+      description: 'Tem aqui um espaço!',
       onPress: 'addSpot',
       icon: {
         name: 'location',
@@ -104,7 +180,7 @@ export const MarkersProvider = ({ children }) => {
     {
       title: 'Invalidar',
       description: 'Alguém já estacionou!',
-      onPress: '',
+      onPress: 'invalidateMarker',
       icon: {
         name: 'error-outline',
         size: undefined,
@@ -114,7 +190,7 @@ export const MarkersProvider = ({ children }) => {
     {
       title: 'Espaço Vago!',
       description: 'Espaço Livre Aqui!',
-      onPress: '',
+      onPress: 'validateMarker',
       icon: {
         name: 'check',
         size: undefined,
@@ -127,13 +203,16 @@ export const MarkersProvider = ({ children }) => {
     <MarkersContext.Provider
       value={{
         addSpot,
-        addMarker,
         markers,
         handleAddPosition,
         showPositionMarker,
         validateMarker,
         invalidateMarker,
         showValidateAndInvalidate,
+        hideValidateAndInvalidate,
+        getMarkers,
+        selectedMarker,
+        cancelAddSpot,
       }}>
       {children}
     </MarkersContext.Provider>

@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react'
 
 interface ITopBarContext {
   isOpen: boolean
-  handleOpenMarkerOptions: (id: number) => void
+  handleOpenMarkerOptions: (id: string) => void
 }
 
 const TopBarContext = createContext({} as ITopBarContext)
@@ -11,7 +11,7 @@ export const TopBarProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [markerOptions, setMarkerOptions] = useState(false)
 
-  const handleOpenMarkerOptions = (id: number = 1) => {
+  const handleOpenMarkerOptions = (id: string = 1) => {
     setMarkerOptions(true)
     setIsOpen(true)
   }

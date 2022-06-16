@@ -14,7 +14,8 @@ import { useMarkers } from '/hooks/markers'
 const Home = () => {
   const { location, currentLocation, permissionsLoading } = useUserLocation()
   const { addCurrentPosition, positionToGo } = useMainController()
-  const { markers } = useMarkers()
+  const { markers, hideValidateAndInvalidate, selectedMarker, getMarkers } =
+    useMarkers()
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
   const mapRef = useRef<MapView>(null)
 
@@ -38,7 +39,7 @@ const Home = () => {
             ...camera,
             center: { ...positionToGo },
           },
-          { duration: 750 },
+          { duration: 400 },
         )
       }
       handleCamera()
@@ -54,7 +55,24 @@ const Home = () => {
   const handleOnChangeFocus = (reg, details) => {
     if (details.isGesture) {
       addCurrentPosition(reg)
+      getMarkers()
+    }
+  }
+  const handleChangeRegion = (reg, details) => {
+    if (details.isGesture) {
+      addCurrentPosition(reg)
       setUserLocationIsFocused(false)
+      if (selectedMarker) {
+        hideValidateAndInvalidate()
+      }
+    }
+  }
+  const handleMapPress = () => {
+    if (selectedMarker) {
+      console.log('handleMapPress')
+      setTimeout(() => {
+        hideValidateAndInvalidate()
+      }, 500)
     }
   }
 
@@ -71,6 +89,8 @@ const Home = () => {
           provider={PROVIDER_GOOGLE}
           initialRegion={initialRegion}
           onRegionChangeComplete={handleOnChangeFocus}
+          onRegionChange={handleChangeRegion}
+          // onPress={handleMapPress}
           style={styles.map}>
           {currentLocation?.latitude && (
             <UserMarker position={currentLocation} />

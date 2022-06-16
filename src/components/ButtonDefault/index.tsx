@@ -27,7 +27,7 @@ const ButtonDefault = ({
   onTimerOut,
 }: Props) => {
   const mainController = useMainController()
-  const { addSpot } = useMarkers()
+  const markersPress = useMarkers()
   const [time, setTime] = useState(timer * 5)
   useEffect(() => {
     let valid = true
@@ -65,8 +65,8 @@ const ButtonDefault = ({
 
   const handleOnPress = () => {
     if (typeof onPress === 'string') {
-      if (onPress === 'addSpot') {
-        addSpot()
+      if (markersPress[onPress]) {
+        markersPress[onPress]()
       } else if (mainController[onPress]) {
         mainController[onPress]()
       }
