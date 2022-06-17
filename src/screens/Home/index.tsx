@@ -24,8 +24,6 @@ const Home = () => {
   const defaultDelta = {
     longitudeDelta: 0.00922 * zoom,
     latitudeDelta: 0.00421 * zoom,
-    // longitudeDelta: 0.00922,
-    // latitudeDelta: 0.00421,
   }
 
   useEffect(() => {
@@ -113,7 +111,7 @@ const Home = () => {
       {!userLocationIsFocused && (
         <LocationButton onPress={() => setUserLocationIsFocused(true)} />
       )}
-      <MainTab />
+      <MainTab setUserFocused={setUserLocationIsFocused} />
       <TopBar />
     </View>
   )

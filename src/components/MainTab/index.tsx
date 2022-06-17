@@ -11,8 +11,10 @@ import { IButton, useMainController } from '/hooks/mainController'
 import { useMarkers } from '/hooks/markers'
 
 const transition = <Transition.Change interpolation="easeInOut" />
-
-const MainTab = () => {
+interface Props {
+  setUserFocused: (value: boolean) => void
+}
+const MainTab = ({ setUserFocused }: Props) => {
   const [collapsed, setCollapsed] = useState(true)
   const ref = useRef(null)
   const { buttons, leftText, destination, resetDestination } =
@@ -55,6 +57,7 @@ const MainTab = () => {
         timer={item.timer}
         onTimerOut={item.onTimerOut}
         disabled={disabled}
+        setUserFocused={setUserFocused}
       />
     )
   }

@@ -9,6 +9,7 @@ import { findNearest } from 'geolib'
 
 interface Props extends IButton {
   disabled?: boolean
+  setUserFocused?: (value: boolean) => void
 }
 
 const ButtonDefault = ({
@@ -19,6 +20,7 @@ const ButtonDefault = ({
   timer,
   onTimerOut,
   disabled,
+  setUserFocused,
 }: Props) => {
   const mainController = useMainController()
   const useMarkersObj = useMarkers()
@@ -68,6 +70,7 @@ const ButtonDefault = ({
           mainController[onPress](
             nearest as { latitude: number; longitude: number },
           )
+          setUserFocused(true)
         }
       } else if (useMarkersObj[onPress]) {
         useMarkersObj[onPress]()
