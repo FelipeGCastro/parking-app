@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import * as Location from 'expo-location'
+import { useMarkers } from './markers'
 
 interface ILocation {
   latitude: number
@@ -18,6 +19,7 @@ export const UserLocationProvider = ({ children }) => {
   const [currentLocation, setCurrentLocation] = useState<ILocation>(null)
   const [errorMsg, setErrorMsg] = useState(null)
   const [permissionsLoading, setPermissionsLoading] = useState(true)
+  const { getMarkers } = useMarkers()
 
   const handleUpdatePosition: Location.LocationCallback = ({ coords }) => {
     setCurrentLocation({
@@ -39,13 +41,15 @@ export const UserLocationProvider = ({ children }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({})
-      setLocation({
+      const dataLocation = {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-      })
+      }
+      setLocation(dataLocation)
+      getMarkers(dataLocation)
       setPermissionsLoading(false)
       locationSubscription = await Location.watchPositionAsync(
-        { accuracy: Location.Accuracy.High },
+        { accuracy: Location.Accuracy.BestForNavigation },
         handleUpdatePosition,
       )
     }

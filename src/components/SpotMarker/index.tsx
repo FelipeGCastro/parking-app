@@ -10,17 +10,16 @@ import { formatDistanceLocal } from '/utils/date'
 
 interface Props {
   marker: IMarker
+  setUserFocused: (value: boolean) => void
 }
 
-const SpotMarker = ({ marker }: Props) => {
+const SpotMarker = ({ marker, setUserFocused }: Props) => {
   const { handleSetPositionToGo, handleDirection } = useMainController()
   const {
     showValidateAndInvalidate,
     hideValidateAndInvalidate,
     selectedMarker,
   } = useMarkers()
-
-  const ref = useRef(null)
 
   const colorObj = {
     created: '#0673C6',
@@ -30,7 +29,7 @@ const SpotMarker = ({ marker }: Props) => {
   }
   const normalColor = colorObj[marker.status] || colorObj.created
   const selected =
-    selectedMarker === marker.id ? normalColor : colorObj.deselected
+    selectedMarker?.id === marker.id ? normalColor : colorObj.deselected
   const color = selectedMarker ? selected : normalColor
 
   const handleDeselectMarker = () => {
@@ -47,12 +46,13 @@ const SpotMarker = ({ marker }: Props) => {
       handleSetPositionToGo(event.nativeEvent?.coordinate)
     }
 
-    showValidateAndInvalidate(marker.id)
+    showValidateAndInvalidate(marker)
   }
 
   const handleCalloutPress = () => {
     console.log('handleCalloutPress')
     handleDirection(marker)
+    setUserFocused(true)
   }
   const renderOptions = () => (
     <Callout

@@ -26,14 +26,14 @@ interface IMarkerContext {
   addSpot: () => void
   markers: IMarker[]
   handleAddPosition: () => void
-  showValidateAndInvalidate: (id: string) => void
+  showValidateAndInvalidate: (marker: IMarker) => void
   hideValidateAndInvalidate: () => void
   cancelAddSpot: () => void
   showPositionMarker: boolean
   validateMarker: (id: string) => void
   invalidateMarker: (id: string) => void
   getMarkers: (location?: IPosition) => Promise<void>
-  selectedMarker: undefined | string
+  selectedMarker: undefined | IMarker
 }
 const MarkersContext = createContext({} as IMarkerContext)
 
@@ -41,7 +41,7 @@ export const MarkersProvider = ({ children }) => {
   const [markers, setMarkers] = useState<IMarker[]>([])
   const [showPositionMarker, setShowPositionMarker] = useState(false)
   const [preventDoubleCall, setPreventDoubleCall] = useState(false)
-  const [selectedMarker, setSelectedMarker] = useState<undefined | string>()
+  const [selectedMarker, setSelectedMarker] = useState<undefined | IMarker>()
   const { changeButtons, currentPosition } = useMainController()
 
   useEffect(() => {
@@ -102,13 +102,13 @@ export const MarkersProvider = ({ children }) => {
 
   const validateMarker = (id: string) => {
     if (!id) {
-      id = selectedMarker
+      id = selectedMarker?.id
     }
     updateMarker({ id, status: 'valided', position: currentPosition })
   }
   const invalidateMarker = (id: string) => {
     if (!id) {
-      id = selectedMarker
+      id = selectedMarker?.id
     }
     updateMarker({ id, status: 'invalided', position: currentPosition })
   }
@@ -139,12 +139,12 @@ export const MarkersProvider = ({ children }) => {
     }
   }
 
-  const showValidateAndInvalidate = (id: string) => {
+  const showValidateAndInvalidate = (marker: IMarker) => {
     setPreventDoubleCall(true)
     setTimeout(() => {
       setPreventDoubleCall(false)
     }, 750)
-    setSelectedMarker(id)
+    setSelectedMarker(marker)
 
     changeButtons(validateAndInvalidate)
   }

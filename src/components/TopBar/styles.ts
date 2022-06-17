@@ -39,4 +39,14 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     color: '#1A1A1A',
   },
+  instructionsContainer: {
+    backgroundColor: '#C60606',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+  },
+  instructionsText: {
+    fontSize: 13,
+    color: '#fff',
+  },
 })

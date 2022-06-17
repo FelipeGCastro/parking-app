@@ -20,7 +20,13 @@ const TopBar = () => {
   }, [isOpen])
 
   const renderInstructions = () => {
-    return <Text style={styles.labelText}>Para cancelar, mova no mapa!</Text>
+    return (
+      <View style={styles.instructionsContainer}>
+        <Text style={styles.instructionsText}>
+          Para cancelar, mova no mapa!
+        </Text>
+      </View>
+    )
   }
   const renderLabels = () => (
     <>

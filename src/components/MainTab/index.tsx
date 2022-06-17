@@ -18,7 +18,7 @@ const MainTab = () => {
   const { buttons, leftText, destination, resetDestination } =
     useMainController()
   const { permissionsLoading, location } = useUserLocation()
-  const { showPositionMarker, markers } = useMarkers()
+  const { showPositionMarker, markers, selectedMarker } = useMarkers()
   const bottomSafeArea = useSafeAreaInsets().bottom
 
   useEffect(() => {
@@ -41,6 +41,9 @@ const MainTab = () => {
     let disabled
     if (item.onPress === 'handleDirection') {
       disabled = !(markers.length > 0)
+    }
+    if (item.onPress === 'invalidateMarker') {
+      disabled = selectedMarker?.status === 'invalided'
     }
     return (
       <ButtonDefault

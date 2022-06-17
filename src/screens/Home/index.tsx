@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ActivityIndicator, View } from 'react-native'
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
+import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import { useUserLocation } from 'hooks/location'
 import { styles } from './styles'
 import MainTab from '/components/MainTab'
@@ -14,23 +14,26 @@ import MapViewDirections from 'react-native-maps-directions'
 
 const Home = () => {
   const { location, currentLocation, permissionsLoading } = useUserLocation()
-  const { addCurrentPosition, positionToGo, destination, currentPosition } =
-    useMainController()
+  const { addCurrentPosition, positionToGo, destination } = useMainController()
   const { markers, hideValidateAndInvalidate, selectedMarker, getMarkers } =
     useMarkers()
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
   const mapRef = useRef<MapView>(null)
 
+  const zoom = destination?.latitude ? 0.5 : 1
   const defaultDelta = {
-    longitudeDelta: 0.00922,
-    latitudeDelta: 0.00421,
+    longitudeDelta: 0.00922 * zoom,
+    latitudeDelta: 0.00421 * zoom,
+    // longitudeDelta: 0.00922,
+    // latitudeDelta: 0.00421,
   }
 
   useEffect(() => {
     if (userLocationIsFocused) {
       mapRef?.current?.animateToRegion({ ...currentLocation, ...defaultDelta })
+      getMarkers()
     }
-  }, [userLocationIsFocused])
+  }, [userLocationIsFocused, currentLocation])
 
   useEffect(() => {
     if (positionToGo?.latitude && mapRef?.current) {
@@ -50,14 +53,12 @@ const Home = () => {
 
   const initialRegion = {
     ...location,
-    longitudeDelta: 0.00922,
-    latitudeDelta: 0.00421,
+    longitudeDelta: 0.00922 * zoom,
+    latitudeDelta: 0.00421 * zoom,
   }
 
-  const handleOnChangeFocus = (reg, details) => {
-    if (details.isGesture) {
-      getMarkers()
-    }
+  const handleOnChangeFocus = (reg: Region, details) => {
+    getMarkers({ latitude: reg.latitude, longitude: reg.longitude })
   }
   const handleChangeRegion = (reg, details) => {
     if (details.isGesture) {
@@ -70,7 +71,7 @@ const Home = () => {
   }
 
   const handleMapReady = () => {
-    getMarkers(location)
+    getMarkers()
   }
 
   return (
@@ -93,7 +94,11 @@ const Home = () => {
             <UserMarker position={currentLocation} />
           )}
           {markers.map(marker => (
-            <SpotMarker key={marker.id} marker={marker} />
+            <SpotMarker
+              key={marker.id}
+              marker={marker}
+              setUserFocused={setUserLocationIsFocused}
+            />
           ))}
           {destination?.latitude && (
             <MapViewDirections

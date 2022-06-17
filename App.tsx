@@ -10,13 +10,13 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <MainControllerProvider>
-        <UserLocationProvider>
-          <MarkersProvider>
+        <MarkersProvider>
+          <UserLocationProvider>
             <TopBarProvider>
               <Home />
             </TopBarProvider>
-          </MarkersProvider>
-        </UserLocationProvider>
+          </UserLocationProvider>
+        </MarkersProvider>
       </MainControllerProvider>
     </SafeAreaProvider>
   )

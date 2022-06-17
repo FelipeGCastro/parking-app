@@ -11,7 +11,7 @@ export const TopBarProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [markerOptions, setMarkerOptions] = useState(false)
 
-  const handleOpenMarkerOptions = (id: string = 1) => {
+  const handleOpenMarkerOptions = (id: string = '1') => {
     setMarkerOptions(true)
     setIsOpen(true)
   }
