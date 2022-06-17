@@ -50,7 +50,6 @@ const SpotMarker = ({ marker, setUserFocused }: Props) => {
   }
 
   const handleCalloutPress = () => {
-    console.log('handleCalloutPress')
     handleDirection(marker)
     setUserFocused(true)
   }

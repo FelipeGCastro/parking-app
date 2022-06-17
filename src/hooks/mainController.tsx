@@ -108,8 +108,8 @@ export const MainControllerProvider = ({ children }) => {
       },
     },
     {
-      title: 'Ir Mais Próximo',
-      description: 'Direções automáticas',
+      title: 'Direção Auto.',
+      description: 'Direção p/ mais próximo',
       onPress: 'handleDirection',
       icon: {
         name: 'location',
