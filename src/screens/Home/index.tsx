@@ -15,23 +15,28 @@ import MapViewDirections from 'react-native-maps-directions'
 const Home = () => {
   const { location, currentLocation, permissionsLoading } = useUserLocation()
   const { addCurrentPosition, positionToGo, destination } = useMainController()
-  const { markers, hideValidateAndInvalidate, selectedMarker, getMarkers } =
-    useMarkers()
+  const {
+    markers,
+    hideValidateAndInvalidate,
+    selectedMarker,
+    getMarkers,
+    showPositionMarker,
+  } = useMarkers()
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
   const mapRef = useRef<MapView>(null)
 
-  const zoom = destination?.latitude ? 0.5 : 1
+  const zoom = destination?.latitude ? 0.5 : showPositionMarker ? 0.25 : 1
   const defaultDelta = {
     longitudeDelta: 0.00922 * zoom,
     latitudeDelta: 0.00421 * zoom,
   }
 
   useEffect(() => {
-    if (userLocationIsFocused) {
+    if (userLocationIsFocused || showPositionMarker) {
       mapRef?.current?.animateToRegion({ ...currentLocation, ...defaultDelta })
       getMarkers()
     }
-  }, [userLocationIsFocused, currentLocation])
+  }, [userLocationIsFocused, currentLocation, showPositionMarker])
 
   useEffect(() => {
     if (positionToGo?.latitude && mapRef?.current) {
