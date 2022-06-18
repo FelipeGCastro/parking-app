@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { ActivityIndicator, View } from 'react-native'
+import { ActivityIndicator, Platform, View } from 'react-native'
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import { useUserLocation } from 'hooks/location'
 import { styles } from './styles'
@@ -11,6 +11,11 @@ import UserMarker from '/components/UserMarker'
 import LocationButton from './LocationButton'
 import { useMarkers } from '/hooks/markers'
 import MapViewDirections from 'react-native-maps-directions'
+
+const googleApiKey =
+  Platform.OS === 'android'
+    ? process.env.GOOGLE_API_KEY
+    : process.env.GOOGLE_API_KEY_IOS
 
 const Home = () => {
   const { location, currentLocation, permissionsLoading } = useUserLocation()
@@ -132,7 +137,7 @@ const Home = () => {
             <MapViewDirections
               origin={currentLocation}
               destination={destination}
-              apikey={process.env.GOOGLE_API_KEY}
+              apikey={googleApiKey}
               strokeWidth={3}
             />
           )}
