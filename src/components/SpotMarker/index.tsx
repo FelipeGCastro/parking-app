@@ -23,8 +23,8 @@ const SpotMarker = ({ marker, setUserFocused }: Props) => {
 
   const colorObj = {
     created: '#0673C6',
-    invalided: '#C60606',
-    valided: '#06C615',
+    invalidated: '#C60606',
+    validated: '#06C615',
     deselected: '#d3d3d3',
   }
   const normalColor = colorObj[marker.status] || colorObj.created

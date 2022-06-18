@@ -5,10 +5,11 @@ import {
   useEffect,
   useState,
 } from 'react'
+import { useTranslate } from 'react-polyglot'
 import { IButton, useMainController } from './mainController'
 import { api } from '/services/api'
 
-export type MarkerStatus = 'created' | 'invalided' | 'valided'
+export type MarkerStatus = 'created' | 'invalidated' | 'validated'
 
 interface IPosition {
   longitude: number
@@ -43,6 +44,7 @@ export const MarkersProvider = ({ children }) => {
   const [preventDoubleCall, setPreventDoubleCall] = useState(false)
   const [selectedMarker, setSelectedMarker] = useState<undefined | IMarker>()
   const { changeButtons, currentPosition } = useMainController()
+  const t = useTranslate()
 
   useEffect(() => {
     let valid = true
@@ -104,13 +106,13 @@ export const MarkersProvider = ({ children }) => {
     if (!id) {
       id = selectedMarker?.id
     }
-    updateMarker({ id, status: 'valided', position: currentPosition })
+    updateMarker({ id, status: 'validated', position: currentPosition })
   }
   const invalidateMarker = (id: string) => {
     if (!id) {
       id = selectedMarker?.id
     }
-    updateMarker({ id, status: 'invalided', position: currentPosition })
+    updateMarker({ id, status: 'invalidated', position: currentPosition })
   }
 
   const addSpot = useCallback(async () => {
@@ -155,8 +157,8 @@ export const MarkersProvider = ({ children }) => {
 
   const addSpotButton: IButton[] = [
     {
-      title: 'Cancelar!',
-      description: 'Não quero mais!',
+      title: t('cancel'),
+      description: t('changedMyMind'),
       onPress: 'cancelAddSpot',
       icon: {
         name: 'error-outline',
@@ -164,8 +166,8 @@ export const MarkersProvider = ({ children }) => {
       },
     },
     {
-      title: 'Marcar espaço!',
-      description: 'Tem aqui um espaço!',
+      title: t('markSpot'),
+      description: t('spotFreeHere'),
       onPress: 'addSpot',
       icon: {
         name: 'location',
@@ -176,8 +178,8 @@ export const MarkersProvider = ({ children }) => {
 
   const validateAndInvalidate: IButton[] = [
     {
-      title: 'Invalidar',
-      description: 'Alguém já estacionou!',
+      title: t('invalid'),
+      description: t('someoneTookIt'),
       onPress: 'invalidateMarker',
       icon: {
         name: 'error-outline',
@@ -186,8 +188,8 @@ export const MarkersProvider = ({ children }) => {
       },
     },
     {
-      title: 'Espaço Vago!',
-      description: 'Espaço Livre Aqui!',
+      title: t('spotFree'),
+      description: t('spotFreeHere'),
       onPress: 'validateMarker',
       icon: {
         name: 'check',

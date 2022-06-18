@@ -45,7 +45,7 @@ const MainTab = ({ setUserFocused }: Props) => {
       disabled = !(markers.length > 0)
     }
     if (item.onPress === 'invalidateMarker') {
-      disabled = selectedMarker?.status === 'invalided'
+      disabled = selectedMarker?.status === 'invalidated'
     }
     return (
       <ButtonDefault

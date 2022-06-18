@@ -1,6 +1,6 @@
 import { IconNames } from 'components/Icon'
-import { findNearest } from 'geolib'
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useTranslate } from 'react-polyglot'
 
 export interface IButton {
   title: string
@@ -28,7 +28,7 @@ interface IMarker {
     longitude: number
     latitude: number
   }
-  status: 'created' | 'invalided' | 'valided'
+  status: 'created' | 'invalidated' | 'validated'
 }
 interface IPosition {
   longitude: number
@@ -61,6 +61,7 @@ export const MainControllerProvider = ({ children }) => {
   const [positionToGo, setPositionToGo] = useState<IPosition>({} as IPosition)
   const [currentPosition, setCurrentPosition] = useState<IRegion>({} as IRegion)
   const [destination, setDestination] = useState({} as IPosition)
+  const t = useTranslate()
 
   useEffect(() => {
     setButtons(initialButtons)
@@ -98,8 +99,8 @@ export const MainControllerProvider = ({ children }) => {
 
   const initialButtons: IButton[] = [
     {
-      title: 'Estou saindo',
-      description: 'Espaço ficará vazio',
+      title: t('leaving'),
+      description: t('spaceWillBeFree'),
       onPress: 'handleAddPosition',
       icon: {
         name: 'time-to-leave',
@@ -108,8 +109,8 @@ export const MainControllerProvider = ({ children }) => {
       },
     },
     {
-      title: 'Direção Auto.',
-      description: 'Direção p/ mais próximo',
+      title: t('direction'),
+      description: t('directionToNearest'),
       onPress: 'handleDirection',
       icon: {
         name: 'location',
@@ -120,8 +121,8 @@ export const MainControllerProvider = ({ children }) => {
   ]
   const checkSpotButtons: IButton[] = [
     {
-      title: 'Oh não, já não há!',
-      description: 'Alguém já estacionou!',
+      title: t('noSpot'),
+      description: t('someoneTookIt'),
       onPress: '',
       icon: {
         name: 'error-outline',
@@ -130,8 +131,8 @@ export const MainControllerProvider = ({ children }) => {
       },
     },
     {
-      title: 'Fixe, deu certo!',
-      description: 'Obrigado!',
+      title: t('wellDone'),
+      description: t('thanks'),
       onPress: '',
       icon: {
         name: 'check',
@@ -143,8 +144,8 @@ export const MainControllerProvider = ({ children }) => {
 
   const otherSpotButton: IButton[] = [
     {
-      title: 'Sim, estou a ver!',
-      description: 'Bem perto',
+      title: t('yesICanSee'),
+      description: t('nearToMe'),
       onPress: '',
       onTimerOut: handleTimerOut,
       timer: 15,
