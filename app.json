@@ -1,8 +1,12 @@
 {
   "expo": {
-    "name": "parking-app",
-    "slug": "parking-app",
+    "name": "Spoty Parking",
+    "slug": "spoty-parking",
     "version": "1.0.0",
+    "icon": "./src/assets/appIcon.png",
+    "splash": {
+      "image": "./src/assets/splash.png"
+    },
     "assetBundlePatterns": [
       "**/*"
     ]
