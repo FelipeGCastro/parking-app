@@ -1,0 +1,35 @@
+{
+  "cli": {
+    "version": ">= 0.54.1"
+  },
+  "build": {
+    "development": {
+      "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "buildConfiguration": "Debug"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "GOOGLE_API_KEY": "AIzaSyCXZnngCOqs0Qb5Sc7VtPH_L-2bXzEC5xs",
+        "BASE_URL": "https://parking-node-backend.herokuapp.com/"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "env": {
+        "GOOGLE_API_KEY": "AIzaSyCXZnngCOqs0Qb5Sc7VtPH_L-2bXzEC5xs",
+        "BASE_URL": "https://parking-node-backend.herokuapp.com/"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

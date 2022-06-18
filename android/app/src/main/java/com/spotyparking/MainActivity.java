@@ -1,4 +1,4 @@
-package com.parkingapp;
+package com.spotyparking;
 
 import android.os.Build;
 import android.os.Bundle;
