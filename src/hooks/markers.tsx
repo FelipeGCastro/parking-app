@@ -23,6 +23,10 @@ export interface IMarker {
   createdAt: string
   updatedAt: string
 }
+export interface IBounds {
+  northEast: { latitude: number; longitude: number }
+  southWest: { latitude: number; longitude: number }
+}
 interface IMarkerContext {
   addSpot: () => void
   markers: IMarker[]
@@ -33,7 +37,7 @@ interface IMarkerContext {
   showPositionMarker: boolean
   validateMarker: (id: string) => void
   invalidateMarker: (id: string) => void
-  getMarkers: (location?: IPosition) => Promise<void>
+  getMarkers: (bounds: IBounds) => Promise<void>
   selectedMarker: undefined | IMarker
 }
 const MarkersContext = createContext({} as IMarkerContext)
@@ -46,34 +50,17 @@ export const MarkersProvider = ({ children }) => {
   const { changeButtons, currentPosition } = useMainController()
   const t = useTranslate()
 
-  useEffect(() => {
-    let valid = true
-    function refresh() {
-      if (valid) {
-        getMarkers()
-      }
-      setTimeout(refresh, 1000 * 30)
-      // ...
-    }
-
-    // initial call, or just call refresh directly
-    setTimeout(refresh, 1000 * 30)
-    return () => {
-      valid = false
-    }
-  }, [])
-
-  const getMarkers = async (location?: IPosition) => {
+  const getMarkers = async (bounds?: IBounds) => {
     try {
-      const pos = location?.latitude ? location : currentPosition
-      if (pos?.latitude) {
+      if (bounds?.northEast) {
         const result = await api.get('/spots', {
           params: {
-            latitude: pos.latitude,
-            longitude: pos.longitude,
+            bounds,
           },
         })
         setMarkers(result.data)
+      } else {
+        return
       }
     } catch (error) {
       console.log('ERROR GETTING SPOTS')

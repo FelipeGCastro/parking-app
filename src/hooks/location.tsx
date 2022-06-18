@@ -19,7 +19,6 @@ export const UserLocationProvider = ({ children }) => {
   const [currentLocation, setCurrentLocation] = useState<ILocation>(null)
   const [errorMsg, setErrorMsg] = useState(null)
   const [permissionsLoading, setPermissionsLoading] = useState(true)
-  const { getMarkers } = useMarkers()
 
   const handleUpdatePosition: Location.LocationCallback = ({ coords }) => {
     setCurrentLocation({
@@ -46,7 +45,6 @@ export const UserLocationProvider = ({ children }) => {
         longitude: location.coords.longitude,
       }
       setLocation(dataLocation)
-      getMarkers(dataLocation)
       setPermissionsLoading(false)
       locationSubscription = await Location.watchPositionAsync(
         { accuracy: Location.Accuracy.BestForNavigation },

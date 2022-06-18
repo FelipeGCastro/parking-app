@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { ActivityIndicator, View } from 'react-native'
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import { useUserLocation } from 'hooks/location'
@@ -34,9 +34,34 @@ const Home = () => {
   useEffect(() => {
     if (userLocationIsFocused || showPositionMarker) {
       mapRef?.current?.animateToRegion({ ...currentLocation, ...defaultDelta })
-      getMarkers()
+
+      fetchMarkers()
     }
   }, [userLocationIsFocused, currentLocation, showPositionMarker])
+
+  const fetchMarkers = useCallback(async () => {
+    const bounds = await mapRef?.current?.getMapBoundaries()
+    if (bounds?.northEast?.latitude) {
+      getMarkers(bounds)
+    }
+  }, [mapRef, getMarkers])
+
+  useEffect(() => {
+    let valid = true
+    function refresh() {
+      if (valid) {
+        fetchMarkers()
+      }
+      setTimeout(refresh, 1000 * 30)
+      // ...
+    }
+
+    // initial call, or just call refresh directly
+    setTimeout(refresh, 1000 * 30)
+    return () => {
+      valid = false
+    }
+  }, [])
 
   useEffect(() => {
     if (positionToGo?.latitude && mapRef?.current) {
@@ -60,8 +85,8 @@ const Home = () => {
     latitudeDelta: 0.00421 * zoom,
   }
 
-  const handleOnChangeFocus = (reg: Region, details) => {
-    getMarkers({ latitude: reg.latitude, longitude: reg.longitude })
+  const handleOnChangeFocus = (reg: Region) => {
+    fetchMarkers()
   }
   const handleChangeRegion = (reg, details) => {
     if (details.isGesture) {
@@ -74,7 +99,7 @@ const Home = () => {
   }
 
   const handleMapReady = () => {
-    getMarkers()
+    fetchMarkers()
   }
 
   return (
