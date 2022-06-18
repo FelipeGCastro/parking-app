@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Text, View } from 'react-native'
-import { Transitioning, Transition } from 'react-native-reanimated'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ButtonDefault from '../ButtonDefault'
 import { SetMarker } from '../SetMarker'
@@ -10,29 +13,35 @@ import { useUserLocation } from '/hooks/location'
 import { IButton, useMainController } from '/hooks/mainController'
 import { useMarkers } from '/hooks/markers'
 
-const transition = <Transition.Change interpolation="easeInOut" />
 interface Props {
   setUserFocused: (value: boolean) => void
 }
 const MainTab = ({ setUserFocused }: Props) => {
   const [collapsed, setCollapsed] = useState(true)
-  const ref = useRef(null)
   const { buttons, leftText, destination, resetDestination } =
     useMainController()
   const { permissionsLoading, location } = useUserLocation()
   const { showPositionMarker, markers, selectedMarker } = useMarkers()
   const bottomSafeArea = useSafeAreaInsets().bottom
 
+  const offset = useSharedValue(0)
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      height: offset.value === 100 ? 'auto' : 0,
+    }
+  })
+
   useEffect(() => {
     if (!permissionsLoading && !!location?.latitude) {
-      ref?.current?.animateNextTransition()
       setCollapsed(false)
+      offset.value = 100
     }
   }, [permissionsLoading, location])
 
   useEffect(() => {
     if (destination.latitude) {
-      ref?.current?.animateNextTransition()
+      // ref?.current?.animateNextTransition()
       setCollapsed(true)
     } else {
       setCollapsed(false)
@@ -66,19 +75,18 @@ const MainTab = ({ setUserFocused }: Props) => {
     <>
       {showPositionMarker && <SetMarker />}
       {destination && collapsed && <CloseButton onPress={resetDestination} />}
-      <Transitioning.View
-        ref={ref}
-        transition={transition}
+      <Animated.View
         style={[
           styles.container,
           { paddingBottom: bottomSafeArea },
-          collapsed && styles.collapsedContainer,
+          animatedStyles,
+          // collapsed && styles.collapsedContainer,
         ]}>
         <View style={[styles.content, collapsed && styles.collapsedContainer]}>
           {!!leftText && <Text style={styles.leftText}>{leftText}</Text>}
           {!collapsed && buttons.map(renderButtons)}
         </View>
-      </Transitioning.View>
+      </Animated.View>
     </>
   )
 }

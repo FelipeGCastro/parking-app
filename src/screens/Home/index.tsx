@@ -45,6 +45,9 @@ const Home = () => {
   }, [userLocationIsFocused, currentLocation, showPositionMarker])
 
   const fetchMarkers = useCallback(async () => {
+    if (!mapRef?.current) {
+      return
+    }
     const bounds = await mapRef?.current?.getMapBoundaries()
     if (bounds?.northEast?.latitude) {
       getMarkers(bounds)
@@ -67,7 +70,6 @@ const Home = () => {
       valid = false
     }
   }, [])
-
   useEffect(() => {
     if (positionToGo?.latitude && mapRef?.current) {
       const handleCamera = async () => {
