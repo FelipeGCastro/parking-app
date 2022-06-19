@@ -47,7 +47,7 @@ export const MarkersProvider = ({ children }) => {
   const [showPositionMarker, setShowPositionMarker] = useState(false)
   const [preventDoubleCall, setPreventDoubleCall] = useState(false)
   const [selectedMarker, setSelectedMarker] = useState<undefined | IMarker>()
-  const { changeButtons, currentPosition } = useMainController()
+  const { changeButtons, currentPosition, bounds } = useMainController()
   const t = useTranslate()
 
   const getMarkers = async (bounds?: IBounds) => {
@@ -75,15 +75,17 @@ export const MarkersProvider = ({ children }) => {
   const updateMarker = async ({
     id,
     status,
-    position,
+    bounds,
   }: {
     id: string
     status: MarkerStatus
-    position: IPosition
+    bounds: IBounds
   }) => {
     try {
-      const result = await api.patch('/spots', { id, status, position })
-      setMarkers(result.data)
+      if (bounds?.northEast?.latitude) {
+        const result = await api.patch('/spots', { id, status, bounds })
+        setMarkers(result.data)
+      }
     } catch (error) {
       console.log('ERROR UPDATING MARKER')
     }
@@ -93,22 +95,22 @@ export const MarkersProvider = ({ children }) => {
     if (!id) {
       id = selectedMarker?.id
     }
-    updateMarker({ id, status: 'validated', position: currentPosition })
+    updateMarker({ id, status: 'validated', bounds })
   }
   const invalidateMarker = (id: string) => {
     if (!id) {
       id = selectedMarker?.id
     }
-    updateMarker({ id, status: 'invalidated', position: currentPosition })
+    updateMarker({ id, status: 'invalidated', bounds })
   }
 
   const addSpot = useCallback(async () => {
-    if (currentPosition?.latitude) {
+    if (currentPosition?.latitude && bounds?.northEast?.latitude) {
       try {
         const result = await api.post('/spots', {
           longitude: currentPosition.longitude,
           latitude: currentPosition.latitude,
-          position: currentPosition,
+          bounds,
         })
         setMarkers(result.data)
       } catch (error) {
@@ -119,7 +121,7 @@ export const MarkersProvider = ({ children }) => {
     } else {
       console.log('Error to add current position')
     }
-  }, [currentPosition])
+  }, [currentPosition, bounds])
 
   const hideValidateAndInvalidate = () => {
     if (!preventDoubleCall) {

@@ -1,6 +1,7 @@
 import { IconNames } from 'components/Icon'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useTranslate } from 'react-polyglot'
+import { IBounds } from './markers'
 
 export interface IButton {
   title: string
@@ -51,6 +52,8 @@ interface MainContext {
   destination: IPosition
   handleDirection: (destination: IPosition) => void
   resetDestination: () => void
+  bounds: IBounds
+  addBounds: (bounds: IBounds) => void
 }
 
 const MainControllerContext = createContext({} as MainContext)
@@ -61,6 +64,7 @@ export const MainControllerProvider = ({ children }) => {
   const [positionToGo, setPositionToGo] = useState<IPosition>({} as IPosition)
   const [currentPosition, setCurrentPosition] = useState<IRegion>({} as IRegion)
   const [destination, setDestination] = useState({} as IPosition)
+  const [bounds, setBounds] = useState({} as IBounds)
   const t = useTranslate()
 
   useEffect(() => {
@@ -79,7 +83,9 @@ export const MainControllerProvider = ({ children }) => {
     }
     setButtons(buttons)
   }
-
+  const addBounds = (bounds: IBounds) => {
+    setBounds(bounds)
+  }
   const addCurrentPosition = (pos: IRegion) => {
     setCurrentPosition(pos)
   }
@@ -169,6 +175,8 @@ export const MainControllerProvider = ({ children }) => {
         handleDirection,
         destination,
         resetDestination,
+        bounds,
+        addBounds,
       }}>
       {children}
     </MainControllerContext.Provider>

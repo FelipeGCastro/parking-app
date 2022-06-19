@@ -1,9 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Text, View } from 'react-native'
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-} from 'react-native-reanimated'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ButtonDefault from '../ButtonDefault'
 import { SetMarker } from '../SetMarker'
@@ -24,18 +21,9 @@ const MainTab = ({ setUserFocused }: Props) => {
   const { showPositionMarker, markers, selectedMarker } = useMarkers()
   const bottomSafeArea = useSafeAreaInsets().bottom
 
-  const offset = useSharedValue(0)
-
-  const animatedStyles = useAnimatedStyle(() => {
-    return {
-      height: offset.value === 100 ? 'auto' : 0,
-    }
-  })
-
   useEffect(() => {
     if (!permissionsLoading && !!location?.latitude) {
       setCollapsed(false)
-      offset.value = 100
     }
   }, [permissionsLoading, location])
 
@@ -75,18 +63,17 @@ const MainTab = ({ setUserFocused }: Props) => {
     <>
       {showPositionMarker && <SetMarker />}
       {destination && collapsed && <CloseButton onPress={resetDestination} />}
-      <Animated.View
+      <View
         style={[
           styles.container,
           { paddingBottom: bottomSafeArea },
-          animatedStyles,
-          // collapsed && styles.collapsedContainer,
+          collapsed && styles.collapsedContainer,
         ]}>
         <View style={[styles.content, collapsed && styles.collapsedContainer]}>
           {!!leftText && <Text style={styles.leftText}>{leftText}</Text>}
           {!collapsed && buttons.map(renderButtons)}
         </View>
-      </Animated.View>
+      </View>
     </>
   )
 }

@@ -19,7 +19,8 @@ const googleApiKey =
 
 const Home = () => {
   const { location, currentLocation, permissionsLoading } = useUserLocation()
-  const { addCurrentPosition, positionToGo, destination } = useMainController()
+  const { addCurrentPosition, positionToGo, destination, addBounds } =
+    useMainController()
   const {
     markers,
     hideValidateAndInvalidate,
@@ -92,8 +93,12 @@ const Home = () => {
     latitudeDelta: 0.00421 * zoom,
   }
 
-  const handleOnChangeFocus = (reg: Region) => {
+  const handleOnChangeFocus = async (reg: Region) => {
     fetchMarkers()
+    const bounds = await mapRef?.current?.getMapBoundaries()
+    if (bounds?.northEast?.latitude) {
+      addBounds(bounds)
+    }
   }
   const handleChangeRegion = (reg, details) => {
     if (details.isGesture) {
