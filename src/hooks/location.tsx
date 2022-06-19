@@ -45,6 +45,7 @@ export const UserLocationProvider = ({ children }) => {
         longitude: location.coords.longitude,
       }
       setLocation(dataLocation)
+      setCurrentLocation(dataLocation)
       setPermissionsLoading(false)
       locationSubscription = await Location.watchPositionAsync(
         { accuracy: Location.Accuracy.BestForNavigation },

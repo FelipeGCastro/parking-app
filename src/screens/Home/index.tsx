@@ -12,14 +12,11 @@ import LocationButton from './LocationButton'
 import { useMarkers } from '/hooks/markers'
 import MapViewDirections from 'react-native-maps-directions'
 
-const googleApiKey =
-  Platform.OS === 'android'
-    ? process.env.GOOGLE_API_KEY
-    : process.env.GOOGLE_API_KEY_IOS
+const googleApiKey = process.env.GOOGLE_API_DIRECTIONS
 
 const Home = () => {
   const { location, currentLocation, permissionsLoading } = useUserLocation()
-  const { addCurrentPosition, positionToGo, destination, addBounds } =
+  const { addCurrentPosition, positionToGo, direction, addBounds } =
     useMainController()
   const {
     markers,
@@ -31,7 +28,7 @@ const Home = () => {
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
   const mapRef = useRef<MapView>(null)
 
-  const zoom = destination?.latitude ? 0.5 : showPositionMarker ? 0.25 : 1
+  const zoom = direction?.destination ? 0.5 : showPositionMarker ? 0.25 : 1
   const defaultDelta = {
     longitudeDelta: 0.00922 * zoom,
     latitudeDelta: 0.00421 * zoom,
@@ -101,13 +98,13 @@ const Home = () => {
     }
   }
   const handleChangeRegion = (reg, details) => {
-    if (details.isGesture) {
-      addCurrentPosition(reg)
-      setUserLocationIsFocused(false)
-      if (selectedMarker) {
-        hideValidateAndInvalidate()
-      }
+    // if (details.isGesture) {
+    addCurrentPosition(reg)
+    setUserLocationIsFocused(false)
+    if (selectedMarker) {
+      hideValidateAndInvalidate()
     }
+    // }
   }
 
   const handleMapReady = () => {
@@ -140,10 +137,10 @@ const Home = () => {
               setUserFocused={setUserLocationIsFocused}
             />
           ))}
-          {destination?.latitude && (
+          {direction?.destination && !!currentLocation?.latitude && (
             <MapViewDirections
               origin={currentLocation}
-              destination={destination}
+              destination={direction.destination}
               apikey={googleApiKey}
               strokeWidth={3}
             />

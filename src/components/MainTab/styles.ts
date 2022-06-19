@@ -12,12 +12,15 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   content: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     flexDirection: 'row',
     paddingBottom: 24,
     paddingTop: 16,
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  buttonContainer: {
+    marginHorizontal: 4,
   },
   leftText: {
     flexShrink: 1,

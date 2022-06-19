@@ -35,6 +35,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   textTime: {
+    color: '#313131',
     fontSize: 11,
   },
   containerOptions: {

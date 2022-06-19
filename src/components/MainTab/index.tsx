@@ -15,8 +15,7 @@ interface Props {
 }
 const MainTab = ({ setUserFocused }: Props) => {
   const [collapsed, setCollapsed] = useState(true)
-  const { buttons, leftText, destination, resetDestination } =
-    useMainController()
+  const { buttons, leftText, direction, resetDestination } = useMainController()
   const { permissionsLoading, location } = useUserLocation()
   const { showPositionMarker, markers, selectedMarker } = useMarkers()
   const bottomSafeArea = useSafeAreaInsets().bottom
@@ -28,13 +27,13 @@ const MainTab = ({ setUserFocused }: Props) => {
   }, [permissionsLoading, location])
 
   useEffect(() => {
-    if (destination.latitude) {
+    if (direction?.destination) {
       // ref?.current?.animateNextTransition()
       setCollapsed(true)
     } else {
       setCollapsed(false)
     }
-  }, [destination])
+  }, [direction])
 
   const renderButtons = (item: IButton) => {
     let disabled
@@ -45,24 +44,27 @@ const MainTab = ({ setUserFocused }: Props) => {
       disabled = selectedMarker?.status === 'invalidated'
     }
     return (
-      <ButtonDefault
-        key={item.title}
-        onPress={item.onPress}
-        icon={item.icon}
-        title={item.title}
-        description={item.description}
-        timer={item.timer}
-        onTimerOut={item.onTimerOut}
-        disabled={disabled}
-        setUserFocused={setUserFocused}
-      />
+      <View key={item.title} style={styles.buttonContainer}>
+        <ButtonDefault
+          onPress={item.onPress}
+          icon={item.icon}
+          title={item.title}
+          description={item.description}
+          timer={item.timer}
+          onTimerOut={item.onTimerOut}
+          disabled={disabled}
+          setUserFocused={setUserFocused}
+        />
+      </View>
     )
   }
 
   return (
     <>
       {showPositionMarker && <SetMarker />}
-      {destination && collapsed && <CloseButton onPress={resetDestination} />}
+      {direction?.destination && collapsed && (
+        <CloseButton onPress={resetDestination} />
+      )}
       <View
         style={[
           styles.container,

@@ -1,6 +1,13 @@
 import { IconNames } from 'components/Icon'
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { useTranslate } from 'react-polyglot'
+import { useUserLocation } from './location'
 import { IBounds } from './markers'
 
 export interface IButton {
@@ -41,6 +48,9 @@ interface IRegion {
   longitudeDelta: number
   latitudeDelta: number
 }
+interface IDirection {
+  destination: IPosition
+}
 interface MainContext {
   buttons: IButton[]
   leftText: string
@@ -49,7 +59,7 @@ interface MainContext {
   positionToGo: IPosition
   handleSetPositionToGo: (pos: IPosition) => void
   changeButtons: (buttons?: IButton[]) => void
-  destination: IPosition
+  direction: IDirection
   handleDirection: (destination: IPosition) => void
   resetDestination: () => void
   bounds: IBounds
@@ -63,7 +73,7 @@ export const MainControllerProvider = ({ children }) => {
   const [leftText, setLeftText] = useState('')
   const [positionToGo, setPositionToGo] = useState<IPosition>({} as IPosition)
   const [currentPosition, setCurrentPosition] = useState<IRegion>({} as IRegion)
-  const [destination, setDestination] = useState({} as IPosition)
+  const [direction, setDirection] = useState({} as IDirection)
   const [bounds, setBounds] = useState({} as IBounds)
   const t = useTranslate()
 
@@ -96,11 +106,12 @@ export const MainControllerProvider = ({ children }) => {
 
   const handleDirection = (destination: IPosition) => {
     if (destination?.latitude) {
-      setDestination(destination)
+      setDirection({ destination })
     }
   }
+
   const resetDestination = () => {
-    setDestination({} as IPosition)
+    setDirection({} as IDirection)
   }
 
   const initialButtons: IButton[] = [
@@ -173,7 +184,7 @@ export const MainControllerProvider = ({ children }) => {
         handleSetPositionToGo,
         changeButtons,
         handleDirection,
-        destination,
+        direction,
         resetDestination,
         bounds,
         addBounds,
