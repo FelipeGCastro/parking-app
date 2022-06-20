@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
+    height: 65,
   },
   contentContainer: {
     flexGrow: 1,

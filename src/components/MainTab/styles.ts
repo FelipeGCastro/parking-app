@@ -19,7 +19,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  alertText: {
+    paddingTop: 8,
+    fontSize: 12,
+    color: 'red',
+    alignSelf: 'center',
+  },
   buttonContainer: {
+    flexGrow: 1,
     marginHorizontal: 4,
   },
   leftText: {

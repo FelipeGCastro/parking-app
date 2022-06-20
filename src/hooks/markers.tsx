@@ -5,7 +5,7 @@ import { api } from '/services/api'
 
 export type MarkerStatus = 'created' | 'invalidated' | 'validated'
 
-interface IPosition {
+export interface IPosition {
   longitude: number
   latitude: number
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Text, View } from 'react-native'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useTranslate } from 'react-polyglot'
 import ButtonDefault from '../ButtonDefault'
 import { SetMarker } from '../SetMarker'
 import CloseButton from './CloseButton'
@@ -9,16 +10,20 @@ import { styles } from './styles'
 import { useUserLocation } from '/hooks/location'
 import { IButton, useMainController } from '/hooks/mainController'
 import { useMarkers } from '/hooks/markers'
+import { validateDistance } from '/utils/geo'
 
 interface Props {
   setUserFocused: (value: boolean) => void
 }
+const maxDistance = 100
 const MainTab = ({ setUserFocused }: Props) => {
   const [collapsed, setCollapsed] = useState(true)
   const { buttons, leftText, direction, resetDestination } = useMainController()
-  const { permissionsLoading, location } = useUserLocation()
+  const { permissionsLoading, location, currentLocation } = useUserLocation()
   const { showPositionMarker, markers, selectedMarker } = useMarkers()
   const bottomSafeArea = useSafeAreaInsets().bottom
+  const [alert, setAlert] = useState('')
+  const t = useTranslate()
 
   useEffect(() => {
     if (!permissionsLoading && !!location?.latitude) {
@@ -35,13 +40,30 @@ const MainTab = ({ setUserFocused }: Props) => {
     }
   }, [direction])
 
+  useEffect(() => {
+    const firstValidation = buttons[0]?.onPress === 'invalidateMarker'
+    if (firstValidation && selectedMarker?.latitude) {
+      setAlert(
+        validateDistance(selectedMarker, currentLocation, maxDistance)
+          ? ''
+          : t('minLocation', { distance: maxDistance }),
+      )
+    } else {
+      setAlert('')
+    }
+  }, [selectedMarker, currentLocation])
+
   const renderButtons = (item: IButton) => {
     let disabled
+
     if (item.onPress === 'handleDirection') {
       disabled = !(markers.length > 0)
     }
     if (item.onPress === 'invalidateMarker') {
-      disabled = selectedMarker?.status === 'invalidated'
+      disabled = selectedMarker?.status === 'invalidated' || alert
+    }
+    if (item.onPress === 'validateMarker') {
+      disabled = selectedMarker?.status === 'validated' || alert
     }
     return (
       <View key={item.title} style={styles.buttonContainer}>
@@ -71,7 +93,13 @@ const MainTab = ({ setUserFocused }: Props) => {
           { paddingBottom: bottomSafeArea },
           collapsed && styles.collapsedContainer,
         ]}>
-        <View style={[styles.content, collapsed && styles.collapsedContainer]}>
+        {!!alert && <Text style={styles.alertText}>{alert}</Text>}
+        <View
+          style={[
+            styles.content,
+            !!alert && { paddingTop: 0 },
+            collapsed && styles.collapsedContainer,
+          ]}>
           {!!leftText && <Text style={styles.leftText}>{leftText}</Text>}
           {!collapsed && buttons.map(renderButtons)}
         </View>

@@ -50,7 +50,7 @@ const TopBar = () => {
     <Transitioning.View
       ref={ref}
       transition={transition}
-      style={[styles.container, { paddingTop: topSafeArea }]}>
+      style={[styles.container, { paddingTop: topSafeArea + 4 }]}>
       <View style={styles.content}>
         {selectedMarker ? renderInstructions() : renderLabels()}
       </View>

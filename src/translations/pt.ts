@@ -4,7 +4,7 @@ export const phrases = {
   direction: 'Direção',
   directionToNearest: 'Direção p/ mais próximo',
   noSpot: 'Oh não, já não há!',
-  someoneTookIt: 'Alguém já estacionou!',
+  someoneTookIt: 'Eu ou Alguém já estacionou!',
   wellDone: 'Fixe, deu certo!',
   thanks: 'Obrigado!',
   yesICanSee: 'Sim, estou a ver!',
@@ -19,4 +19,5 @@ export const phrases = {
   validated: 'Validado',
   created: 'Criado',
   invalidated: 'Invalidado',
+  minLocation: 'É preciso estar no máximo %{distance}m do espaço',
 }

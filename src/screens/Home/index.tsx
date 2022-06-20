@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ActivityIndicator, Platform, View } from 'react-native'
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import { useUserLocation } from 'hooks/location'
@@ -36,11 +36,15 @@ const Home = () => {
 
   useEffect(() => {
     if (userLocationIsFocused || showPositionMarker) {
+      console.log(
+        'userLocationIsFocused || showPositionMarker',
+        userLocationIsFocused || showPositionMarker,
+      )
       mapRef?.current?.animateToRegion({ ...currentLocation, ...defaultDelta })
 
       fetchMarkers()
     }
-  }, [userLocationIsFocused, currentLocation, showPositionMarker])
+  }, [userLocationIsFocused, showPositionMarker])
 
   const fetchMarkers = useCallback(async () => {
     if (!mapRef?.current) {
@@ -96,11 +100,13 @@ const Home = () => {
     if (bounds?.northEast?.latitude) {
       addBounds(bounds)
     }
+    addCurrentPosition(reg)
   }
   const handleChangeRegion = (reg, details) => {
     // if (details.isGesture) {
-    addCurrentPosition(reg)
-    setUserLocationIsFocused(false)
+    if (userLocationIsFocused) {
+      setUserLocationIsFocused(false)
+    }
     if (selectedMarker) {
       hideValidateAndInvalidate()
     }
@@ -126,6 +132,7 @@ const Home = () => {
           onRegionChangeComplete={handleOnChangeFocus}
           onRegionChange={handleChangeRegion}
           // onPress={handleMapPress}
+          toolbarEnabled={false}
           style={styles.map}>
           {currentLocation?.latitude && (
             <UserMarker position={currentLocation} />

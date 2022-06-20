@@ -76,6 +76,7 @@ const SpotMarker = ({ marker, setUserFocused }: Props) => {
       onPress={handlePressMarker}
       onDeselect={handleDeselectMarker}
       coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+      tracksViewChanges={false}
       // onCalloutPress={handleCalloutPress}
     >
       <View style={styles.content}>
