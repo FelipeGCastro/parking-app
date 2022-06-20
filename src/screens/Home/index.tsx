@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ActivityIndicator, Platform, View } from 'react-native'
-import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps'
+import MapView, { Circle, PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import { useUserLocation } from 'hooks/location'
 import { styles } from './styles'
 import MainTab from '/components/MainTab'
@@ -28,7 +28,7 @@ const Home = () => {
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
   const mapRef = useRef<MapView>(null)
 
-  const zoom = direction?.destination ? 0.5 : showPositionMarker ? 0.25 : 1
+  const zoom = direction?.destination ? 0.35 : showPositionMarker ? 0.25 : 1
   const defaultDelta = {
     longitudeDelta: 0.00922 * zoom,
     latitudeDelta: 0.00421 * zoom,
@@ -102,6 +102,7 @@ const Home = () => {
     }
     addCurrentPosition(reg)
   }
+
   const handleChangeRegion = (reg, details) => {
     // if (details.isGesture) {
     if (userLocationIsFocused) {
@@ -137,10 +138,19 @@ const Home = () => {
           {currentLocation?.latitude && (
             <UserMarker position={currentLocation} />
           )}
+          {!!selectedMarker && (
+            <Circle
+              center={currentLocation}
+              fillColor={'rgba(255,40,0,0.1)'}
+              strokeColor={'rgba(255,40,0,0.2)'}
+              radius={100}
+            />
+          )}
           {markers.map(marker => (
             <SpotMarker
               key={marker.id}
               marker={marker}
+              selectedMarker={selectedMarker}
               setUserFocused={setUserLocationIsFocused}
             />
           ))}

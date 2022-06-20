@@ -2,7 +2,7 @@ export const phrases = {
   leaving: "I'm Leaving",
   spaceWillBeFree: 'Space will be free',
   direction: 'Direction',
-  directionToNearest: 'Direction to neareast spot!',
+  directionToNearest: 'To neareast spot!',
   noSpot: "Oh no, it's gone!",
   someoneTookIt: 'Me or someone took it!',
   wellDone: 'Well Done!',

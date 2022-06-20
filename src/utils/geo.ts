@@ -10,7 +10,7 @@ export const validateDistance = (
     { latitude: from.latitude, longitude: from.longitude },
     to,
   )
-  console.log('distanceVerified', distanceVerified)
+
   if (distanceVerified) {
     return distanceVerified < distance
   } else {

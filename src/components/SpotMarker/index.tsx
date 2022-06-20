@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { Platform, Text, View } from 'react-native'
 import { Marker, Callout, MapEvent } from 'react-native-maps'
 import Icon from '../Icon'
@@ -11,15 +11,12 @@ import { formatDistanceLocal } from '/utils/date'
 interface Props {
   marker: IMarker
   setUserFocused: (value: boolean) => void
+  selectedMarker: IMarker
 }
 
-const SpotMarker = ({ marker, setUserFocused }: Props) => {
+const SpotMarker = ({ marker, setUserFocused, selectedMarker }: Props) => {
   const { handleSetPositionToGo, handleDirection } = useMainController()
-  const {
-    showValidateAndInvalidate,
-    hideValidateAndInvalidate,
-    selectedMarker,
-  } = useMarkers()
+  const { showValidateAndInvalidate, hideValidateAndInvalidate } = useMarkers()
 
   const colorObj = {
     created: '#0673C6',
@@ -27,10 +24,21 @@ const SpotMarker = ({ marker, setUserFocused }: Props) => {
     validated: '#06C615',
     deselected: '#d3d3d3',
   }
-  const normalColor = colorObj[marker.status] || colorObj.created
-  const selected =
-    selectedMarker?.id === marker.id ? normalColor : colorObj.deselected
-  const color = selectedMarker ? selected : normalColor
+  const normalColor = useMemo(
+    () => colorObj[marker.status] || colorObj.created,
+    [marker, colorObj],
+  )
+
+  const selected = useMemo(
+    () =>
+      selectedMarker?.id === marker.id ? normalColor : colorObj.deselected,
+    [selectedMarker, normalColor],
+  )
+
+  const color = useMemo(
+    () => (selectedMarker?.id ? selected : normalColor),
+    [selectedMarker, normalColor, selected],
+  )
 
   const handleDeselectMarker = () => {
     hideValidateAndInvalidate()
@@ -76,9 +84,7 @@ const SpotMarker = ({ marker, setUserFocused }: Props) => {
       onPress={handlePressMarker}
       onDeselect={handleDeselectMarker}
       coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-      tracksViewChanges={false}
-      // onCalloutPress={handleCalloutPress}
-    >
+      tracksViewChanges={false}>
       <View style={styles.content}>
         <View style={[styles.markerContainer, { backgroundColor: color }]}>
           <Text style={styles.markerLetter}>P</Text>
