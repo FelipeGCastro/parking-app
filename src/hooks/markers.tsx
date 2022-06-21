@@ -1,7 +1,14 @@
-import { createContext, useCallback, useContext, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { useTranslate } from 'react-polyglot'
 import { IButton, useMainController } from './mainController'
 import { api } from '/services/api'
+import { socket } from '/services/io'
 
 export type MarkerStatus = 'created' | 'invalidated' | 'validated'
 
@@ -45,20 +52,23 @@ export const MarkersProvider = ({ children }) => {
   const t = useTranslate()
 
   const getMarkers = async (bounds?: IBounds) => {
-    try {
-      if (bounds?.northEast) {
-        const result = await api.get('/spots', {
-          params: {
-            bounds,
-          },
-        })
-        setMarkers(result.data)
-      } else {
-        return
-      }
-    } catch (error) {
-      console.log('ERROR GETTING SPOTS')
-    }
+    socket.emit('getSpots', bounds, response => {
+      setMarkers(response.spots)
+    })
+    // try {
+    //   if (bounds?.northEast) {
+    //     const result = await api.get('/spots', {
+    //       params: {
+    //         bounds,
+    //       },
+    //     })
+    //     setMarkers(result.data)
+    //   } else {
+    //     return
+    //   }
+    // } catch (error) {
+    //   console.log('ERROR GETTING SPOTS')
+    // }
   }
 
   const handleAddPosition = () => {

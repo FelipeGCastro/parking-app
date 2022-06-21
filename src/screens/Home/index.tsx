@@ -36,10 +36,6 @@ const Home = () => {
 
   useEffect(() => {
     if (userLocationIsFocused || showPositionMarker) {
-      console.log(
-        'userLocationIsFocused || showPositionMarker',
-        userLocationIsFocused || showPositionMarker,
-      )
       mapRef?.current?.animateToRegion({ ...currentLocation, ...defaultDelta })
 
       fetchMarkers()
@@ -62,12 +58,12 @@ const Home = () => {
       if (valid) {
         fetchMarkers()
       }
-      setTimeout(refresh, 1000 * 30)
+      setTimeout(refresh, 1000 * 5)
       // ...
     }
 
     // initial call, or just call refresh directly
-    setTimeout(refresh, 1000 * 30)
+    setTimeout(refresh, 1000 * 5)
     return () => {
       valid = false
     }

@@ -27,7 +27,8 @@
     "react-native-reanimated": "~2.8.0",
     "react-native-safe-area-context": "4.2.4",
     "react-native-web": "0.17.7",
-    "react-polyglot": "^0.7.2"
+    "react-polyglot": "^0.7.2",
+    "socket.io-client": "^4.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
