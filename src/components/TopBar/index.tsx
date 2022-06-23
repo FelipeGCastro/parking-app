@@ -2,24 +2,14 @@ import React, { useEffect, useRef } from 'react'
 import { Text, View } from 'react-native'
 import { styles } from './styles'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Transitioning, Transition } from 'react-native-reanimated'
-import { useTopBar } from '/hooks/topBar'
 import { useMarkers } from '/hooks/markers'
 import { useTranslate } from 'react-polyglot'
-const transition = <Transition.Change interpolation="easeInOut" />
 
 const TopBar = () => {
   const topSafeArea = useSafeAreaInsets().top
   const ref = useRef(null)
   const { selectedMarker } = useMarkers()
-  const { isOpen } = useTopBar()
   const t = useTranslate()
-
-  useEffect(() => {
-    if (isOpen) {
-      ref?.current?.animateNextTransition()
-    }
-  }, [isOpen])
 
   const renderInstructions = () => {
     return (
@@ -46,16 +36,11 @@ const TopBar = () => {
     </>
   )
 
-  return (
-    <Transitioning.View
-      ref={ref}
-      transition={transition}
-      style={[styles.container, { paddingTop: topSafeArea + 4 }]}>
-      <View style={styles.content}>
-        {selectedMarker ? renderInstructions() : renderLabels()}
-      </View>
-    </Transitioning.View>
-  )
+  return selectedMarker ? (
+    <View ref={ref} style={[styles.container, { paddingTop: topSafeArea + 4 }]}>
+      <View style={styles.content}>{renderInstructions()}</View>
+    </View>
+  ) : null
 }
 
 export default TopBar

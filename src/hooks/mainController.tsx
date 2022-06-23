@@ -116,7 +116,7 @@ export const MainControllerProvider = ({ children }) => {
 
   const initialButtons: IButton[] = [
     {
-      title: t('leaving'),
+      title: t('markSpot'),
       description: t('spaceWillBeFree'),
       onPress: 'handleAddPosition',
       icon: {

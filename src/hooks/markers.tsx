@@ -40,6 +40,7 @@ interface IMarkerContext {
   invalidateMarker: (id: string) => void
   getMarkers: (bounds: IBounds) => Promise<void>
   selectedMarker: undefined | IMarker
+  markersLoading: boolean
 }
 const MarkersContext = createContext({} as IMarkerContext)
 
@@ -49,11 +50,14 @@ export const MarkersProvider = ({ children }) => {
   const [preventDoubleCall, setPreventDoubleCall] = useState(false)
   const [selectedMarker, setSelectedMarker] = useState<undefined | IMarker>()
   const { changeButtons, currentPosition, bounds } = useMainController()
+  const [markersLoading, setMarkersLoading] = useState(false)
   const t = useTranslate()
 
   const getMarkers = async (bounds?: IBounds) => {
+    setMarkersLoading(true)
     socket.emit('getSpots', bounds, response => {
       setMarkers(response.spots)
+      setMarkersLoading(false)
     })
     // try {
     //   if (bounds?.northEast) {
@@ -100,12 +104,16 @@ export const MarkersProvider = ({ children }) => {
       id = selectedMarker?.id
     }
     updateMarker({ id, status: 'validated', bounds })
+    changeButtons()
+    setSelectedMarker(undefined)
   }
   const invalidateMarker = (id: string) => {
     if (!id) {
       id = selectedMarker?.id
     }
     updateMarker({ id, status: 'invalidated', bounds })
+    changeButtons()
+    setSelectedMarker(undefined)
   }
 
   const addSpot = useCallback(async () => {
@@ -206,6 +214,7 @@ export const MarkersProvider = ({ children }) => {
         getMarkers,
         selectedMarker,
         cancelAddSpot,
+        markersLoading,
       }}>
       {children}
     </MarkersContext.Provider>

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import * as Location from 'expo-location'
 import { useMarkers } from './markers'
+import { useTranslate } from 'react-polyglot'
 
 interface ILocation {
   latitude: number
@@ -19,6 +20,7 @@ export const UserLocationProvider = ({ children }) => {
   const [currentLocation, setCurrentLocation] = useState<ILocation>(null)
   const [errorMsg, setErrorMsg] = useState(null)
   const [permissionsLoading, setPermissionsLoading] = useState(true)
+  const t = useTranslate()
 
   const handleUpdatePosition: Location.LocationCallback = ({ coords }) => {
     setCurrentLocation({
@@ -31,21 +33,7 @@ export const UserLocationProvider = ({ children }) => {
     let locationSubscription: Location.LocationSubscription
     const handleLocationThings = async () => {
       setPermissionsLoading(true)
-      let { status } = await Location.requestForegroundPermissionsAsync()
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied')
-        console.log('Permission to access location was denied')
-        setPermissionsLoading(false)
-        return
-      }
-
-      let location = await Location.getCurrentPositionAsync({})
-      const dataLocation = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      }
-      setLocation(dataLocation)
-      setCurrentLocation(dataLocation)
+      await requestPermissions()
       setPermissionsLoading(false)
       locationSubscription = await Location.watchPositionAsync(
         { accuracy: Location.Accuracy.BestForNavigation },
@@ -58,6 +46,23 @@ export const UserLocationProvider = ({ children }) => {
       locationSubscription?.remove()
     }
   }, [])
+
+  const requestPermissions = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync()
+    if (status !== 'granted') {
+      setErrorMsg(t('permissionDenied'))
+      console.log('Permission to access location was denied')
+      return
+    }
+
+    let location = await Location.getCurrentPositionAsync({})
+    const dataLocation = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    }
+    setLocation(dataLocation)
+    setCurrentLocation(dataLocation)
+  }
 
   return (
     <UserLocationContext.Provider

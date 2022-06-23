@@ -20,4 +20,5 @@ export const phrases = {
   created: 'Criado',
   invalidated: 'Invalidado',
   minLocation: 'É preciso estar no máximo %{distance}m do espaço',
+  permissionDenied: 'Permissão para acessar localização foi negada.',
 }

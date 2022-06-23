@@ -16,7 +16,11 @@ interface Props {
 
 const SpotMarker = ({ marker, setUserFocused, selectedMarker }: Props) => {
   const { handleSetPositionToGo, handleDirection } = useMainController()
-  const { showValidateAndInvalidate, hideValidateAndInvalidate } = useMarkers()
+  const {
+    showValidateAndInvalidate,
+    hideValidateAndInvalidate,
+    markersLoading,
+  } = useMarkers()
 
   const colorObj = {
     created: '#0673C6',
@@ -84,7 +88,7 @@ const SpotMarker = ({ marker, setUserFocused, selectedMarker }: Props) => {
       onPress={handlePressMarker}
       onDeselect={handleDeselectMarker}
       coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-      tracksViewChanges={false}>
+      tracksViewChanges={markersLoading}>
       <View style={styles.content}>
         <View style={[styles.markerContainer, { backgroundColor: color }]}>
           <Text style={styles.markerLetter}>P</Text>

@@ -30,8 +30,8 @@ const Home = () => {
 
   const zoom = direction?.destination ? 0.35 : showPositionMarker ? 0.25 : 1
   const defaultDelta = {
-    longitudeDelta: 0.00922 * zoom,
-    latitudeDelta: 0.00421 * zoom,
+    longitudeDelta: 0.00522 * zoom,
+    latitudeDelta: 0.00021 * zoom,
   }
 
   useEffect(() => {
