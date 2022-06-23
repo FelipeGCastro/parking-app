@@ -6,11 +6,10 @@ import Icon from '/components/Icon'
 interface Props {
   onPress: () => void
 }
-const CloseButton = ({ onPress }: Props) => {
-  const bottomSafeArea = useSafeAreaInsets().bottom
+const MenuButton = ({ onPress }: Props) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Icon name="close-circle-outline" color="#C60606" />
+      <Icon name="menu" />
     </TouchableOpacity>
   )
 }
@@ -25,8 +24,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
-    marginBottom: 24,
+    marginBottom: 16,
   },
 })
 
-export default CloseButton
+export default MenuButton

@@ -13,7 +13,9 @@ const iconNames = {
   ['error-outline']: MaterialIcons,
   location: Entypo,
   check: FontAwesome5,
+  ['user-alt']: FontAwesome5,
   ['my-location']: MaterialIcons,
+  menu: MaterialIcons,
   ['close-circle-outline']: MaterialCommunityIcons,
 } as const
 

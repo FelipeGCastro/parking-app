@@ -97,17 +97,21 @@ const Home = () => {
       addBounds(bounds)
     }
     addCurrentPosition(reg)
-  }
-
-  const handleChangeRegion = (reg, details) => {
-    // if (details.isGesture) {
     if (userLocationIsFocused) {
       setUserLocationIsFocused(false)
     }
     if (selectedMarker) {
       hideValidateAndInvalidate()
     }
-    // }
+  }
+
+  const handleChangeRegion = (reg, details) => {
+    if (userLocationIsFocused) {
+      setUserLocationIsFocused(false)
+    }
+    if (selectedMarker) {
+      hideValidateAndInvalidate()
+    }
   }
 
   const handleMapReady = () => {
@@ -127,7 +131,7 @@ const Home = () => {
           provider={PROVIDER_GOOGLE}
           initialRegion={initialRegion}
           onRegionChangeComplete={handleOnChangeFocus}
-          onRegionChange={handleChangeRegion}
+          // onRegionChange={handleChangeRegion}
           // onPress={handleMapPress}
           toolbarEnabled={false}
           style={styles.map}>
@@ -160,10 +164,12 @@ const Home = () => {
           )}
         </MapView>
       )}
-      {!userLocationIsFocused && (
-        <LocationButton onPress={() => setUserLocationIsFocused(true)} />
-      )}
-      <MainTab setUserFocused={setUserLocationIsFocused} />
+
+      <MainTab
+        userLocationIsFocused={userLocationIsFocused}
+        setUserLocationIsFocused={setUserLocationIsFocused}
+        setUserFocused={setUserLocationIsFocused}
+      />
       <TopBar />
     </View>
   )

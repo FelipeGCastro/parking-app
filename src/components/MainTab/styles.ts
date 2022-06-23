@@ -1,12 +1,15 @@
 import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
-  container: {
+  containerWrapper: {
     flexGrow: 1,
     position: 'absolute',
     bottom: 0,
     // overflow: 'hidden',
     width: '100%',
+  },
+  container: {
+    flexGrow: 1,
     borderTopRightRadius: 24,
     borderTopLeftRadius: 24,
     backgroundColor: '#fff',

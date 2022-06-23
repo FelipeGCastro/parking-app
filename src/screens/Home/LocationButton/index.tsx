@@ -7,24 +7,24 @@ interface Props {
   onPress: () => void
 }
 const LocationButton = ({ onPress }: Props) => {
-  const bottomSafeArea = useSafeAreaInsets().bottom
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[styles.container, { bottom: bottomSafeArea + 120 }]}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <Icon name="my-location" />
     </TouchableOpacity>
   )
 }
 export const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    right: 16,
+    alignSelf: 'flex-end',
+    width: 50,
+    height: 50,
     padding: 10,
     borderRadius: 25,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: 16,
+    marginBottom: 16,
   },
 })
 

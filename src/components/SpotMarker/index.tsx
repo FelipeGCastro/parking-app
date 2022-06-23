@@ -88,7 +88,7 @@ const SpotMarker = ({ marker, setUserFocused, selectedMarker }: Props) => {
       onPress={handlePressMarker}
       onDeselect={handleDeselectMarker}
       coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-      tracksViewChanges={markersLoading}>
+      tracksViewChanges={true}>
       <View style={styles.content}>
         <View style={[styles.markerContainer, { backgroundColor: color }]}>
           <Text style={styles.markerLetter}>P</Text>

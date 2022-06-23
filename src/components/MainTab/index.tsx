@@ -6,17 +6,26 @@ import { useTranslate } from 'react-polyglot'
 import ButtonDefault from '../ButtonDefault'
 import { SetMarker } from '../SetMarker'
 import CloseButton from './CloseButton'
+import MenuButton from './MenuButton'
 import { styles } from './styles'
 import { useUserLocation } from '/hooks/location'
 import { IButton, useMainController } from '/hooks/mainController'
 import { useMarkers } from '/hooks/markers'
+import LocationButton from '/screens/Home/LocationButton'
 import { validateDistance } from '/utils/geo'
+import { useNavigation } from '@react-navigation/native'
 
 interface Props {
   setUserFocused: (value: boolean) => void
+  userLocationIsFocused: boolean
+  setUserLocationIsFocused: (value: boolean) => void
 }
 const maxDistance = 100
-const MainTab = ({ setUserFocused }: Props) => {
+const MainTab = ({
+  setUserFocused,
+  userLocationIsFocused,
+  setUserLocationIsFocused,
+}: Props) => {
   const [collapsed, setCollapsed] = useState(true)
   const { buttons, leftText, direction, resetDestination } = useMainController()
   const { permissionsLoading, location, currentLocation } = useUserLocation()
@@ -24,6 +33,7 @@ const MainTab = ({ setUserFocused }: Props) => {
   const bottomSafeArea = useSafeAreaInsets().bottom
   const [alert, setAlert] = useState('')
   const t = useTranslate()
+  const navigation = useNavigation<any>()
 
   useEffect(() => {
     if (!permissionsLoading && !!location?.latitude) {
@@ -82,8 +92,12 @@ const MainTab = ({ setUserFocused }: Props) => {
   }
 
   return (
-    <>
+    <View style={styles.containerWrapper}>
       {showPositionMarker && <SetMarker />}
+      <MenuButton onPress={() => navigation.toggleDrawer()} />
+      {!userLocationIsFocused && (
+        <LocationButton onPress={() => setUserLocationIsFocused(true)} />
+      )}
       {direction?.destination && collapsed && (
         <CloseButton onPress={resetDestination} />
       )}
@@ -104,7 +118,7 @@ const MainTab = ({ setUserFocused }: Props) => {
           {!collapsed && buttons.map(renderButtons)}
         </View>
       </View>
-    </>
+    </View>
   )
 }
 
