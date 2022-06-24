@@ -9,6 +9,7 @@ import { useTranslate } from 'react-polyglot'
 import { IButton, useMainController } from './mainController'
 import { api } from '/services/api'
 import { socket } from '/services/io'
+import { convertArrayToObject, isInsideBounds } from '/utils/manipulators'
 
 export type MarkerStatus = 'created' | 'invalidated' | 'validated'
 
@@ -30,7 +31,7 @@ export interface IBounds {
 }
 interface IMarkerContext {
   addSpot: () => void
-  markers: IMarker[]
+  markers: IMarkers
   handleAddPosition: () => void
   showValidateAndInvalidate: (marker: IMarker) => void
   hideValidateAndInvalidate: () => void
@@ -44,8 +45,12 @@ interface IMarkerContext {
 }
 const MarkersContext = createContext({} as IMarkerContext)
 
+interface IMarkers {
+  [key: string]: IMarker
+}
+
 export const MarkersProvider = ({ children }) => {
-  const [markers, setMarkers] = useState<IMarker[]>([])
+  const [markers, setMarkers] = useState<IMarkers>({})
   const [showPositionMarker, setShowPositionMarker] = useState(false)
   const [preventDoubleCall, setPreventDoubleCall] = useState(false)
   const [selectedMarker, setSelectedMarker] = useState<undefined | IMarker>()
@@ -53,26 +58,47 @@ export const MarkersProvider = ({ children }) => {
   const [markersLoading, setMarkersLoading] = useState(false)
   const t = useTranslate()
 
+  useEffect(() => {
+    socket.on('latestSpot', handleUpdateSpots)
+    socket.on('removedSpots', handleRemoveSpots)
+
+    return () => {
+      socket.off('latestSpot')
+      socket.off('removedSpots')
+    }
+  }, [])
+  const handleUpdateSpots = useCallback(
+    (spot: IMarker) => {
+      console.log('spot.latitude', spot.latitude)
+      if (spot.latitude) {
+        // const isRelevant = isInsideBounds(
+        //   { latitude: spot.latitude, longitude: spot.longitude },
+        //   bounds,
+        // )
+        // if (isRelevant) {
+        setMarkers(prev => ({ ...prev, [spot.id]: spot }))
+        // }
+      }
+    },
+    [bounds],
+  )
+  const handleRemoveSpots = useCallback(
+    (spots: IMarker[]) => {
+      const markersCopy = { ...markers }
+      spots.forEach(spot => {
+        delete markersCopy[spot.id]
+      })
+      setMarkers(markersCopy)
+    },
+    [markers],
+  )
   const getMarkers = async (bounds?: IBounds) => {
     setMarkersLoading(true)
     socket.emit('getSpots', bounds, response => {
-      setMarkers(response.spots)
+      const markers = convertArrayToObject(response.spots, 'id')
+      setMarkers(markers)
       setMarkersLoading(false)
     })
-    // try {
-    //   if (bounds?.northEast) {
-    //     const result = await api.get('/spots', {
-    //       params: {
-    //         bounds,
-    //       },
-    //     })
-    //     setMarkers(result.data)
-    //   } else {
-    //     return
-    //   }
-    // } catch (error) {
-    //   console.log('ERROR GETTING SPOTS')
-    // }
   }
 
   const handleAddPosition = () => {
@@ -83,16 +109,13 @@ export const MarkersProvider = ({ children }) => {
   const updateMarker = async ({
     id,
     status,
-    bounds,
   }: {
     id: string
     status: MarkerStatus
-    bounds: IBounds
   }) => {
     try {
       if (bounds?.northEast?.latitude) {
-        const result = await api.patch('/spots', { id, status, bounds })
-        setMarkers(result.data)
+        await api.patch('/spots', { id, status })
       }
     } catch (error) {
       console.log('ERROR UPDATING MARKER')
@@ -103,7 +126,7 @@ export const MarkersProvider = ({ children }) => {
     if (!id) {
       id = selectedMarker?.id
     }
-    updateMarker({ id, status: 'validated', bounds })
+    updateMarker({ id, status: 'validated' })
     changeButtons()
     setSelectedMarker(undefined)
   }
@@ -111,20 +134,18 @@ export const MarkersProvider = ({ children }) => {
     if (!id) {
       id = selectedMarker?.id
     }
-    updateMarker({ id, status: 'invalidated', bounds })
+    updateMarker({ id, status: 'invalidated' })
     changeButtons()
     setSelectedMarker(undefined)
   }
 
   const addSpot = useCallback(async () => {
-    if (currentPosition?.latitude && bounds?.northEast?.latitude) {
+    if (currentPosition?.latitude) {
       try {
-        const result = await api.post('/spots', {
+        await api.post('/spots', {
           longitude: currentPosition.longitude,
           latitude: currentPosition.latitude,
-          bounds,
         })
-        setMarkers(result.data)
       } catch (error) {
         console.log(error)
       }
@@ -133,7 +154,7 @@ export const MarkersProvider = ({ children }) => {
     } else {
       console.log('Error to add current position')
     }
-  }, [currentPosition, bounds])
+  }, [currentPosition])
 
   const hideValidateAndInvalidate = () => {
     if (!preventDoubleCall) {

@@ -20,7 +20,7 @@ interface Props {
   userLocationIsFocused: boolean
   setUserLocationIsFocused: (value: boolean) => void
 }
-const maxDistance = 100
+const maxDistance = 200
 const MainTab = ({
   setUserFocused,
   userLocationIsFocused,
@@ -67,7 +67,7 @@ const MainTab = ({
     let disabled
 
     if (item.onPress === 'handleDirection') {
-      disabled = !(markers.length > 0)
+      disabled = !(Object.keys(markers)?.length > 0)
     }
     if (item.onPress === 'invalidateMarker') {
       disabled = selectedMarker?.status === 'invalidated' || alert
@@ -92,33 +92,35 @@ const MainTab = ({
   }
 
   return (
-    <View style={styles.containerWrapper}>
+    <>
       {showPositionMarker && <SetMarker />}
-      <MenuButton onPress={() => navigation.toggleDrawer()} />
-      {!userLocationIsFocused && (
-        <LocationButton onPress={() => setUserLocationIsFocused(true)} />
-      )}
-      {direction?.destination && collapsed && (
-        <CloseButton onPress={resetDestination} />
-      )}
-      <View
-        style={[
-          styles.container,
-          { paddingBottom: bottomSafeArea },
-          collapsed && styles.collapsedContainer,
-        ]}>
-        {!!alert && <Text style={styles.alertText}>{alert}</Text>}
+      <View style={styles.containerWrapper}>
+        <MenuButton onPress={() => navigation.toggleDrawer()} />
+        {!userLocationIsFocused && (
+          <LocationButton onPress={() => setUserLocationIsFocused(true)} />
+        )}
+        {direction?.destination && collapsed && (
+          <CloseButton onPress={resetDestination} />
+        )}
         <View
           style={[
-            styles.content,
-            !!alert && { paddingTop: 0 },
+            styles.container,
+            { paddingBottom: bottomSafeArea },
             collapsed && styles.collapsedContainer,
           ]}>
-          {!!leftText && <Text style={styles.leftText}>{leftText}</Text>}
-          {!collapsed && buttons.map(renderButtons)}
+          {!!alert && <Text style={styles.alertText}>{alert}</Text>}
+          <View
+            style={[
+              styles.content,
+              !!alert && { paddingTop: 0 },
+              collapsed && styles.collapsedContainer,
+            ]}>
+            {!!leftText && <Text style={styles.leftText}>{leftText}</Text>}
+            {!collapsed && buttons.map(renderButtons)}
+          </View>
         </View>
       </View>
-    </View>
+    </>
   )
 }
 

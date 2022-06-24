@@ -8,7 +8,6 @@ import { useMainController } from '/hooks/mainController'
 import SpotMarker from '/components/SpotMarker'
 import TopBar from '/components/TopBar'
 import UserMarker from '/components/UserMarker'
-import LocationButton from './LocationButton'
 import { useMarkers } from '/hooks/markers'
 import MapViewDirections from 'react-native-maps-directions'
 
@@ -52,22 +51,6 @@ const Home = () => {
     }
   }, [mapRef, getMarkers])
 
-  useEffect(() => {
-    let valid = true
-    function refresh() {
-      if (valid) {
-        fetchMarkers()
-      }
-      setTimeout(refresh, 1000 * 5)
-      // ...
-    }
-
-    // initial call, or just call refresh directly
-    setTimeout(refresh, 1000 * 5)
-    return () => {
-      valid = false
-    }
-  }, [])
   useEffect(() => {
     if (positionToGo?.latitude && mapRef?.current) {
       const handleCamera = async () => {
@@ -114,7 +97,11 @@ const Home = () => {
     }
   }
 
-  const handleMapReady = () => {
+  const handleMapReady = async () => {
+    const bounds = await mapRef?.current?.getMapBoundaries()
+    if (bounds?.northEast?.latitude) {
+      addBounds(bounds)
+    }
     fetchMarkers()
   }
 
@@ -143,13 +130,13 @@ const Home = () => {
               center={currentLocation}
               fillColor={'rgba(255,40,0,0.1)'}
               strokeColor={'rgba(255,40,0,0.2)'}
-              radius={100}
+              radius={200}
             />
           )}
-          {markers.map(marker => (
+          {Object.keys(markers).map((key, index) => (
             <SpotMarker
-              key={marker.id}
-              marker={marker}
+              key={markers[key].id}
+              marker={markers[key]}
               selectedMarker={selectedMarker}
               setUserFocused={setUserLocationIsFocused}
             />
