@@ -19,12 +19,14 @@ interface Props {
   setUserFocused: (value: boolean) => void
   userLocationIsFocused: boolean
   setUserLocationIsFocused: (value: boolean) => void
+  maxDistance: number
 }
-const maxDistance = 200
+
 const MainTab = ({
   setUserFocused,
   userLocationIsFocused,
   setUserLocationIsFocused,
+  maxDistance,
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true)
   const { buttons, leftText, direction, resetDestination } = useMainController()

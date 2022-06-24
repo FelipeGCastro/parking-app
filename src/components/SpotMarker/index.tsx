@@ -16,11 +16,7 @@ interface Props {
 
 const SpotMarker = ({ marker, setUserFocused, selectedMarker }: Props) => {
   const { handleSetPositionToGo, handleDirection } = useMainController()
-  const {
-    showValidateAndInvalidate,
-    hideValidateAndInvalidate,
-    markersLoading,
-  } = useMarkers()
+  const { showValidateAndInvalidate, hideValidateAndInvalidate } = useMarkers()
 
   const colorObj = {
     created: '#0673C6',

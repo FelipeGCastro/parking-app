@@ -26,7 +26,7 @@ const Home = () => {
   } = useMarkers()
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
   const mapRef = useRef<MapView>(null)
-
+  const maxDistance = 500
   const zoom = direction?.destination ? 0.35 : showPositionMarker ? 0.25 : 1
   const defaultDelta = {
     longitudeDelta: 0.00522 * zoom,
@@ -128,9 +128,9 @@ const Home = () => {
           {!!selectedMarker && (
             <Circle
               center={currentLocation}
-              fillColor={'rgba(255,40,0,0.1)'}
-              strokeColor={'rgba(255,40,0,0.2)'}
-              radius={200}
+              fillColor={'rgba(0,40,0,0.1)'}
+              strokeColor={'rgba(0,40,0,0.2)'}
+              radius={maxDistance}
             />
           )}
           {Object.keys(markers).map((key, index) => (
@@ -146,7 +146,7 @@ const Home = () => {
               origin={currentLocation}
               destination={direction.destination}
               apikey={googleApiKey}
-              strokeWidth={3}
+              strokeWidth={4}
             />
           )}
         </MapView>
@@ -156,6 +156,7 @@ const Home = () => {
         userLocationIsFocused={userLocationIsFocused}
         setUserLocationIsFocused={setUserLocationIsFocused}
         setUserFocused={setUserLocationIsFocused}
+        maxDistance={maxDistance}
       />
       <TopBar />
     </View>

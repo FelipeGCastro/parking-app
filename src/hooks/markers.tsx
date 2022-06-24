@@ -41,6 +41,7 @@ interface IMarkerContext {
   invalidateMarker: (id: string) => void
   getMarkers: (bounds: IBounds) => Promise<void>
   selectedMarker: undefined | IMarker
+  getMarkersLoading: boolean
   markersLoading: boolean
 }
 const MarkersContext = createContext({} as IMarkerContext)
@@ -55,49 +56,52 @@ export const MarkersProvider = ({ children }) => {
   const [preventDoubleCall, setPreventDoubleCall] = useState(false)
   const [selectedMarker, setSelectedMarker] = useState<undefined | IMarker>()
   const { changeButtons, currentPosition, bounds } = useMainController()
+  const [getMarkersLoading, setGetMarkersLoading] = useState(false)
   const [markersLoading, setMarkersLoading] = useState(false)
+  const [newSpot, setNewSpot] = useState<undefined | IMarker>()
   const t = useTranslate()
 
   useEffect(() => {
-    socket.on('latestSpot', handleUpdateSpots)
-    socket.on('removedSpots', handleRemoveSpots)
+    if (newSpot) {
+      const isRelevant = isInsideBounds(
+        { latitude: newSpot.latitude, longitude: newSpot.longitude },
+        bounds,
+      )
+      if (isRelevant) {
+        setMarkers(prev => ({ ...prev, [newSpot.id]: newSpot }))
+      }
+      setNewSpot(undefined)
+    }
+  }, [newSpot])
+
+  useEffect(() => {
+    socket.on('latestSpot', (spot: IMarker) => {
+      if (spot.latitude) {
+        setNewSpot(spot)
+      }
+    })
+
+    socket.on('removedSpots', (spots: IMarker[]) => {
+      setMarkers(prev => {
+        spots.forEach(spotItem => {
+          delete prev[spotItem.id]
+        })
+        return prev
+      })
+    })
 
     return () => {
       socket.off('latestSpot')
       socket.off('removedSpots')
     }
   }, [])
-  const handleUpdateSpots = useCallback(
-    (spot: IMarker) => {
-      console.log('spot.latitude', spot.latitude)
-      if (spot.latitude) {
-        // const isRelevant = isInsideBounds(
-        //   { latitude: spot.latitude, longitude: spot.longitude },
-        //   bounds,
-        // )
-        // if (isRelevant) {
-        setMarkers(prev => ({ ...prev, [spot.id]: spot }))
-        // }
-      }
-    },
-    [bounds],
-  )
-  const handleRemoveSpots = useCallback(
-    (spots: IMarker[]) => {
-      const markersCopy = { ...markers }
-      spots.forEach(spot => {
-        delete markersCopy[spot.id]
-      })
-      setMarkers(markersCopy)
-    },
-    [markers],
-  )
+
   const getMarkers = async (bounds?: IBounds) => {
-    setMarkersLoading(true)
+    setGetMarkersLoading(true)
     socket.emit('getSpots', bounds, response => {
       const markers = convertArrayToObject(response.spots, 'id')
       setMarkers(markers)
-      setMarkersLoading(false)
+      setGetMarkersLoading(false)
     })
   }
 
@@ -113,12 +117,19 @@ export const MarkersProvider = ({ children }) => {
     id: string
     status: MarkerStatus
   }) => {
+    setMarkersLoading(true)
     try {
       if (bounds?.northEast?.latitude) {
-        await api.patch('/spots', { id, status })
+        const result = await api.patch('/spots', { id, status })
+        const spot = result.data?.spot
+        if (spot) {
+          setMarkers(prev => ({ ...prev, [spot.id]: spot }))
+        }
       }
+      setMarkersLoading(false)
     } catch (error) {
-      console.log('ERROR UPDATING MARKER')
+      setMarkersLoading(false)
+      console.log('ERROR UPDATING MARKER', error)
     }
   }
 
@@ -140,13 +151,20 @@ export const MarkersProvider = ({ children }) => {
   }
 
   const addSpot = useCallback(async () => {
+    setMarkersLoading(true)
     if (currentPosition?.latitude) {
       try {
-        await api.post('/spots', {
+        const result = await api.post('/spots', {
           longitude: currentPosition.longitude,
           latitude: currentPosition.latitude,
         })
+        const spot = result.data?.spot
+        if (spot) {
+          setMarkers(prev => ({ ...prev, [spot.id]: spot }))
+        }
+        setMarkersLoading(false)
       } catch (error) {
+        setMarkersLoading(false)
         console.log(error)
       }
       setShowPositionMarker(false)
@@ -235,6 +253,7 @@ export const MarkersProvider = ({ children }) => {
         getMarkers,
         selectedMarker,
         cancelAddSpot,
+        getMarkersLoading,
         markersLoading,
       }}>
       {children}
