@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ActivityIndicator, Platform, View } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { ActivityIndicator, View } from 'react-native'
 import MapView, { Circle, PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import { useUserLocation } from 'hooks/location'
 import { styles } from './styles'
