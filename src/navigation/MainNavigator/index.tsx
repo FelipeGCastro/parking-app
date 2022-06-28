@@ -1,7 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NavigationContainer } from '@react-navigation/native'
 import { useTranslate } from 'react-polyglot'
-import { DrawerContent } from '/components/Drawer'
+import { DrawerContent } from '/components/common/Drawer'
 import Home from '/screens/Home'
 import Settings from '/screens/Settings'
 import TermsAndCondition from '/screens/TermsAndCondition'

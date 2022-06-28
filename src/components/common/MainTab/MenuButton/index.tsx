@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Icon from '/components/Icon'
+import Icon from '/components/common/Icon'
 import { useMarkers } from '/hooks/markers'
 
 interface Props {

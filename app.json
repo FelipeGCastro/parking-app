@@ -12,11 +12,13 @@
     ],
     "ios": {
       "usesAppleSignIn": true,
+      "bundleIdentifier": "com.luizcastro.spotyparking",
       "config": {
         "googleMapsApiKey": "AIzaSyAO2vybHaJNCgwKbjgz0yD9D6KdiGcVMr8"
       }
     },
     "android": {
+      "package": "com.spotyparking",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCXZnngCOqs0Qb5Sc7VtPH_L-2bXzEC5xs"
