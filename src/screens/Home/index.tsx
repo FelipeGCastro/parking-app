@@ -10,10 +10,11 @@ import TopBar from '/components/TopBar'
 import UserMarker from '/components/UserMarker'
 import { useMarkers } from '/hooks/markers'
 import MapViewDirections from 'react-native-maps-directions'
+import MenuButton from '/components/MainTab/MenuButton'
 
 const googleApiKey = process.env.GOOGLE_API_DIRECTIONS
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const { location, currentLocation, permissionsLoading } = useUserLocation()
   const { addCurrentPosition, positionToGo, direction, addBounds } =
     useMainController()
@@ -152,6 +153,7 @@ const Home = () => {
         </MapView>
       )}
 
+      <MenuButton onPress={() => navigation.toggleDrawer()} />
       <MainTab
         userLocationIsFocused={userLocationIsFocused}
         setUserLocationIsFocused={setUserLocationIsFocused}

@@ -21,4 +21,9 @@ export const phrases = {
   invalidated: 'Invalidated',
   minLocation: 'You need to be %{distance}m max from spot',
   permissionDenied: 'Permission to access location was denied',
+  screens: {
+    home: 'Home',
+    termsAndCondition: 'Terms and Condition',
+    settings: 'Settings',
+  },
 }

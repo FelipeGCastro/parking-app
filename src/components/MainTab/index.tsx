@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -6,7 +6,6 @@ import { useTranslate } from 'react-polyglot'
 import ButtonDefault from '../ButtonDefault'
 import { SetMarker } from '../SetMarker'
 import CloseButton from './CloseButton'
-import MenuButton from './MenuButton'
 import { styles } from './styles'
 import { useUserLocation } from '/hooks/location'
 import { IButton, useMainController } from '/hooks/mainController'
@@ -35,7 +34,6 @@ const MainTab = ({
   const bottomSafeArea = useSafeAreaInsets().bottom
   const [alert, setAlert] = useState('')
   const t = useTranslate()
-  const navigation = useNavigation<any>()
 
   useEffect(() => {
     if (!permissionsLoading && !!location?.latitude) {
@@ -97,7 +95,6 @@ const MainTab = ({
     <>
       {showPositionMarker && <SetMarker />}
       <View style={styles.containerWrapper}>
-        <MenuButton onPress={() => navigation.toggleDrawer()} />
         {!userLocationIsFocused && (
           <LocationButton onPress={() => setUserLocationIsFocused(true)} />
         )}

@@ -11,6 +11,7 @@
       "**/*"
     ],
     "ios": {
+      "usesAppleSignIn": true,
       "config": {
         "googleMapsApiKey": "AIzaSyAO2vybHaJNCgwKbjgz0yD9D6KdiGcVMr8"
       }

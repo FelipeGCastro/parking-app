@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import * as Location from 'expo-location'
-import { useMarkers } from './markers'
 import { useTranslate } from 'react-polyglot'
 
 interface ILocation {
