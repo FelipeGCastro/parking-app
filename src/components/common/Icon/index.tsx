@@ -1,11 +1,12 @@
 import React from 'react'
-import { StyleProp, TextStyle, View } from 'react-native'
+import { StyleProp, TextStyle } from 'react-native'
 
 import {
   MaterialIcons,
   Entypo,
   FontAwesome5,
   MaterialCommunityIcons,
+  AntDesign,
 } from '@expo/vector-icons'
 
 const iconNames = {
@@ -17,6 +18,8 @@ const iconNames = {
   ['my-location']: MaterialIcons,
   menu: MaterialIcons,
   ['close-circle-outline']: MaterialCommunityIcons,
+  google: AntDesign,
+  apple1: AntDesign,
 } as const
 
 export type IconNames = keyof typeof iconNames
