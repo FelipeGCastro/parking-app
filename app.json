@@ -7,6 +7,7 @@
     "splash": {
       "image": "./src/assets/splash.png"
     },
+    "scheme": "com.spotyparking",
     "assetBundlePatterns": [
       "**/*"
     ],

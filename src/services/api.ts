@@ -5,12 +5,12 @@ import Constants from 'expo-constants'
 const { manifest } = Constants
 
 const base = process.env.BASE_URL
-// typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-//   ? `http://${manifest.debuggerHost.split(`:`).shift().concat(`:3000`)}`
-//   : process.env.BASE_URL
+// const base =
+//   typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
+//     ? `http://${manifest.debuggerHost.split(`:`).shift().concat(`:3000`)}`
+//     : process.env.BASE_URL
 
 const api = axios.create({
-  // baseURL: 'http://192.168.1.86:3333'
   baseURL: base,
 })
 

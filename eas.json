@@ -16,7 +16,11 @@
       "distribution": "internal",
       "env": {
         "BASE_URL": "https://parking-node-backend.herokuapp.com/",
-        "GOOGLE_API_DIRECTIONS": "AIzaSyCCoGbZF4npwAe2MvZ4oSK3zSq-h8d8AzU"
+        "GOOGLE_API_DIRECTIONS": "AIzaSyCCoGbZF4npwAe2MvZ4oSK3zSq-h8d8AzU",
+        "GOOGLE_ID_ANDROID": "694285838288-kcdabh221i20gqb0odtsdsh01385f45i.apps.googleusercontent.com",
+        "GOOGLE_ID_IOS": "694285838288-95jd0itbll538oc9etikie8r954o7sat.apps.googleusercontent.com",
+        "GOOGLE_ID_EXPO": "694285838288-54q629o6rppe3botl53ta582fv5bh0aj.apps.googleusercontent.com",
+        "GOOGLE_SECRET_KEY": "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"
       },
       "android": {
         "buildType": "apk"
@@ -25,7 +29,11 @@
     "production": {
       "env": {
         "BASE_URL": "https://parking-node-backend.herokuapp.com/",
-        "GOOGLE_API_DIRECTIONS": "AIzaSyCCoGbZF4npwAe2MvZ4oSK3zSq-h8d8AzU"
+        "GOOGLE_API_DIRECTIONS": "AIzaSyCCoGbZF4npwAe2MvZ4oSK3zSq-h8d8AzU",
+        "GOOGLE_ID_ANDROID": "694285838288-kcdabh221i20gqb0odtsdsh01385f45i.apps.googleusercontent.com",
+        "GOOGLE_ID_IOS": "694285838288-95jd0itbll538oc9etikie8r954o7sat.apps.googleusercontent.com",
+        "GOOGLE_ID_EXPO": "694285838288-54q629o6rppe3botl53ta582fv5bh0aj.apps.googleusercontent.com",
+        "GOOGLE_SECRET_KEY": "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"
       }
     }
   },

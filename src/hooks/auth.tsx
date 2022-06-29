@@ -6,7 +6,7 @@ interface User {
   id: number
   name: string
   email: string
-  avatar_url: string | undefined
+  avatarUrl: string | undefined
   token: string
 }
 interface IAuthContext {
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
     iosClientId: process.env.GOOGLE_ID_IOS,
     expoClientId: process.env.GOOGLE_ID_EXPO,
     scopes: ['email', 'profile'],
-    clientSecret: process.env.EXPO_CLIENT_SECRET,
+    clientSecret: process.env.GOOGLE_SECRET_KEY,
     shouldAutoExchangeCode: true,
   })
 
@@ -43,11 +43,12 @@ export const AuthProvider = ({ children }) => {
             token: authentication?.accessToken,
           })
           const { user: userInfo, token } = result.data
+          console.log('userInfo', userInfo)
           const userLogged = {
             id: userInfo.id,
             email: userInfo.email,
             name: userInfo.name,
-            avatar_url: userInfo.avatar_url,
+            avatarUrl: userInfo.avatarUrl,
             token: token,
           }
           setUser(userLogged)

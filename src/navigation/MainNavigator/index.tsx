@@ -12,7 +12,7 @@ export const MainNavigator = () => {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        drawerContent={DrawerContent}
+        drawerContent={props => <DrawerContent {...props} />}
         screenOptions={{ drawerType: 'front' }}
         initialRouteName="Home">
         <Drawer.Screen

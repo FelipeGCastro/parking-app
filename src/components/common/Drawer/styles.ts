@@ -26,4 +26,14 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#707070',
   },
+  imageContainer: {
+    width: 75,
+    height: 75,
+    borderRadius: 40,
+  },
+  image: {
+    width: 75,
+    height: 75,
+    borderRadius: 40,
+  },
 })

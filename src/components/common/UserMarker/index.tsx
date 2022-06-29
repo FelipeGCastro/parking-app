@@ -1,9 +1,8 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { Marker } from 'react-native-maps'
 
 import { styles } from './styles'
-import { useTopBar } from '/hooks/topBar'
 
 interface Props {
   position: {

@@ -4,15 +4,22 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useTranslate } from 'react-polyglot'
 import ModalTray from '../containers/ModalTray'
 import Icon from '/components/common/Icon'
+import { useAuth } from '/hooks/auth'
 
 // import { Container } from './styles';
 
 const SignIn = ({ onClose }) => {
+  const { signInWithGoogle } = useAuth()
   const t = useTranslate()
+  const handleGooglePress = () => {
+    signInWithGoogle()
+  }
   return (
     <ModalTray onClose={onClose}>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.googleButton}>
+        <TouchableOpacity
+          onPress={handleGooglePress}
+          style={styles.googleButton}>
           <Icon style={styles.icon} color="#fff" name="google" />
           <Text style={styles.buttonText}>{t('signInGoogle')}</Text>
         </TouchableOpacity>
