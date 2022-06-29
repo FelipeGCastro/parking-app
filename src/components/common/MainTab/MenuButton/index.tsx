@@ -1,10 +1,5 @@
 import React from 'react'
-import {
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Icon from '/components/common/Icon'
 import { useMarkers } from '/hooks/markers'
@@ -14,10 +9,11 @@ interface Props {
 }
 const MenuButton = ({ onPress }: Props) => {
   const { markersLoading, getMarkersLoading } = useMarkers()
+
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.container, { top: 0 + useSafeAreaInsets().top }]}>
+      style={[styles.container, { top: 16 + useSafeAreaInsets().top }]}>
       {markersLoading || getMarkersLoading ? (
         <ActivityIndicator size="large" color={'#0673C6'} />
       ) : (

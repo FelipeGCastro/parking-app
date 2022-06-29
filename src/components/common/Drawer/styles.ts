@@ -4,6 +4,8 @@ export const styles = StyleSheet.create({
   userContainer: {
     flexGrow: 1,
     alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 24,
   },
   userPhoto: {
