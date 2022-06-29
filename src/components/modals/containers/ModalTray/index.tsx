@@ -31,14 +31,6 @@ const ModalTray = ({
     setIsVisible(false)
   }, [])
 
-  const renderBackdrop = () => (
-    <TouchableWithoutFeedback onPress={handleClose}>
-      <View style={styles.backdropContainer}>
-        <BlurView style={styles.backdrop} tint={'light'} intensity={50} />
-      </View>
-    </TouchableWithoutFeedback>
-  )
-
   const renderChildren = () => (
     <View
       style={[
@@ -56,7 +48,6 @@ const ModalTray = ({
 
   return (
     <>
-      {isVisible && renderBackdrop()}
       <Modal
         testID="modal"
         isVisible={isVisible}
