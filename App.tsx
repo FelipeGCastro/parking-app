@@ -11,6 +11,7 @@ import { phrases as en } from '/translations/en'
 import { phrases as pt } from '/translations/en'
 import { MainNavigator } from '/navigation/MainNavigator'
 import { ModalProvider } from '/hooks/modal'
+import { AuthProvider } from '/hooks/auth'
 
 export default function App() {
   const translations = {
@@ -27,17 +28,19 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <I18n locale="en" messages={messages}>
-        <ModalProvider>
-          <MainControllerProvider>
-            <MarkersProvider>
-              <UserLocationProvider>
-                <TopBarProvider>
-                  <MainNavigator />
-                </TopBarProvider>
-              </UserLocationProvider>
-            </MarkersProvider>
-          </MainControllerProvider>
-        </ModalProvider>
+        <AuthProvider>
+          <ModalProvider>
+            <MainControllerProvider>
+              <MarkersProvider>
+                <UserLocationProvider>
+                  <TopBarProvider>
+                    <MainNavigator />
+                  </TopBarProvider>
+                </UserLocationProvider>
+              </MarkersProvider>
+            </MainControllerProvider>
+          </ModalProvider>
+        </AuthProvider>
       </I18n>
     </SafeAreaProvider>
   )

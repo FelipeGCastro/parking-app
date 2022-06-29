@@ -22,6 +22,8 @@ export const phrases = {
   minLocation: 'You need to be %{distance}m max from spot',
   permissionDenied: 'Permission to access location was denied',
   signIn: 'Sign In',
+  signInGoogle: 'Sign In with Google',
+  signInApple: 'Sign In with Apple',
   screens: {
     home: 'Home',
     termsAndCondition: 'Terms and Condition',

@@ -22,6 +22,8 @@ export const phrases = {
   minLocation: 'É preciso estar no máximo %{distance}m do espaço',
   permissionDenied: 'Permissão para acessar localização foi negada.',
   signIn: 'Entrar',
+  signInGoogle: 'Entrar com o Google',
+  signInApple: 'Entrar com o Apple',
   screens: {
     home: 'Início',
     termsAndCondition: 'Termos e Condições',
