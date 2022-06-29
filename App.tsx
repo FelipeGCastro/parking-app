@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler'
 import React from 'react'
 import * as Localization from 'expo-localization'
+import Toast from 'react-native-toast-message'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { MainControllerProvider } from '/hooks/mainController'
 import { TopBarProvider } from '/hooks/topBar'
@@ -35,6 +36,7 @@ export default function App() {
                 <UserLocationProvider>
                   <TopBarProvider>
                     <MainNavigator />
+                    <Toast />
                   </TopBarProvider>
                 </UserLocationProvider>
               </MarkersProvider>

@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import * as Google from 'expo-auth-session/providers/google'
 import { api, setTokenInterceptors } from '/services/api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Toast from 'react-native-toast-message'
+import { useTranslate } from 'react-polyglot'
 interface User {
   id: number
   name: string
@@ -22,6 +24,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState<User>({} as User)
   const [userStorageloading, setUserStorageLoading] = useState(true)
   const userStorageKey = '@spotyparking:user'
+  const t = useTranslate()
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: process.env.GOOGLE_ID_ANDROID,
@@ -42,8 +45,13 @@ export const AuthProvider = ({ children }) => {
           const result = await api.post('authenticate', {
             token: authentication?.accessToken,
           })
+          Toast.show({
+            text1: 'Authenticate Request',
+            type: 'success',
+            autoHide: true,
+            visibilityTime: 1000,
+          })
           const { user: userInfo, token } = result.data
-          console.log('userInfo', userInfo)
           const userLogged = {
             id: userInfo.id,
             email: userInfo.email,
@@ -59,6 +67,12 @@ export const AuthProvider = ({ children }) => {
       }
     }
     if (response?.type === 'success' && !user.email) {
+      Toast.show({
+        text1: t('signInGoogleSuccess'),
+        type: 'success',
+        autoHide: true,
+        visibilityTime: 2000,
+      })
       fetchUserFromApi()
     }
   }, [response])

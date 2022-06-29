@@ -1,6 +1,5 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { useTranslate } from 'react-polyglot'
 import ModalTray from '../containers/ModalTray'
 import Icon from '/components/common/Icon'
@@ -9,13 +8,15 @@ import { useAuth } from '/hooks/auth'
 // import { Container } from './styles';
 
 const SignIn = ({ onClose }) => {
+  const [forceClose, setForceClose] = useState(false)
   const { signInWithGoogle } = useAuth()
   const t = useTranslate()
-  const handleGooglePress = () => {
-    signInWithGoogle()
+  const handleGooglePress = async () => {
+    await signInWithGoogle()
+    setForceClose(true)
   }
   return (
-    <ModalTray onClose={onClose}>
+    <ModalTray onClose={onClose} forceClose={forceClose}>
       <View style={styles.container}>
         <TouchableOpacity
           onPress={handleGooglePress}

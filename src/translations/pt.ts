@@ -24,6 +24,7 @@ export const phrases = {
   signIn: 'Entrar',
   signInGoogle: 'Entrar com o Google',
   signInApple: 'Entrar com o Apple',
+  signInGoogleSuccess: 'Google com Successo',
   screens: {
     home: 'Início',
     termsAndCondition: 'Termos e Condições',
