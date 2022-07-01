@@ -25,6 +25,10 @@ export const phrases = {
   signInGoogle: 'Entrar com o Google',
   signInApple: 'Entrar com o Apple',
   signInGoogleSuccess: 'Google com Successo',
+  signOutTitle: 'É um adeus?',
+  signOutDescription: 'Tem certeza que deseja sair?',
+  noSignOut: 'Não, quero ficar!',
+  yesSignOut: 'Sim, tenho certeza',
   screens: {
     home: 'Início',
     termsAndCondition: 'Termos e Condições',

@@ -27,7 +27,7 @@ const Home = ({ navigation }) => {
   } = useMarkers()
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
   const mapRef = useRef<MapView>(null)
-  const maxDistance = 500
+  const maxDistance = 250
   const zoom = direction?.destination ? 0.35 : showPositionMarker ? 0.25 : 1
   const defaultDelta = {
     longitudeDelta: 0.00522 * zoom,
@@ -129,8 +129,8 @@ const Home = ({ navigation }) => {
           {!!selectedMarker && (
             <Circle
               center={currentLocation}
-              fillColor={'rgba(0,40,0,0.1)'}
-              strokeColor={'rgba(0,40,0,0.2)'}
+              fillColor={'rgba(0,0,0,0.1)'}
+              strokeColor={'rgba(0,0,0,0.2)'}
               radius={maxDistance}
             />
           )}

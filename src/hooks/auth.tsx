@@ -4,6 +4,7 @@ import { api, setTokenInterceptors } from '/services/api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Toast from 'react-native-toast-message'
 import { useTranslate } from 'react-polyglot'
+import { Platform } from 'react-native'
 interface User {
   id: number
   name: string
@@ -25,14 +26,16 @@ export const AuthProvider = ({ children }) => {
   const [userStorageloading, setUserStorageLoading] = useState(true)
   const userStorageKey = '@spotyparking:user'
   const t = useTranslate()
+  const android = { androidClientId: process.env.GOOGLE_ID_ANDROID }
+  const expo = { expoClientId: process.env.GOOGLE_ID_EXPO, clientSecret: process.env.GOOGLE_SECRET_KEY }
+  const ios = { iosClientId: process.env.GOOGLE_ID_IOS  }
+  const rightOS = Platform.OS === 'android' ? android : ios
+  const client = process.env.ENV === 'development' ? expo : rightOS
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: process.env.GOOGLE_ID_ANDROID,
-    iosClientId: process.env.GOOGLE_ID_IOS,
-    expoClientId: process.env.GOOGLE_ID_EXPO,
     scopes: ['email', 'profile'],
-    clientSecret: process.env.GOOGLE_SECRET_KEY,
     shouldAutoExchangeCode: true,
+    ...client
   })
 
   useEffect(() => {
@@ -46,7 +49,7 @@ export const AuthProvider = ({ children }) => {
             token: authentication?.accessToken,
           })
           Toast.show({
-            text1: 'Authenticate Request',
+            text1: t('signInGoogleSuccess'),
             type: 'success',
             autoHide: true,
             visibilityTime: 1000,
@@ -62,17 +65,18 @@ export const AuthProvider = ({ children }) => {
           setUser(userLogged)
           await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged))
         } catch (error) {
+          const err = error?.message || error
+          Toast.show({
+            text1: err,
+            type: 'error',
+            autoHide: true,
+            visibilityTime: 2000,
+          })
           console.log(error)
         }
       }
     }
     if (response?.type === 'success' && !user.email) {
-      Toast.show({
-        text1: t('signInGoogleSuccess'),
-        type: 'success',
-        autoHide: true,
-        visibilityTime: 2000,
-      })
       fetchUserFromApi()
     }
   }, [response])
@@ -99,9 +103,16 @@ export const AuthProvider = ({ children }) => {
 
   async function signInWithGoogle() {
     try {
-      promptAsync()
+      await promptAsync()
     } catch (error) {
       console.log(JSON.stringify(error, null, 2))
+      const err = error?.message || error
+      Toast.show({
+        text1: err,
+        type: 'error',
+        autoHide: true,
+        visibilityTime: 2000,
+      })
       throw new Error(error as string)
     }
   }

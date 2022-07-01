@@ -7,6 +7,7 @@ import {
   FontAwesome5,
   MaterialCommunityIcons,
   AntDesign,
+  Feather
 } from '@expo/vector-icons'
 
 const iconNames = {
@@ -20,6 +21,7 @@ const iconNames = {
   ['close-circle-outline']: MaterialCommunityIcons,
   google: AntDesign,
   apple1: AntDesign,
+  power: Feather
 } as const
 
 export type IconNames = keyof typeof iconNames
