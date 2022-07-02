@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react'
 import { useTranslate } from 'react-polyglot'
+import { ICollaborators, useCollaborators } from './collaborators'
 import { IButton, useMainController } from './mainController'
 import { api } from '/services/api'
 import { socket } from '/services/io'
@@ -43,6 +44,7 @@ interface IMarkerContext {
   selectedMarker: undefined | IMarker
   getMarkersLoading: boolean
   markersLoading: boolean
+  collaborators: ICollaborators
 }
 const MarkersContext = createContext({} as IMarkerContext)
 
@@ -60,6 +62,7 @@ export const MarkersProvider = ({ children }) => {
   const [markersLoading, setMarkersLoading] = useState(false)
   const [newSpot, setNewSpot] = useState<undefined | IMarker>()
   const t = useTranslate()
+  const { collaborators } = useCollaborators()
 
   useEffect(() => {
     if (newSpot) {
@@ -105,10 +108,10 @@ export const MarkersProvider = ({ children }) => {
     })
   }
 
-  const handleAddPosition = () => {
+  const handleAddPosition = useCallback(() => {
     setShowPositionMarker(true)
-    changeButtons(addSpotButton)
-  }
+    changeButtons('addSpotButton')
+  }, [])
 
   const updateMarker = async ({
     id,
@@ -188,56 +191,14 @@ export const MarkersProvider = ({ children }) => {
     }, 750)
     setSelectedMarker(marker)
 
-    changeButtons(validateAndInvalidate)
+    changeButtons('validateAndInvalidate')
   }
   const cancelAddSpot = () => {
     setShowPositionMarker(false)
     changeButtons()
   }
 
-  const addSpotButton: IButton[] = [
-    {
-      title: t('cancel'),
-      description: t('changedMyMind'),
-      onPress: 'cancelAddSpot',
-      icon: {
-        name: 'error-outline',
-        color: '#C60606',
-      },
-    },
-    {
-      title: t('markSpot'),
-      description: t('spotFreeHere'),
-      onPress: 'addSpot',
-      icon: {
-        name: 'location',
-        color: '#06C615',
-      },
-    },
-  ]
 
-  const validateAndInvalidate: IButton[] = [
-    {
-      title: t('invalid'),
-      description: t('someoneTookIt'),
-      onPress: 'invalidateMarker',
-      icon: {
-        name: 'error-outline',
-        size: undefined,
-        color: '#C60606',
-      },
-    },
-    {
-      title: t('spotFree'),
-      description: t('spotFreeHere'),
-      onPress: 'validateMarker',
-      icon: {
-        name: 'check',
-        size: undefined,
-        color: '#06C615',
-      },
-    },
-  ]
 
   return (
     <MarkersContext.Provider
@@ -255,6 +216,7 @@ export const MarkersProvider = ({ children }) => {
         cancelAddSpot,
         getMarkersLoading,
         markersLoading,
+        collaborators,
       }}>
       {children}
     </MarkersContext.Provider>

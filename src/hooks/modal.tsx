@@ -28,7 +28,7 @@ export const ModalProvider = ({ children }) => {
   const [modalProps, setModalProps] = useState<IModalProps>({} as IModalProps)
 
   const openModal = (props: IModalProps) => {
-    console.log('OPEN MODAL PLEASE')
+
     setIsModalOpen(true)
     setSelectedModal(props.modalName)
     setModalProps(props)

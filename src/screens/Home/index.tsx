@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { ActivityIndicator, View } from 'react-native'
-import MapView, { Circle, PROVIDER_GOOGLE, Region } from 'react-native-maps'
+import MapView, { Circle, Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import { useUserLocation } from 'hooks/location'
 import { styles } from './styles'
 import MainTab from '/components/common/MainTab'
@@ -24,6 +24,7 @@ const Home = ({ navigation }) => {
     selectedMarker,
     getMarkers,
     showPositionMarker,
+    collaborators
   } = useMarkers()
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
   const mapRef = useRef<MapView>(null)
@@ -40,7 +41,13 @@ const Home = ({ navigation }) => {
 
       fetchMarkers()
     }
-  }, [userLocationIsFocused, showPositionMarker])
+  }, [showPositionMarker, userLocationIsFocused])
+
+  useEffect(() => {
+    if (userLocationIsFocused) {
+      mapRef?.current?.animateToRegion({ ...currentLocation, ...defaultDelta })
+    }
+  }, [currentLocation])
 
   const fetchMarkers = useCallback(async () => {
     if (!mapRef?.current) {
@@ -74,14 +81,14 @@ const Home = ({ navigation }) => {
     latitudeDelta: 0.00421 * zoom,
   }
 
-  const handleOnChangeFocus = async (reg: Region) => {
+  const handleOnChangeFocus = async (reg: Region, { isGesture } ) => {
     fetchMarkers()
     const bounds = await mapRef?.current?.getMapBoundaries()
     if (bounds?.northEast?.latitude) {
       addBounds(bounds)
     }
     addCurrentPosition(reg)
-    if (userLocationIsFocused) {
+    if (userLocationIsFocused && isGesture) {
       setUserLocationIsFocused(false)
     }
     if (selectedMarker) {
@@ -89,14 +96,14 @@ const Home = ({ navigation }) => {
     }
   }
 
-  const handleChangeRegion = (reg, details) => {
-    if (userLocationIsFocused) {
-      setUserLocationIsFocused(false)
-    }
-    if (selectedMarker) {
-      hideValidateAndInvalidate()
-    }
-  }
+  // const handleChangeRegion = (reg, details) => {
+  //   if (userLocationIsFocused) {
+  //     setUserLocationIsFocused(false)
+  //   }
+  //   if (selectedMarker) {
+  //     hideValidateAndInvalidate()
+  //   }
+  // }
 
   const handleMapReady = async () => {
     const bounds = await mapRef?.current?.getMapBoundaries()
@@ -134,7 +141,10 @@ const Home = ({ navigation }) => {
               radius={maxDistance}
             />
           )}
-          {Object.keys(markers).map((key, index) => (
+          {Object.keys(collaborators).map((key) => (
+            <Marker key={collaborators[key].id} coordinate={collaborators[key]} />
+          ))}
+          {Object.keys(markers).map(key => (
             <SpotMarker
               key={markers[key].id}
               marker={markers[key]}

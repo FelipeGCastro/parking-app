@@ -9,6 +9,7 @@ interface User {
   id: number
   name: string
   email: string
+  isAdmin: boolean
   avatarUrl: string | undefined
   token: string
 }
@@ -59,6 +60,7 @@ export const AuthProvider = ({ children }) => {
             id: userInfo.id,
             email: userInfo.email,
             name: userInfo.name,
+            isAdmin: userInfo.isAdmin,
             avatarUrl: userInfo.avatarUrl,
             token: token,
           }

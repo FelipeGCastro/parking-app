@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import * as Location from 'expo-location'
 import { useTranslate } from 'react-polyglot'
+import { useAuth } from './auth'
+import { socket } from '/services/io'
 
 interface ILocation {
   latitude: number
@@ -19,14 +21,22 @@ export const UserLocationProvider = ({ children }) => {
   const [currentLocation, setCurrentLocation] = useState<ILocation>(null)
   const [errorMsg, setErrorMsg] = useState(null)
   const [permissionsLoading, setPermissionsLoading] = useState(true)
+  const { user } = useAuth()
   const t = useTranslate()
 
   const handleUpdatePosition: Location.LocationCallback = ({ coords }) => {
-    setCurrentLocation({
+    const userLocation = {
       latitude: coords.latitude,
       longitude: coords.longitude,
-    })
+    }
+    setCurrentLocation(userLocation)
   }
+
+  useEffect(() => {
+    if (user.isAdmin) {
+      socket.emit('collaboratorLocation', currentLocation, user.id)
+    }
+  }, [currentLocation])
 
   useEffect(() => {
     let locationSubscription: Location.LocationSubscription
@@ -42,6 +52,9 @@ export const UserLocationProvider = ({ children }) => {
     handleLocationThings()
 
     return () => {
+      if (user.isAdmin) {
+        socket.emit('removeCollaborator', user.id)
+      }
       locationSubscription?.remove()
     }
   }, [])

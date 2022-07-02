@@ -1,13 +1,6 @@
-import { IconNames } from 'components/Icon'
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
-import { useTranslate } from 'react-polyglot'
-import { useUserLocation } from './location'
+import { IconNames } from 'components/common/Icon'
+import { createContext, useCallback, useContext, useState } from 'react'
+import { useButtons } from './buttons'
 import { IBounds } from './markers'
 
 export interface IButton {
@@ -31,13 +24,6 @@ export interface IButton {
   }
 }
 
-interface IMarker {
-  position: {
-    longitude: number
-    latitude: number
-  }
-  status: 'created' | 'invalidated' | 'validated'
-}
 interface IPosition {
   longitude: number
   latitude: number
@@ -58,7 +44,7 @@ interface MainContext {
   currentPosition: IRegion
   positionToGo: IPosition
   handleSetPositionToGo: (pos: IPosition) => void
-  changeButtons: (buttons?: IButton[]) => void
+  changeButtons: (key?: string) => void
   direction: IDirection
   handleDirection: (destination: IPosition) => void
   resetDestination: () => void
@@ -69,109 +55,33 @@ interface MainContext {
 const MainControllerContext = createContext({} as MainContext)
 
 export const MainControllerProvider = ({ children }) => {
-  const [buttons, setButtons] = useState([])
-  const [leftText, setLeftText] = useState('')
   const [positionToGo, setPositionToGo] = useState<IPosition>({} as IPosition)
   const [currentPosition, setCurrentPosition] = useState<IRegion>({} as IRegion)
   const [direction, setDirection] = useState({} as IDirection)
   const [bounds, setBounds] = useState({} as IBounds)
-  const t = useTranslate()
+  const { leftText, changeButtons, buttons } = useButtons()
 
-  useEffect(() => {
-    setButtons(initialButtons)
+  const addBounds = useCallback((bounds: IBounds) => {
+    setBounds(bounds)
   }, [])
 
-  const handleTimerOut = () => {
-    setLeftText('')
-    setButtons(initialButtons)
-  }
-
-  const changeButtons = (buttons: IButton[]) => {
-    if (!buttons) {
-      setButtons(initialButtons)
-      return
-    }
-    setButtons(buttons)
-  }
-  const addBounds = (bounds: IBounds) => {
-    setBounds(bounds)
-  }
-  const addCurrentPosition = (pos: IRegion) => {
+  const addCurrentPosition = useCallback((pos: IRegion) => {
     setCurrentPosition(pos)
-  }
+  }, [])
 
-  const handleSetPositionToGo = (pos: IPosition) => {
+  const handleSetPositionToGo = useCallback((pos: IPosition) => {
     setPositionToGo(pos)
-  }
+  }, [])
 
-  const handleDirection = (destination: IPosition) => {
+  const handleDirection = useCallback((destination: IPosition) => {
     if (destination?.latitude) {
       setDirection({ destination })
     }
-  }
+  }, [])
 
-  const resetDestination = () => {
+  const resetDestination = useCallback(() => {
     setDirection({} as IDirection)
-  }
-
-  const initialButtons: IButton[] = [
-    {
-      title: t('markSpot'),
-      description: t('spaceWillBeFree'),
-      onPress: 'handleAddPosition',
-      icon: {
-        name: 'time-to-leave',
-        size: undefined,
-        color: undefined,
-      },
-    },
-    {
-      title: t('direction'),
-      description: t('directionToNearest'),
-      onPress: 'handleDirection',
-      icon: {
-        name: 'location',
-        size: undefined,
-        color: undefined,
-      },
-    },
-  ]
-  const checkSpotButtons: IButton[] = [
-    {
-      title: t('noSpot'),
-      description: t('someoneTookIt'),
-      onPress: '',
-      icon: {
-        name: 'error-outline',
-        size: undefined,
-        color: '#C60606',
-      },
-    },
-    {
-      title: t('wellDone'),
-      description: t('thanks'),
-      onPress: '',
-      icon: {
-        name: 'check',
-        size: undefined,
-        color: '#06C615',
-      },
-    },
-  ]
-
-  const otherSpotButton: IButton[] = [
-    {
-      title: t('yesICanSee'),
-      description: t('nearToMe'),
-      onPress: '',
-      onTimerOut: handleTimerOut,
-      timer: 15,
-      icon: {
-        name: 'check',
-        color: '#06C615',
-      },
-    },
-  ]
+  }, [])
 
   return (
     <MainControllerContext.Provider
