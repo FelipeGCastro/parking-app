@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { text, variables } from '/styles'
 
 export const styles = StyleSheet.create({
   containerWrapper: {
@@ -24,8 +25,8 @@ export const styles = StyleSheet.create({
   },
   alertText: {
     paddingTop: 8,
-    fontSize: 12,
-    color: 'red',
+    ...text.bodyXSRegular,
+    color: variables.inactiveColor,
     alignSelf: 'center',
   },
   buttonContainer: {
@@ -35,8 +36,7 @@ export const styles = StyleSheet.create({
   leftText: {
     flexShrink: 1,
     color: '#313131',
-    fontSize: 16,
-    fontWeight: 'bold',
+    ...text.bodyLMedium,
   },
   centered: {
     justifyContent: 'center',

@@ -129,6 +129,7 @@ const Home = ({ navigation }) => {
           // onRegionChange={handleChangeRegion}
           // onPress={handleMapPress}
           toolbarEnabled={false}
+          
           style={styles.map}>
           {currentLocation?.latitude && (
             <UserMarker position={currentLocation} />

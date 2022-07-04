@@ -1,46 +1,25 @@
-import { createDrawerNavigator } from '@react-navigation/drawer'
+
 import { NavigationContainer } from '@react-navigation/native'
-import { useTranslate } from 'react-polyglot'
-import { DrawerContent } from '/components/common/Drawer'
-import Home from '/screens/Home'
-import Settings from '/screens/Settings'
-import TermsAndCondition from '/screens/TermsAndCondition'
-const Drawer = createDrawerNavigator()
+import { createStackNavigator } from '@react-navigation/stack';
+import { HomeNavigator } from '../HomeNavigator';
+import { OnBoardingNavigator } from '../OnboardingNavigator';
+
+const Stack = createStackNavigator();
 
 export const MainNavigator = () => {
-  const t = useTranslate()
+
   return (
     <NavigationContainer>
-      <Drawer.Navigator
-        drawerContent={props => <DrawerContent {...props} />}
-        screenOptions={{ drawerType: 'front' }}
-        initialRouteName="Home">
-        <Drawer.Screen
+      <Stack.Navigator screenOptions={{ headerShown: false }} >
+        <Stack.Screen
+          name="OnBoarding"
+          component={OnBoardingNavigator}
+        />
+        <Stack.Screen
           name="Home"
-          options={{
-            headerShown: false,
-            headerTitle: t('screens.home'),
-            title: t('screens.home'),
-          }}
-          component={Home}
+          component={HomeNavigator}
         />
-        <Drawer.Screen
-          name="TermsAndCondition"
-          options={{
-            headerTitle: t('screens.termsAndCondition'),
-            title: t('screens.termsAndCondition'),
-          }}
-          component={TermsAndCondition}
-        />
-        <Drawer.Screen
-          name="Settings"
-          options={{
-            headerTitle: t('screens.settings'),
-            title: t('screens.settings'),
-          }}
-          component={Settings}
-        />
-      </Drawer.Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   )
 }

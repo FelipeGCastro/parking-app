@@ -85,7 +85,7 @@ const SpotMarker = ({ marker, setUserFocused, selectedMarker }: Props) => {
       onPress={handlePressMarker}
       onDeselect={handleDeselectMarker}
       coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-      tracksViewChanges={true}>
+      >
         <MarkerIcon color={color} time={formatDistanceLocal(marker.updatedAt)} />
         {renderOptions()}
         </Marker>
@@ -103,5 +103,5 @@ const SpotMarker = ({ marker, setUserFocused, selectedMarker }: Props) => {
         </View>
       </View>
       {renderOptions()}
-    </Marker> */
+   */
 export default SpotMarker

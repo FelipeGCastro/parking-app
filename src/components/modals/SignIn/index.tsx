@@ -4,6 +4,7 @@ import { useTranslate } from 'react-polyglot'
 import ModalTray from '../containers/ModalTray'
 import Icon from '/components/common/Icon'
 import { useAuth } from '/hooks/auth'
+import { variables } from '/styles'
 
 // import { Container } from './styles';
 
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 32,
-    backgroundColor: '#0673C6',
+    backgroundColor: variables.regularColor,
     borderRadius: 8,
     marginBottom: 24,
   },

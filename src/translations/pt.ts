@@ -29,6 +29,12 @@ export const phrases = {
   signOutDescription: 'Tem certeza que deseja sair?',
   noSignOut: 'Não, quero ficar!',
   yesSignOut: 'Sim, tenho certeza',
+  pins: 'PINS',
+  pinOnBoardingDescriptionOne: 'Algum usuário criou o Pin',
+  pinOnBoardingDescriptionTwo: 'Alguém confirmou o Pin.',
+  pinOnBoardingDescriptionThree: 'Alguém invalidou o Pin.',
+  pinOnBoardingDescriptionThreeExtra: 'Será removido em aprox. 2 min.',
+
   screens: {
     home: 'Início',
     termsAndCondition: 'Termos e Condições',

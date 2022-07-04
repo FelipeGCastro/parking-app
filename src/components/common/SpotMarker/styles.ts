@@ -1,42 +1,10 @@
 import { StyleSheet } from 'react-native'
+import { text, variables } from '/styles'
 
 export const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     alignItems: 'center',
-  },
-  content: {
-    flexGrow: 1,
-    flexDirection: 'row',
-  },
-  markerContainer: {
-    width: 35,
-    height: 35,
-    borderRadius: 16,
-    borderBottomRightRadius: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  markerLetter: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  textContainer: {
-    flexShrink: 1,
-    width: 35,
-    alignSelf: 'flex-start',
-    paddingVertical: 2,
-    paddingHorizontal: 4,
-    backgroundColor: '#fff',
-    borderRadius: 4,
-    borderBottomLeftRadius: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textTime: {
-    color: '#313131',
-    fontSize: 11,
   },
   containerOptions: {
     alignItems: 'center',
@@ -60,7 +28,7 @@ export const styles = StyleSheet.create({
     width: 95,
   },
   buttonValid: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: variables.primaryDarkColor,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 4,
@@ -71,9 +39,8 @@ export const styles = StyleSheet.create({
   },
   buttonText: {
     marginTop: 2,
-    fontWeight: 'bold',
-    fontSize: 12,
-    color: '#fff',
+    ...text.bodyXSMedium,
+    color: variables.white_one,
   },
   detail: {
     width: 16,

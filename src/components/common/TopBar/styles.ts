@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { variables } from '/styles'
 
 export const styles = StyleSheet.create({
   container: {
@@ -14,30 +15,6 @@ export const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center',
     flexDirection: 'row',
-  },
-  labelContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 17.5,
-  },
-  labelIcon: {
-    width: 14,
-    height: 14,
-    borderRadius: 8,
-    marginRight: 4,
-  },
-  labelConfirmed: {
-    backgroundColor: '#06C615',
-  },
-  labelIndicated: {
-    backgroundColor: '#0673C6',
-  },
-  labelReindicated: {
-    backgroundColor: '#C60606',
-  },
-  labelText: {
-    fontSize: 13,
-    color: '#1A1A1A',
   },
   instructionsContainer: {
     backgroundColor: '#C60606',

@@ -33,10 +33,10 @@ export const UserLocationProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (user.isAdmin) {
+    if (user.isAdmin && currentLocation?.latitude) {
       socket.emit('collaboratorLocation', currentLocation, user.id)
     }
-  }, [currentLocation])
+  }, [currentLocation, user])
 
   useEffect(() => {
     let locationSubscription: Location.LocationSubscription

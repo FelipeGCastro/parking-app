@@ -18,23 +18,6 @@ const TopBar = () => {
       </View>
     )
   }
-  const renderLabels = () => (
-    <>
-      <View style={styles.labelContainer}>
-        <View style={[styles.labelIcon, styles.labelConfirmed]} />
-        <Text style={styles.labelText}>{t('validated')}</Text>
-      </View>
-
-      <View style={styles.labelContainer}>
-        <View style={[styles.labelIcon, styles.labelIndicated]} />
-        <Text style={styles.labelText}>{t('created')}</Text>
-      </View>
-      <View style={styles.labelContainer}>
-        <View style={[styles.labelIcon, styles.labelReindicated]} />
-        <Text style={styles.labelText}>{t('invalidated')}</Text>
-      </View>
-    </>
-  )
 
   return selectedMarker ? (
     <View ref={ref} style={[styles.container, { paddingTop: topSafeArea + 4 }]}>

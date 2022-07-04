@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { text } from '/styles'
 
 export const styles = StyleSheet.create({
   userContainer: {
@@ -48,8 +49,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   userText: {
-    fontSize: 14,
-    fontWeight: 'bold',
+    ...text.bodySMedium,
     color: '#707070',
   },
   imageContainer: {

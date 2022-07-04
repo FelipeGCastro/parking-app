@@ -29,6 +29,11 @@ export const phrases = {
   signOutDescription: 'Are you sure, that you want sign out?',
   noSignOut: 'No, I wanna stay',
   yesSignOut: 'Yes, I\'m sure!',
+  pins: 'PINS',
+  pinOnBoardingDescriptionOne: 'User created a Pin.',
+  pinOnBoardingDescriptionTwo: 'Somebody confirmed a Pin.',
+  pinOnBoardingDescriptionThree: 'Somebody invalidated a Pin.',
+  pinOnBoardingDescriptionThreeExtra: 'Will be removed in aprox. 2 min.',
   screens: {
     home: 'Home',
     termsAndCondition: 'Terms and Condition',
