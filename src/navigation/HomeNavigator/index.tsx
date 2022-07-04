@@ -1,5 +1,4 @@
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { NavigationContainer } from '@react-navigation/native'
 import { useTranslate } from 'react-polyglot'
 import { DrawerContent } from '/components/common/Drawer'
 import Home from '/screens/Home'
@@ -10,13 +9,12 @@ const Drawer = createDrawerNavigator()
 export const HomeNavigator = () => {
   const t = useTranslate()
   return (
-    <NavigationContainer>
       <Drawer.Navigator
         drawerContent={props => <DrawerContent {...props} />}
         screenOptions={{ drawerType: 'front' }}
         initialRouteName="Home">
         <Drawer.Screen
-          name="Home"
+          name="MapScreen"
           options={{
             headerShown: false,
             headerTitle: t('screens.home'),
@@ -41,6 +39,5 @@ export const HomeNavigator = () => {
           component={Settings}
         />
       </Drawer.Navigator>
-    </NavigationContainer>
   )
 }
