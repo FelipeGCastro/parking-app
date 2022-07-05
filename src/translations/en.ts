@@ -60,5 +60,6 @@ export const phrases = {
     home: 'Home',
     termsAndCondition: 'Terms and Condition',
     settings: 'Settings',
+    instructions: 'Instructions',
   },
 }

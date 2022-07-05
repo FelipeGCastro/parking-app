@@ -6,7 +6,7 @@ import { variables } from '/styles'
 interface IMarkerIcon {
   time: string
   color?: string
-  style: ViewStyle
+  style?: ViewStyle
   width?: number
   height?: number
   scale?: number
@@ -14,7 +14,7 @@ interface IMarkerIcon {
 }
 const MarkerIcon = ({
   time,
-  color = variables.regularColor,
+  color = '#0673C6',
   style,
   scale = 1,
   width = 70,

@@ -1,6 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ActivityIndicator, View } from 'react-native'
-import MapView, { Circle, Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps'
+import MapView, {
+  Circle,
+  Marker,
+  PROVIDER_GOOGLE,
+  Region,
+} from 'react-native-maps'
 import { useUserLocation } from 'hooks/location'
 import { styles } from './styles'
 import MainTab from '/components/common/MainTab'
@@ -11,6 +16,7 @@ import UserMarker from '/components/common/UserMarker'
 import { useMarkers } from '/hooks/markers'
 import MapViewDirections from 'react-native-maps-directions'
 import MenuButton from '/components/common/MainTab/MenuButton'
+import CollaboratorMarker from '/components/common/CollaboratorMarker'
 
 const googleApiKey = process.env.GOOGLE_API_DIRECTIONS
 
@@ -24,7 +30,7 @@ const Home = ({ navigation }) => {
     selectedMarker,
     getMarkers,
     showPositionMarker,
-    collaborators
+    collaborators,
   } = useMarkers()
   const [userLocationIsFocused, setUserLocationIsFocused] = useState(true)
   const mapRef = useRef<MapView>(null)
@@ -81,7 +87,7 @@ const Home = ({ navigation }) => {
     latitudeDelta: 0.00421 * zoom,
   }
 
-  const handleOnChangeFocus = async (reg: Region, { isGesture } ) => {
+  const handleOnChangeFocus = async (reg: Region, { isGesture }) => {
     fetchMarkers()
     const bounds = await mapRef?.current?.getMapBoundaries()
     if (bounds?.northEast?.latitude) {
@@ -112,7 +118,16 @@ const Home = ({ navigation }) => {
     }
     fetchMarkers()
   }
-
+  const collaboratorsArray = useMemo(
+    () => Object.keys(collaborators),
+    [collaborators],
+  )
+  const markersArray = useMemo(() => Object.keys(markers), [markers])
+  console.log(
+    'collaboratorsArray and markersArray',
+    collaboratorsArray.length,
+    markersArray.length,
+  )
   return (
     <View style={styles.container}>
       {permissionsLoading || !location?.latitude ? (
@@ -129,7 +144,6 @@ const Home = ({ navigation }) => {
           // onRegionChange={handleChangeRegion}
           // onPress={handleMapPress}
           toolbarEnabled={false}
-          
           style={styles.map}>
           {currentLocation?.latitude && (
             <UserMarker position={currentLocation} />
@@ -142,17 +156,22 @@ const Home = ({ navigation }) => {
               radius={maxDistance}
             />
           )}
-          {Object.keys(collaborators).map((key) => (
-            <Marker key={collaborators[key].id} coordinate={collaborators[key]} />
-          ))}
-          {Object.keys(markers).map(key => (
-            <SpotMarker
-              key={markers[key].id}
-              marker={markers[key]}
-              selectedMarker={selectedMarker}
-              setUserFocused={setUserLocationIsFocused}
-            />
-          ))}
+          {collaboratorsArray.length > 0 &&
+            collaboratorsArray.map((key, index) => (
+              <CollaboratorMarker
+                key={collaboratorsArray[key]?.id || index}
+                position={collaborators[key]}
+              />
+            ))}
+          {markersArray.length > 0 &&
+            markersArray.map((key, index) => (
+              <SpotMarker
+                key={markers[key]?.id || index}
+                marker={markers[key]}
+                selectedMarker={selectedMarker}
+                setUserFocused={setUserLocationIsFocused}
+              />
+            ))}
           {direction?.destination && !!currentLocation?.latitude && (
             <MapViewDirections
               origin={currentLocation}

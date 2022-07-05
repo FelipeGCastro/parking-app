@@ -61,5 +61,6 @@ export const phrases = {
     home: 'Início',
     termsAndCondition: 'Termos e Condições',
     settings: 'Configurações',
+    instructions: 'Instruções',
   },
 }

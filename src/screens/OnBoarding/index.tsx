@@ -8,8 +8,16 @@ import PageController from './PageController'
 import Pins from './Pins'
 import Subscriptions from './Subscriptions'
 import Wrapper from './Wrapper'
+import { DrawerScreenProps } from '@react-navigation/drawer'
 
-export const OnBoarding = ({ navigation }) => {
+type RootStackParamList = {
+  OnBoarding: undefined
+  MapScreen: undefined
+  Home: undefined
+}
+type Props = DrawerScreenProps<RootStackParamList, 'OnBoarding'>
+
+export const OnBoarding = ({ navigation }: Props) => {
   const [page, setPage] = useState(0)
   const pagerRef = useRef<PagerView>(null)
   const t = useTranslate()
@@ -36,7 +44,7 @@ export const OnBoarding = ({ navigation }) => {
         return prev + 1
       })
     } else {
-      navigation.navigate('Home')
+      navigation.navigate(navigation.canGoBack() ? 'MapScreen' : 'Home')
     }
   }
   const renderPins = () => (

@@ -34,6 +34,7 @@ export const UserLocationProvider = ({ children }) => {
 
   useEffect(() => {
     if (user.isAdmin && currentLocation?.latitude) {
+      console.log('isAdmin and changed location')
       socket.emit('collaboratorLocation', currentLocation, user.id)
     }
   }, [currentLocation, user])
