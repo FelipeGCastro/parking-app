@@ -6,11 +6,9 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     paddingVertical: variables.marginVertical * 1.5,
     paddingHorizontal: variables.marginHorizontal * 1.5,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
-  headerInfo: {
-    
-  },
+  headerInfo: {},
   headerOne: {
     ...text.heading1,
     color: variables.white_one,
@@ -20,12 +18,17 @@ export const styles = StyleSheet.create({
     color: variables.white_one,
     marginBottom: variables.marginVertical * 1.5,
   },
-  optionsContainer: {
+  optionsContainer: {},
+  headerTopic: {
+    alignSelf: 'flex-end',
+    ...text.heading2Italic,
+    color: variables.white_one,
+    marginBottom: variables.marginVertical,
   },
   contentRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 32,
   },
   imageContainer: {
     width: 130,
@@ -46,7 +49,11 @@ export const styles = StyleSheet.create({
   },
   pin: { marginBottom: 17 * 1.5 },
   descriptionContainer: {
-    marginLeft: variables.marginHorizontal,
+    marginHorizontal: variables.marginHorizontal,
+    flexShrink: 1,
+  },
+  alignRight: {
+    alignItems: 'flex-end',
   },
   description: {
     ...text.bodyLMedium,
@@ -55,5 +62,20 @@ export const styles = StyleSheet.create({
   descriptionExtra: {
     ...text.bodyXSRegular,
     color: variables.white_one,
+  },
+  title: {
+    ...text.heading2,
+    color: variables.white_one,
+    marginBottom: variables.marginVertical / 4,
+  },
+  price: {
+    ...text.bodyXLItalic,
+    color: variables.white_one,
+    marginBottom: variables.marginVertical / 2,
+  },
+  descriptionSub: {
+    ...text.bodySRegular,
+    color: variables.white_one,
+    flexShrink: 1,
   },
 })

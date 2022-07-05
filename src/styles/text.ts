@@ -14,26 +14,25 @@ export const text = StyleSheet.create({
     fontFamily: fonts.textLightItalic,
     fontSize: 35,
   },
+  heading2Italic: {
+    fontFamily: fonts.textLightItalic,
+    fontSize: 25,
+  },
   heading2: {
-    fontFamily: fonts.textRegular,
-    fontSize: 24,
+    fontFamily: fonts.textBold,
+    fontSize: 26,
   },
-  heading3: {
-    fontFamily: fonts.textRegular,
-    fontSize: 18,
+  bodyXLItalic: {
+    fontFamily: fonts.textLightItalic,
+    fontSize: 22,
   },
-  heading4: {
-    fontFamily: fonts.textRegular,
-    fontSize: 16,
-  },
-
   bodyXLMedium: {
     fontFamily: fonts.textBold,
-    fontSize: 24,
+    fontSize: 22,
   },
   bodyXLRegular: {
     fontFamily: fonts.textRegular,
-    fontSize: 24,
+    fontSize: 22,
   },
   bodyLMedium: {
     fontFamily: fonts.textBold,

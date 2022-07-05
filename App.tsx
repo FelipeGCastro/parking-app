@@ -73,22 +73,22 @@ export default function App() {
 
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
-        <I18n locale="en" messages={messages}>
-          <AuthProvider>
-            <ModalProvider>
-              <MainControllerProvider>
-                <MarkersProvider>
-                  <UserLocationProvider>
-                    <TopBarProvider>
-                      <MainNavigator />
-                      <Toast />
-                    </TopBarProvider>
-                  </UserLocationProvider>
-                </MarkersProvider>
-              </MainControllerProvider>
-            </ModalProvider>
-          </AuthProvider>
-        </I18n>
+      <I18n locale="en" messages={messages}>
+        <AuthProvider>
+          <ModalProvider>
+            <MainControllerProvider>
+              <MarkersProvider>
+                <UserLocationProvider>
+                  <TopBarProvider>
+                    <MainNavigator />
+                    <Toast />
+                  </TopBarProvider>
+                </UserLocationProvider>
+              </MarkersProvider>
+            </MainControllerProvider>
+          </ModalProvider>
+        </AuthProvider>
+      </I18n>
     </SafeAreaProvider>
   )
 }

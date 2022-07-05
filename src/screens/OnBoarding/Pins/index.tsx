@@ -1,28 +1,38 @@
 import React from 'react'
-import { Image, Text, View } from 'react-native'
+import { Image, Text, View, ViewStyle, ScrollView } from 'react-native'
 import { useTranslate } from 'react-polyglot'
 import { styles } from '../styles'
 import MapSample from 'assets/images/mapSample.png'
 import MarkerIcon from '/components/common/MarkerIcon'
 import { variables } from '/styles'
 import Animated, { SlideInLeft } from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const Pins = ({ page }: { page: number}) => {
+const Pins = ({ page }: { page: number }) => {
   const t = useTranslate()
+  const insets = useSafeAreaInsets()
+  const safeArea: ViewStyle = {
+    paddingTop: insets.top,
+    flexGrow: 1,
+  }
 
   const options = [
-    { textOne: 'pinOnBoardingDescriptionOne' , color: variables.regularColor},
-    { textOne: 'pinOnBoardingDescriptionTwo' , color: variables.activeColor},
+    { textOne: 'pinOnBoardingDescriptionOne', color: variables.regularColor },
+    { textOne: 'pinOnBoardingDescriptionTwo', color: variables.activeColor },
     {
       textOne: 'pinOnBoardingDescriptionThree',
-      extra: 'pinOnBoardingDescriptionThreeExtra', color: variables.inactiveColor
+      extra: 'pinOnBoardingDescriptionThreeExtra',
+      color: variables.inactiveColor,
     },
   ]
   const renderOptions = (
     item: { textOne: string; extra?: string; color: string },
     index: number,
-  ) =>  (
-    <Animated.View  entering={SlideInLeft.delay(index * 100)} key={index} style={styles.contentRow}>
+  ) => (
+    <Animated.View
+      entering={SlideInLeft.delay(index * 100)}
+      key={index}
+      style={styles.contentRow}>
       <View style={styles.imageContainer}>
         <Image style={styles.mapImage} source={MapSample} />
         <View style={styles.markerContainer}>
@@ -42,17 +52,20 @@ const Pins = ({ page }: { page: number}) => {
       </View>
     </Animated.View>
   )
-  return page === 0  ? (
-    <View style={styles.container}>
-      <View style={styles.headerInfo}>
-        <Text style={styles.headerOne}>SPOTY</Text>
-        <Text style={styles.headerTwo}>{t('pins')}</Text>
+
+  return page === 0 ? (
+    <ScrollView contentContainerStyle={safeArea}>
+      <View style={styles.container}>
+        <View style={styles.headerInfo}>
+          <Text style={styles.headerOne}>SPOTY</Text>
+          <Text style={styles.headerTwo}>{t('pins')}</Text>
+        </View>
+        <View style={styles.optionsContainer}>
+          {options.map(renderOptions)}
+        </View>
+        <View style={{ height: 50 }} />
       </View>
-      <View style={styles.optionsContainer}>
-      {options.map(renderOptions)}
-      </View>
-      <View style={{ height: 50 }}  />
-    </View>
+    </ScrollView>
   ) : null
 }
 

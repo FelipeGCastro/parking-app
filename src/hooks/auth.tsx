@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Toast from 'react-native-toast-message'
 import { useTranslate } from 'react-polyglot'
 import { Platform } from 'react-native'
+import { clearStorage } from '/utils/storage'
 interface User {
   id: number
   name: string
@@ -21,22 +22,25 @@ interface IAuthContext {
   userStorageloading: boolean
 }
 const AuthContext = createContext({} as IAuthContext)
-
+const userStorageKey = '@spotyparking:user'
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState<User>({} as User)
   const [userStorageloading, setUserStorageLoading] = useState(true)
-  const userStorageKey = '@spotyparking:user'
+
   const t = useTranslate()
   const android = { androidClientId: process.env.GOOGLE_ID_ANDROID }
-  const expo = { expoClientId: process.env.GOOGLE_ID_EXPO, clientSecret: process.env.GOOGLE_SECRET_KEY }
-  const ios = { iosClientId: process.env.GOOGLE_ID_IOS  }
+  const expo = {
+    expoClientId: process.env.GOOGLE_ID_EXPO,
+    clientSecret: process.env.GOOGLE_SECRET_KEY,
+  }
+  const ios = { iosClientId: process.env.GOOGLE_ID_IOS }
   const rightOS = Platform.OS === 'android' ? android : ios
   const client = process.env.ENV === 'development' ? expo : rightOS
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     scopes: ['email', 'profile'],
     shouldAutoExchangeCode: true,
-    ...client
+    ...client,
   })
 
   useEffect(() => {

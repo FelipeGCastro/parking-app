@@ -34,9 +34,29 @@ export const phrases = {
   pinOnBoardingDescriptionTwo: 'Alguém confirmou o Pin.',
   pinOnBoardingDescriptionThree: 'Alguém invalidou o Pin.',
   pinOnBoardingDescriptionThreeExtra: 'Será removido em aprox. 2 min.',
+  collaboratorsOnBoardingDescriptionOne: 'Nossos colaboradores na rua.',
+  collaboratorsOnBoardingDescriptionTwo: 'Nosso colaborador marcou.',
   back: 'Voltar',
   continue: 'Continuar',
   next: 'Proximo',
+  collaborators: 'COLABORADORES',
+  subscriptions: 'ASSINATURAS',
+  monthly: 'MENSALMENTE',
+  oneDay: 'DIÁRIO',
+  subscriptionsScreen: {
+    subscriptionsOnBoardingTitleOne: 'STANDARD',
+    subscriptionsOnBoardingTitleTwo: 'GOLD',
+    subscriptionsOnBoardingTitleThree: 'SOLO',
+    subscriptionsOnBoardingDescriptionOne:
+      'Acesso apenas aos Pins de outros usuários',
+    subscriptionsOnBoardingDescriptionTwo:
+      'Acesso aos Pins de Colaboradores e usuários',
+    subscriptionsOnBoardingDescriptionThree:
+      'Acesso aos Pins de Colaboradores e usuários',
+    subscriptionsOnBoardingPriceOne: 'FREE',
+    subscriptionsOnBoardingPriceTwo: '€ 3,99',
+    subscriptionsOnBoardingPriceThree: '€ 0,50',
+  },
   screens: {
     home: 'Início',
     termsAndCondition: 'Termos e Condições',

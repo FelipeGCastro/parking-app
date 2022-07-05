@@ -1,29 +1,31 @@
 import * as React from 'react'
 import { ViewStyle } from 'react-native'
 import Svg, { Defs, ClipPath, Path, G, Text, TSpan } from 'react-native-svg'
+import { variables } from '/styles'
 
 interface IMarkerIcon {
   time: string
-  color: string
+  color?: string
   style: ViewStyle
   width?: number
   height?: number
   scale?: number
+  isAdmin?: boolean
 }
 const MarkerIcon = ({
   time,
-  color,
+  color = variables.regularColor,
   style,
   scale = 1,
   width = 70,
   height = 35,
+  isAdmin = false,
 }: IMarkerIcon) => (
   <Svg
     style={style}
     // x2
     width={width * scale}
-    height={height * scale}
-    >
+    height={height * scale}>
     <Defs>
       <ClipPath id="a">
         <Path d="M0 0h70v35H0z" />
@@ -33,12 +35,12 @@ const MarkerIcon = ({
       <Path
         data-name="Rectangle 29"
         d="M43.5 2h18a8.5 8.5 0 0 1 8.5 8.5 8.5 8.5 0 0 1-8.5 8.5H35v-8.5A8.5 8.5 0 0 1 43.5 2Z"
-        fill="#fff"
+        fill={isAdmin ? variables.primaryDarkColor : variables.white_one}
       />
       <Text
         data-name="1m"
         transform="translate(45 14)"
-        fill="#313131"
+        fill={isAdmin ? variables.white_one : variables.mediumGray}
         fontSize={11}
         fontWeight={400}>
         <TSpan x={0} y={0}>

@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import PagerView from 'react-native-pager-view'
 import { useTranslate } from 'react-polyglot'
@@ -12,6 +13,13 @@ export const OnBoarding = ({ navigation }) => {
   const [page, setPage] = useState(0)
   const pagerRef = useRef<PagerView>(null)
   const t = useTranslate()
+
+  useEffect(() => {
+    ;(async () => {
+      AsyncStorage.setItem('@spotyparking:instructions', 'saw')
+    })()
+  }, [])
+
   const handleBackPage = () => {
     if (page > 0) {
       setPage(prev => {
@@ -38,17 +46,21 @@ export const OnBoarding = ({ navigation }) => {
   )
   const renderCollaborators = () => (
     <View key="2" style={styles.pageContainer}>
-      <Collaborators page={page}/>
+      <Collaborators page={page} />
     </View>
   )
   const renderSubscriptions = () => (
     <View key="3" style={styles.pageContainer}>
-      <Subscriptions page={page}/>
+      <Subscriptions page={page} />
     </View>
   )
   return (
     <Wrapper>
-      <PagerView ref={pagerRef} onPageSelected={(event) =>  setPage(event.nativeEvent.position)} style={styles.pagerView} initialPage={0}>
+      <PagerView
+        ref={pagerRef}
+        onPageSelected={event => setPage(event.nativeEvent.position)}
+        style={styles.pagerView}
+        initialPage={0}>
         {renderPins()}
         {renderCollaborators()}
         {renderSubscriptions()}

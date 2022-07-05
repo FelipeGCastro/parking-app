@@ -1,11 +1,15 @@
 import { LinearGradient } from 'expo-linear-gradient'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { StyleSheet, View, ViewStyle } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { variables } from '/styles'
 
 const Wrapper = ({ children }) => {
+  const insets = useSafeAreaInsets()
+  const safeAreaBottom: ViewStyle = {
+    paddingBottom: insets.bottom,
+  }
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -14,8 +18,8 @@ const Wrapper = ({ children }) => {
         colors={variables.screenGradientOne}
         start={{ x: 0.0, y: 0.0 }}
         end={{ x: 1.0, y: 1.0 }}
-        style={styles.gradient}>
-        <SafeAreaView style={styles.safeContainer}>{children}</SafeAreaView>
+        style={[styles.gradient, safeAreaBottom]}>
+        {children}
       </LinearGradient>
     </View>
   )
@@ -30,7 +34,7 @@ const styles = StyleSheet.create({
   },
   safeContainer: {
     flexGrow: 1,
-  }
+  },
 })
 
 export default Wrapper
