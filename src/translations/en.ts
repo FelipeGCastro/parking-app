@@ -34,6 +34,9 @@ export const phrases = {
   pinOnBoardingDescriptionTwo: 'Somebody confirmed a Pin.',
   pinOnBoardingDescriptionThree: 'Somebody invalidated a Pin.',
   pinOnBoardingDescriptionThreeExtra: 'Will be removed in aprox. 2 min.',
+  back: 'Back',
+  continue: 'Continue',
+  next: 'Next',
   screens: {
     home: 'Home',
     termsAndCondition: 'Terms and Condition',

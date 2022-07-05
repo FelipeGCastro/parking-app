@@ -1,13 +1,13 @@
 import React from 'react'
 import { Image, Text, View } from 'react-native'
 import { useTranslate } from 'react-polyglot'
-import Wrapper from '../Wrapper'
-import { styles } from './styles'
+import { styles } from '../styles'
 import MapSample from 'assets/images/mapSample.png'
 import MarkerIcon from '/components/common/MarkerIcon'
 import { variables } from '/styles'
+import Animated, { SlideInLeft } from 'react-native-reanimated'
 
-const Pins = () => {
+const Pins = ({ page }: { page: number}) => {
   const t = useTranslate()
 
   const options = [
@@ -21,8 +21,8 @@ const Pins = () => {
   const renderOptions = (
     item: { textOne: string; extra?: string; color: string },
     index: number,
-  ) => (
-    <View style={styles.contentRow}>
+  ) =>  (
+    <Animated.View  entering={SlideInLeft.delay(index * 100)} key={index} style={styles.contentRow}>
       <View style={styles.imageContainer}>
         <Image style={styles.mapImage} source={MapSample} />
         <View style={styles.markerContainer}>
@@ -40,9 +40,9 @@ const Pins = () => {
           <Text style={styles.descriptionExtra}>{t(item.extra)}</Text>
         )}
       </View>
-    </View>
+    </Animated.View>
   )
-  return (
+  return page === 0  ? (
     <View style={styles.container}>
       <View style={styles.headerInfo}>
         <Text style={styles.headerOne}>SPOTY</Text>
@@ -53,7 +53,7 @@ const Pins = () => {
       </View>
       <View style={{ height: 50 }}  />
     </View>
-  )
+  ) : null
 }
 
 export default Pins

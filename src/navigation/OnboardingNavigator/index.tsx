@@ -7,7 +7,7 @@ export const OnBoardingNavigator = () => {
 
     return (
         <OnBoardingStack.Navigator screenOptions={{ headerShown: false }}>
-            <OnBoardingStack.Screen name='OnBoarding' component={OnBoarding} />
+            <OnBoardingStack.Screen name='OnBoardingScreen' component={OnBoarding} />
         </OnBoardingStack.Navigator>
     )
 }

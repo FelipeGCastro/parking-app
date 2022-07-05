@@ -9,8 +9,8 @@ export const MainNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeNavigator} />
         <Stack.Screen name="OnBoarding" component={OnBoardingNavigator} />
+        <Stack.Screen name="Home" component={HomeNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   )
