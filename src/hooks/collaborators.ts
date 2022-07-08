@@ -43,7 +43,6 @@ export const useCollaborators = () => {
     socket.on(
       'collaboratorsLocation',
       (location: IPosition, userId: string) => {
-        console.log('collaboratorsLocation', userId)
         setNewCollaborator({ ...location, id: userId })
       },
     )

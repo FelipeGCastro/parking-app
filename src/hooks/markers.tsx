@@ -23,6 +23,7 @@ export interface IMarker {
   longitude: number
   latitude: number
   status: MarkerStatus
+  isAdmin: boolean
   createdAt: string
   updatedAt: string
 }
@@ -80,6 +81,7 @@ export const MarkersProvider = ({ children }) => {
   useEffect(() => {
     socket.on('latestSpot', (spot: IMarker) => {
       if (spot.latitude) {
+        console.log('spot', spot)
         setNewSpot(spot)
       }
     })

@@ -123,11 +123,7 @@ const Home = ({ navigation }) => {
     [collaborators],
   )
   const markersArray = useMemo(() => Object.keys(markers), [markers])
-  console.log(
-    'collaboratorsArray and markersArray',
-    collaboratorsArray.length,
-    markersArray.length,
-  )
+
   return (
     <View style={styles.container}>
       {permissionsLoading || !location?.latitude ? (

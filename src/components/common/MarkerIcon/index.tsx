@@ -39,7 +39,7 @@ const MarkerIcon = ({
       />
       <Text
         data-name="1m"
-        transform="translate(45 14)"
+        transform="translate(42 14)"
         fill={isAdmin ? variables.white_one : variables.mediumGray}
         fontSize={11}
         fontWeight={400}>

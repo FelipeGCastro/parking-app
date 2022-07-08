@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { Platform, Text, View } from 'react-native'
 import { Marker, Callout, MapEvent } from 'react-native-maps'
 import Icon from '../Icon'
+import MarkerIcon from '../MarkerIcon'
 import { styles } from './styles'
 import { useMainController } from '/hooks/mainController'
 import { IMarker, useMarkers } from '/hooks/markers'
@@ -81,23 +82,12 @@ const SpotMarker = ({ marker, setUserFocused, selectedMarker }: Props) => {
       style={styles.container}
       onPress={handlePressMarker}
       onDeselect={handleDeselectMarker}
-      icon={getPinImage(marker.status, formatDistanceLocal(marker.updatedAt))}
+      // icon={getPinImage(marker.status, formatDistanceLocal(marker.updatedAt))}
       coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}>
-      {/* <MarkerIcon color={color} time={formatDistanceLocal(marker.updatedAt)} /> */}
+      <MarkerIcon isAdmin={marker.isAdmin} color={color} time={formatDistanceLocal(marker.updatedAt)} />
       {renderOptions()}
     </Marker>
   )
 }
-/* <View style={styles.content}>
-        <View style={[styles.markerContainer, { backgroundColor: color }]}>
-          <Text style={styles.markerLetter}>P</Text>
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.textTime}>
-            {formatDistanceLocal(marker.updatedAt)}
-          </Text>
-        </View>
-      </View>
-      {renderOptions()}
-   */
+
 export default SpotMarker
