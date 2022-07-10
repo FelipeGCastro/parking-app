@@ -11,6 +11,15 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "com.luizcastro.spotyparking",
+          "enableGooglePay": false
+        }
+      ]
+    ],
     "ios": {
       "usesAppleSignIn": true,
       "bundleIdentifier": "com.luizcastro.spotyparking",

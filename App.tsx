@@ -21,6 +21,7 @@ import {
   Roboto_400Regular,
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto'
+import Stripe from '/hooks/stripe'
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false)
@@ -74,20 +75,22 @@ export default function App() {
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
       <I18n locale="en" messages={messages}>
-        <AuthProvider>
-          <ModalProvider>
-            <MainControllerProvider>
-              <MarkersProvider>
-                <UserLocationProvider>
-                  <TopBarProvider>
-                    <MainNavigator />
-                    <Toast />
-                  </TopBarProvider>
-                </UserLocationProvider>
-              </MarkersProvider>
-            </MainControllerProvider>
-          </ModalProvider>
-        </AuthProvider>
+        <Stripe>
+          <AuthProvider>
+            <ModalProvider>
+              <MainControllerProvider>
+                <MarkersProvider>
+                  <UserLocationProvider>
+                    <TopBarProvider>
+                      <MainNavigator />
+                      <Toast />
+                    </TopBarProvider>
+                  </UserLocationProvider>
+                </MarkersProvider>
+              </MainControllerProvider>
+            </ModalProvider>
+          </AuthProvider>
+        </Stripe>
       </I18n>
     </SafeAreaProvider>
   )

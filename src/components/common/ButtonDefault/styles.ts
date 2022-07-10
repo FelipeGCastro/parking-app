@@ -16,6 +16,7 @@ export const styles = StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
     flexDirection: 'row',
+    alignItems: 'center',
   },
   icon: {
     marginRight: 8,

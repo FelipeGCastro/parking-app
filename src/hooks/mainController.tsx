@@ -4,8 +4,8 @@ import { useButtons } from './buttons'
 import { IBounds } from './markers'
 
 export interface IButton {
-  title: string
-  description: string
+  title?: string
+  description?: string
   onPress:
     | 'handleAddPosition'
     | 'cancelAddSpot'
@@ -17,7 +17,7 @@ export interface IButton {
     | (() => void)
   timer?: number
   onTimerOut?: () => void
-  icon: {
+  icon?: {
     name: IconNames
     size?: number
     color?: string

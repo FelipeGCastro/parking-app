@@ -56,10 +56,12 @@ export const phrases = {
     subscriptionsOnBoardingPriceTwo: '€ 3,99',
     subscriptionsOnBoardingPriceThree: '€ 0,50',
   },
+  goToCheckout: 'Go to Checkout',
   screens: {
     home: 'Home',
     termsAndCondition: 'Terms and Condition',
     settings: 'Settings',
     instructions: 'Instructions',
+    subscriptions: 'Subscriptions',
   },
 }

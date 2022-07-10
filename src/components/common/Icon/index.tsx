@@ -8,7 +8,7 @@ import {
   MaterialCommunityIcons,
   AntDesign,
   Feather,
-  Ionicons
+  Ionicons,
 } from '@expo/vector-icons'
 
 const iconNames = {
@@ -26,7 +26,7 @@ const iconNames = {
   apple1: AntDesign,
   power: Feather,
   male: FontAwesome5,
-  ['ios-rocket-sharp']: Ionicons
+  ['ios-rocket-sharp']: Ionicons,
 } as const
 
 export type IconNames = keyof typeof iconNames

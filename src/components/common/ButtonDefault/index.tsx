@@ -101,7 +101,9 @@ const ButtonDefault = ({
         )}
         <View style={styles.textContainer}>
           <Text style={styles.textTitle}>{title}</Text>
-          <Text style={styles.textDescription}>{description}</Text>
+          {!!description && (
+            <Text style={styles.textDescription}>{description}</Text>
+          )}
         </View>
       </View>
       {timer && renderTimer()}

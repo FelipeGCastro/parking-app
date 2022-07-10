@@ -8,7 +8,7 @@ const base =
     ? `http://${manifest.debuggerHost.split(`:`).shift().concat(`:3000`)}`
     : process.env.BASE_URL
 
-;('https://parking-node-backend.herokuapp.com/')
+// ;('https://parking-node-backend.herokuapp.com/')
 
 export const socket = io(base)
 

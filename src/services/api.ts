@@ -10,6 +10,7 @@ const base =
     ? `http://${manifest.debuggerHost.split(`:`).shift().concat(`:3000`)}`
     : process.env.BASE_URL
 
+console.log('base', base)
 const api = axios.create({
   baseURL: base,
 })

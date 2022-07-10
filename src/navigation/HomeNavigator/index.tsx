@@ -1,9 +1,11 @@
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { useTranslate } from 'react-polyglot'
+import { SubscriptionsNavigator } from '../SubscriptionsNavigator'
 import { DrawerContent } from '/components/common/Drawer'
 import Home from '/screens/Home'
 import { OnBoarding } from '/screens/OnBoarding'
 import Settings from '/screens/Settings'
+import Subscriptions from '/screens/Subscriptions'
 import TermsAndCondition from '/screens/TermsAndCondition'
 const Drawer = createDrawerNavigator()
 
@@ -46,6 +48,14 @@ export const HomeNavigator = () => {
           title: t('screens.instructions'),
         }}
         component={OnBoarding}
+      />
+      <Drawer.Screen
+        name="SubscriptionsNav"
+        options={{
+          headerShown: false,
+          title: t('screens.subscriptions'),
+        }}
+        component={SubscriptionsNavigator}
       />
     </Drawer.Navigator>
   )

@@ -62,5 +62,7 @@ export const phrases = {
     termsAndCondition: 'Termos e Condições',
     settings: 'Configurações',
     instructions: 'Instruções',
+    subscriptions: 'Assinaturas',
   },
+  goToCheckout: 'Ir para Checkout',
 }
