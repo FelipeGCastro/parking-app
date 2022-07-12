@@ -14,8 +14,11 @@ interface Props {
 
 const UserMarker = ({ position }: Props) => {
   return (
-    <Marker style={styles.container} coordinate={position}>
-      <Icon name='car-side' size={30} />
+    <Marker
+      style={styles.container}
+      tracksViewChanges={false}
+      coordinate={position}>
+      <Icon name="car-side" size={30} />
     </Marker>
   )
 }

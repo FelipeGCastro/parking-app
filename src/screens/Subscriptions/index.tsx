@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslate } from 'react-polyglot'
-import { styles } from './styles'
+import stylesheet from './styles'
 import HeaderDefault from '/components/common/HeaderDefault'
 import SignInCTA from '/components/common/SignInCTA'
 import { useAuth } from '/hooks/auth'
+import { useStylesContext } from '/hooks/styles'
 import { api } from '/services/api'
 import { variables } from '/styles'
 
@@ -23,6 +24,7 @@ type GetPrices = { prices: IPrice[] }
 
 const Subscriptions = ({ navigation }) => {
   const [prices, setPrices] = useState<IPrice[]>([])
+  const [styles] = useStylesContext(stylesheet)
   const [loading, setLoading] = useState(true)
   const [subscriptionSelected, setSubscriptionSelected] = useState('')
   const insets = useSafeAreaInsets()

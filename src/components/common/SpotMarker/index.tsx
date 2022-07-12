@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Platform, Text, View } from 'react-native'
 import { Marker, Callout, MapEvent } from 'react-native-maps'
 import Icon from '../Icon'
@@ -17,6 +17,17 @@ interface Props {
 const SpotMarker = ({ marker, setUserFocused, selectedMarker }: Props) => {
   const { handleSetPositionToGo, handleDirection } = useMainController()
   const { showValidateAndInvalidate, hideValidateAndInvalidate } = useMarkers()
+  const [changed, setChanged] = useState(false)
+
+  useEffect(() => {
+    setChanged(true)
+  }, [marker.status])
+
+  useEffect(() => {
+    if (changed) {
+      setChanged(false)
+    }
+  }, [changed])
 
   const colorObj = {
     created: '#0673C6',
@@ -82,9 +93,14 @@ const SpotMarker = ({ marker, setUserFocused, selectedMarker }: Props) => {
       style={styles.container}
       onPress={handlePressMarker}
       onDeselect={handleDeselectMarker}
+      tracksViewChanges={changed}
       // icon={getPinImage(marker.status, formatDistanceLocal(marker.updatedAt))}
       coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}>
-      <MarkerIcon isAdmin={marker.isAdmin} color={color} time={formatDistanceLocal(marker.updatedAt)} />
+      <MarkerIcon
+        isAdmin={marker.isAdmin}
+        color={color}
+        time={formatDistanceLocal(marker.updatedAt)}
+      />
       {renderOptions()}
     </Marker>
   )

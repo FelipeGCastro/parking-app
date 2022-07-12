@@ -22,7 +22,7 @@ const SubscriptionsCheckout = ({ route }: Props) => {
 
   const fetchPaymentSheetParams = async () => {
     try {
-      const response = await api.post('checkout', { priceId })
+      const response = await api.post('subscription/checkout', { priceId })
       const { setupIntent, ephemeralKey, customer } = response.data
       setClientSecret(setupIntent)
       return {

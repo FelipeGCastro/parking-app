@@ -14,7 +14,6 @@ import { MainNavigator } from '/navigation/MainNavigator'
 import { ModalProvider } from '/hooks/modal'
 import { AuthProvider } from '/hooks/auth'
 import * as SplashScreen from 'expo-splash-screen'
-import { View } from 'react-native'
 import * as Font from 'expo-font'
 import {
   Roboto_300Light_Italic,
@@ -22,6 +21,7 @@ import {
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto'
 import Stripe from '/hooks/stripe'
+import { StylesProvider } from '/hooks/styles'
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false)
@@ -74,24 +74,26 @@ export default function App() {
 
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
-      <I18n locale="en" messages={messages}>
-        <Stripe>
-          <AuthProvider>
-            <ModalProvider>
-              <MainControllerProvider>
-                <MarkersProvider>
-                  <UserLocationProvider>
-                    <TopBarProvider>
-                      <MainNavigator />
-                      <Toast />
-                    </TopBarProvider>
-                  </UserLocationProvider>
-                </MarkersProvider>
-              </MainControllerProvider>
-            </ModalProvider>
-          </AuthProvider>
-        </Stripe>
-      </I18n>
+      <StylesProvider>
+        <I18n locale="en" messages={messages}>
+          <Stripe>
+            <AuthProvider>
+              <ModalProvider>
+                <MainControllerProvider>
+                  <MarkersProvider>
+                    <UserLocationProvider>
+                      <TopBarProvider>
+                        <MainNavigator />
+                        <Toast />
+                      </TopBarProvider>
+                    </UserLocationProvider>
+                  </MarkersProvider>
+                </MainControllerProvider>
+              </ModalProvider>
+            </AuthProvider>
+          </Stripe>
+        </I18n>
+      </StylesProvider>
     </SafeAreaProvider>
   )
 }

@@ -25,27 +25,23 @@ export function DrawerContent(props: DrawerContentComponentProps) {
   }
 
   const handleSignOut = () => {
-    Alert.alert(
-      t('signOutTitle'),
-      t('signOutDescription'),
-      [
-        {          
-          text: t('noSignOut'),
-          onPress: () => {},
-          style: 'cancel'
-    },
-        {
-          text: t('yesSignOut'),
-          onPress: signOut,
-          style: 'default'
-        }
-      ]
-    )
+    Alert.alert(t('signOutTitle'), t('signOutDescription'), [
+      {
+        text: t('noSignOut'),
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: t('yesSignOut'),
+        onPress: signOut,
+        style: 'default',
+      },
+    ])
   }
 
   const renderUser = () => (
     <View style={styles.userWrapper}>
-      <View  style={styles.emptyView}/>
+      <View style={styles.emptyView} />
       <View style={styles.userInfoContainer}>
         <View style={styles.userPhoto}>
           <View style={styles.imageContainer}>
@@ -56,8 +52,8 @@ export function DrawerContent(props: DrawerContentComponentProps) {
           <Text style={styles.userText}>{user.name}</Text>
         </View>
       </View>
-      <TouchableOpacity onPress={handleSignOut}  style={styles.signOutButton} >
-        <Icon name='power' size={25} color='#fff' />
+      <TouchableOpacity onPress={handleSignOut} style={styles.signOutButton}>
+        <Icon name="power" size={25} color="#fff" />
       </TouchableOpacity>
     </View>
   )

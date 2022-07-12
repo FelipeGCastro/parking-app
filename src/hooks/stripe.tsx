@@ -9,7 +9,7 @@ const Stripe = ({ children }) => {
 
   const fetchPublishableKey = async () => {
     try {
-      const result = await api.get('stripekey') // fetch key from your server here
+      const result = await api.get('stripe/key') // fetch key from your server here
       setPublishableKey(result.data.key)
     } catch (error) {
       console.log('error:', error.message)

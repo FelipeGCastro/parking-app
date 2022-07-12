@@ -1,6 +1,7 @@
-import { Dimensions } from 'react-native'
-
+import { Dimensions, Platform } from 'react-native'
+import { EdgeInsets } from 'react-native-safe-area-context'
 const screenSize = Dimensions.get('screen')
+
 export const variables = {
   screenWidth: screenSize.width,
   screenHeight: screenSize.height,
@@ -24,4 +25,49 @@ export const variables = {
   radiusMedium: 12,
   radiusBig: 16,
   radiusReallyBig: 24,
+}
+
+export const sizeVariables = (safeAreaInsets: EdgeInsets) => {
+  const screenSize = Dimensions.get('screen')
+  const screenWidth = screenSize.width
+  const screenHeight = screenSize.height
+
+  const scale = Platform.OS === 'android' ? screenSize.scale : 1
+
+  const topSafeArea = safeAreaInsets.top / scale
+  const rightSafeArea = safeAreaInsets.right / scale
+  const bottomSafeArea = safeAreaInsets.bottom / scale
+  const leftSafeArea = safeAreaInsets.left / scale
+  const safeAreaHeight = topSafeArea + bottomSafeArea
+  const bottomBarHeight = 50
+  const topHeaderHeight = 56
+
+  const contentHeight = screenHeight - safeAreaHeight
+  const contentWidth = screenWidth - (rightSafeArea + leftSafeArea)
+
+  return {
+    topSafeArea,
+    rightSafeArea,
+    bottomSafeArea,
+    leftSafeArea,
+    bottomBarHeight,
+    topHeaderHeight,
+    contentHeight,
+    contentWidth,
+    screenSize,
+    screenWidth,
+    screenHeight,
+  }
+}
+
+export const allVariables = {
+  ...variables,
+  ...sizeVariables({
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  }),
+  // ...lightVariables,
+  // ...darkVariables,
 }
