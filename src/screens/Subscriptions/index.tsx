@@ -1,102 +1,58 @@
-import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTranslate } from 'react-polyglot'
+import { Stripe } from 'stripe'
+import React, { useCallback, useEffect, useState } from 'react'
+import { ActivityIndicator, View } from 'react-native'
 import stylesheet from './styles'
 import HeaderDefault from '/components/common/HeaderDefault'
 import SignInCTA from '/components/common/SignInCTA'
 import { useAuth } from '/hooks/auth'
+import usePolyglot from '/hooks/polyglot'
 import { useStylesContext } from '/hooks/styles'
 import { api } from '/services/api'
 import { variables } from '/styles'
-
-interface IPrice {
-  id: string
-  currency: string
-  nickname?: string
-  recurring: {
-    interval: 'month' | 'year' | 'week' | 'day'
-    interval_count: 1
-  }
-  unit_amount: 349
-}
-type GetPrices = { prices: IPrice[] }
+import SubscriptionsList from '../SubscriptionsList'
+import SubscriptionDetails from '../SubscriptionDetails'
 
 const Subscriptions = ({ navigation }) => {
-  const [prices, setPrices] = useState<IPrice[]>([])
   const [styles] = useStylesContext(stylesheet)
   const [loading, setLoading] = useState(true)
-  const [subscriptionSelected, setSubscriptionSelected] = useState('')
-  const insets = useSafeAreaInsets()
-  const t = useTranslate()
+  const [subscription, setSubscription] = useState({} as Stripe.Subscription)
+  const [hasSubscription, setHasSubscription] = useState(true)
+  const t = usePolyglot('subscriptions')
   const { user } = useAuth()
 
-  const getPrice = async () => {
+  const getSubscription = useCallback(async () => {
     try {
-      const result = await api.get<GetPrices>('prices')
-      setPrices(result.data.prices)
+      console.log('getSubscription')
+      const response = await api.get<{ subscription: Stripe.Subscription }>(
+        'subscription',
+      )
+      console.log('response')
+      const subs = response.data?.subscription
+      if (
+        !!subs &&
+        (subs.status === 'active' ||
+          subs.status === 'incomplete' ||
+          subs.status === 'trialing')
+      ) {
+        setSubscription(response.data.subscription)
+      } else {
+        setHasSubscription(false)
+      }
       setLoading(false)
     } catch (error) {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    if (!prices.length) {
-      getPrice()
+      console.log('ERROR:', error)
     }
   }, [])
 
-  const handleSelectSubscription = (id: string) => {
-    setSubscriptionSelected(prev => (prev === id ? '' : id))
-  }
-
-  const handleGoToCheckout = () => {
-    navigation.navigate('SubscriptionsCheckout', {
-      priceId: subscriptionSelected,
-    })
-  }
-
-  const renderSubscription = (item: IPrice, index: number) => {
-    const selected = item.id === subscriptionSelected
-    return (
-      <TouchableOpacity
-        activeOpacity={0.6}
-        key={item.id}
-        onPress={() => handleSelectSubscription(item.id)}
-        style={[
-          styles.subscriptionContainer,
-          selected && styles.subscriptionSelected,
-        ]}>
-        <View style={styles.subscriptionHeader}>
-          <Text style={styles.periodText}>MONTHLY</Text>
-          <View style={[styles.dotContainer, selected && styles.dotSelected]}>
-            <View style={styles.dotInner} />
-          </View>
-        </View>
-        <Text style={styles.priceText}>€3,49/month</Text>
-        <View style={styles.trialContainer}>
-          <Text style={styles.trialText}>15 Days Free Trial</Text>
-        </View>
-        <Text style={styles.footerText}>
-          then €{item.unit_amount / 100} per month. Cancel anytime.
-        </Text>
-      </TouchableOpacity>
-    )
-  }
+  useEffect(() => {
+    if (user.id && !subscription.id) {
+      getSubscription()
+    }
+  }, [])
 
   if (!user.id) {
     return (
-      <View
-        style={[
-          styles.container,
-          {
-            paddingBottom: insets.bottom + variables.marginVertical / 2,
-            paddingTop: insets.top,
-            justifyContent: 'space-between',
-            alignItems: 'stretch',
-          },
-        ]}>
+      <View style={styles.container}>
         <HeaderDefault title="GOLD" onPress={navigation.toggleDrawer} />
         <SignInCTA />
         <View></View>
@@ -104,33 +60,23 @@ const Subscriptions = ({ navigation }) => {
     )
   }
 
-  return (
-    <View
-      style={[
-        styles.container,
-        {
-          paddingBottom: insets.bottom + variables.marginVertical / 2,
-          paddingTop: insets.top,
-        },
-      ]}>
-      {loading ? (
-        <ActivityIndicator size="large" color={variables.regularColor} />
-      ) : (
-        <View style={styles.subscriptionList}>
-          <HeaderDefault title="GOLD" onPress={navigation.toggleDrawer} />
-          {prices.map(renderSubscription)}
-        </View>
-      )}
-      <TouchableOpacity
-        disabled={!subscriptionSelected}
-        onPress={handleGoToCheckout}
-        style={[
-          styles.buttonContainer,
-          !subscriptionSelected && styles.buttonDisabled,
-        ]}>
-        <Text style={styles.buttonText}>{t('goToCheckout')}</Text>
-      </TouchableOpacity>
+  const renderScreen = () => {
+    return hasSubscription ? (
+      <SubscriptionDetails
+        subscription={subscription}
+        navigation={navigation}
+      />
+    ) : (
+      <SubscriptionsList navigation={navigation} />
+    )
+  }
+
+  return loading ? (
+    <View style={styles.container}>
+      <ActivityIndicator size="large" color={variables.regularColor} />
     </View>
+  ) : (
+    renderScreen()
   )
 }
 

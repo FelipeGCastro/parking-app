@@ -65,4 +65,13 @@ export const phrases = {
     subscriptions: 'Assinaturas',
   },
   goToCheckout: 'Ir para Checkout',
+  subscriptionsList: {
+    freeTrialText: '15 Dias Teste Grátis',
+    subscriptionFooter: 'depois {price} por mês. Cancele a qualquer momento.',
+    goToCheckout: 'Ir Para Checkout',
+  },
+  signInCTA: {
+    title: 'Ops! você precisa estar logado!',
+    signIn: 'Entrar',
+  },
 }
