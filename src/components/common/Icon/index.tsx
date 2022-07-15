@@ -22,11 +22,14 @@ const iconNames = {
   ['my-location']: MaterialIcons,
   menu: MaterialIcons,
   ['close-circle-outline']: MaterialCommunityIcons,
+  ['check-decagram']: MaterialCommunityIcons,
+  ['close-thick']: MaterialCommunityIcons,
   google: AntDesign,
   apple1: AntDesign,
   power: Feather,
   male: FontAwesome5,
   ['ios-rocket-sharp']: Ionicons,
+  ['arrow-back-sharp']: Ionicons,
 } as const
 
 export type IconNames = keyof typeof iconNames

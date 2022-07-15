@@ -1,17 +1,26 @@
 import React from 'react'
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
-import Icon from '../Icon'
+import Icon, { IconNames } from '../Icon'
 import { text, variables } from '/styles'
 
 interface Props {
-  title: string
-  onPress: () => void
+  title?: string
+  leftButtonPress: () => void
+  leftIcon?: {
+    iconName: IconNames
+    size?: number
+    color?: string
+  }
 }
-const HeaderDefault = ({ title, onPress }: Props) => {
+const HeaderDefault = ({ title, leftButtonPress, leftIcon }: Props) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.menuButton} onPress={onPress}>
-        <Icon name="menu" color={variables.secondaryTextColor} />
+      <TouchableOpacity style={styles.menuButton} onPress={leftButtonPress}>
+        <Icon
+          name={leftIcon?.iconName || 'menu'}
+          size={leftIcon?.size}
+          color={leftIcon?.color || variables.secondaryTextColor}
+        />
       </TouchableOpacity>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.fakeView} />

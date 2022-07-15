@@ -47,7 +47,7 @@ const SubscriptionDetails = ({ navigation, subscription }: Props) => {
   }
   return (
     <View style={styles.container}>
-      <HeaderDefault title="GOLD" onPress={navigation.toggleDrawer} />
+      <HeaderDefault title="GOLD" leftButtonPress={navigation.toggleDrawer} />
     </View>
   )
 }

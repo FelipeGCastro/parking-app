@@ -1,6 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack'
-import Subscriptions from '/screens/Subscriptions'
-import SubscriptionsCheckout from '/screens/SubscriptionsCheckout'
+import Subscriptions from '/screens/SubscriptionFlow/Subscriptions'
+import SubscriptionCheckout from '/screens/SubscriptionFlow/SubscriptionCheckout'
+import SubscriptionPayment from '/screens/SubscriptionFlow/SubscriptionsPayment'
 
 const Stack = createStackNavigator()
 
@@ -9,8 +10,12 @@ export const SubscriptionsNavigator = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Subscriptions" component={Subscriptions} />
       <Stack.Screen
-        name="SubscriptionsCheckout"
-        component={SubscriptionsCheckout}
+        name="SubscriptionCheckout"
+        component={SubscriptionCheckout}
+      />
+      <Stack.Screen
+        name="SubscriptionPayment"
+        component={SubscriptionPayment}
       />
     </Stack.Navigator>
   )

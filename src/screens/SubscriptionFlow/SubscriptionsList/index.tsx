@@ -1,33 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
+import Stripe from 'stripe'
 import stylesheet from './styles'
+import ButtonAction from '/components/common/ButtonAction'
 import HeaderDefault from '/components/common/HeaderDefault'
-import SignInCTA from '/components/common/SignInCTA'
-import { useAuth } from '/hooks/auth'
 import usePolyglot from '/hooks/polyglot'
 import { useStylesContext } from '/hooks/styles'
 import { api } from '/services/api'
 import { variables } from '/styles'
 
-interface IPrice {
-  id: string
-  currency: string
-  nickname?: string
-  recurring: {
-    interval: 'month' | 'year' | 'week' | 'day'
-    interval_count: 1
-  }
-  unit_amount: 349
-}
-type GetPrices = { prices: IPrice[] }
+type GetPrices = { prices: Stripe.Price[] }
 
 const SubscriptionsList = ({ navigation }) => {
-  const [prices, setPrices] = useState<IPrice[]>([])
+  const [prices, setPrices] = useState<Stripe.Price[]>([])
   const [styles] = useStylesContext(stylesheet)
   const [loading, setLoading] = useState(true)
   const [subscriptionSelected, setSubscriptionSelected] = useState('')
   const t = usePolyglot('subscriptionsList')
-  const { user } = useAuth()
 
   const getPrice = async () => {
     try {
@@ -50,12 +39,13 @@ const SubscriptionsList = ({ navigation }) => {
   }
 
   const handleGoToCheckout = () => {
-    navigation.navigate('SubscriptionsCheckout', {
-      priceId: subscriptionSelected,
+    const price = prices.find(item => item.id === subscriptionSelected)
+    navigation.navigate('SubscriptionCheckout', {
+      price,
     })
   }
 
-  const renderSubscription = (item: IPrice, index: number) => {
+  const renderSubscription = (item: Stripe.Price, index: number) => {
     const selected = item.id === subscriptionSelected
     return (
       <TouchableOpacity
@@ -72,24 +62,16 @@ const SubscriptionsList = ({ navigation }) => {
             <View style={styles.dotInner} />
           </View>
         </View>
-        <Text style={styles.priceText}>€3,49/month</Text>
+        <Text style={styles.priceText}>
+          {`€${item.unit_amount / 100}`}/{item.recurring.interval}
+        </Text>
         <View style={styles.trialContainer}>
           <Text style={styles.trialText}>{t('freeTrialText')}</Text>
         </View>
         <Text style={styles.footerText}>
-          {t('subscriptionFooter', { price: `€{item.unit_amount / 100}` })}
+          {t('subscriptionFooter', { price: `€${item.unit_amount / 100}` })}
         </Text>
       </TouchableOpacity>
-    )
-  }
-
-  if (!user.id) {
-    return (
-      <View style={styles.container}>
-        <HeaderDefault title="GOLD" onPress={navigation.toggleDrawer} />
-        <SignInCTA />
-        <View></View>
-      </View>
     )
   }
 
@@ -99,19 +81,18 @@ const SubscriptionsList = ({ navigation }) => {
         <ActivityIndicator size="large" color={variables.regularColor} />
       ) : (
         <View style={styles.subscriptionList}>
-          <HeaderDefault title="GOLD" onPress={navigation.toggleDrawer} />
+          <HeaderDefault
+            title="GOLD"
+            leftButtonPress={navigation.toggleDrawer}
+          />
           {prices.map(renderSubscription)}
         </View>
       )}
-      <TouchableOpacity
+      <ButtonAction
         disabled={!subscriptionSelected}
         onPress={handleGoToCheckout}
-        style={[
-          styles.buttonContainer,
-          !subscriptionSelected && styles.buttonDisabled,
-        ]}>
-        <Text style={styles.buttonText}>{t('goToCheckout')}</Text>
-      </TouchableOpacity>
+        text={t('goToCheckout')}
+      />
     </View>
   )
 }

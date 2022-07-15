@@ -83,21 +83,6 @@ const styles = (variables: AllVariablesType) =>
         ...text.bodySRegular,
         color: variables.secondaryTextColor,
       },
-      buttonDisabled: {
-        opacity: 0.3,
-      },
-      buttonContainer: {
-        paddingVertical: variables.marginVertical,
-        paddingHorizontal: variables.marginHorizontal,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: variables.mediumGray,
-        borderRadius: variables.radiusSmall,
-      },
-      buttonText: {
-        ...text.bodyMRegular,
-        color: variables.white_one,
-      },
     },
   })
 

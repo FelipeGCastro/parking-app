@@ -6,6 +6,18 @@ const fonts = {
   textBold: 'Roboto_700Bold',
 }
 export const text = StyleSheet.create({
+  headingXL: {
+    fontFamily: fonts.textBold,
+    fontSize: 50,
+  },
+  headingXLRegular: {
+    fontFamily: fonts.textRegular,
+    fontSize: 50,
+  },
+  headingXLItalic: {
+    fontFamily: fonts.textLightItalic,
+    fontSize: 50,
+  },
   heading1: {
     fontFamily: fonts.textBold,
     fontSize: 35,
@@ -33,6 +45,10 @@ export const text = StyleSheet.create({
   bodyXLRegular: {
     fontFamily: fonts.textRegular,
     fontSize: 22,
+  },
+  bodyLItalic: {
+    fontFamily: fonts.textLightItalic,
+    fontSize: 18,
   },
   bodyLMedium: {
     fontFamily: fonts.textBold,

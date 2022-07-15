@@ -66,8 +66,11 @@ export const phrases = {
   },
   subscriptionsList: {
     freeTrialText: '15 Days Free Trial',
-    subscriptionFooter: 'then {price} per month. Cancel anytime.',
+    subscriptionFooter: 'then %{price} per month. Cancel anytime.',
     goToCheckout: 'Go to Checkout',
+  },
+  subscriptionCheckout: {
+    subscribe: 'Subscribe',
   },
   signInCTA: {
     title: 'Ops! you need to be signed.',

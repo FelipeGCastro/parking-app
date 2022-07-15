@@ -5,7 +5,6 @@ import { DrawerContent } from '/components/common/Drawer'
 import Home from '/screens/Home'
 import { OnBoarding } from '/screens/OnBoarding'
 import Settings from '/screens/Settings'
-import Subscriptions from '/screens/Subscriptions'
 import TermsAndCondition from '/screens/TermsAndCondition'
 const Drawer = createDrawerNavigator()
 

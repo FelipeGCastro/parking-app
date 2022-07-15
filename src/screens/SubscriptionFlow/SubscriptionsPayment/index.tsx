@@ -1,6 +1,6 @@
 import { PaymentSheetError, useStripe } from '@stripe/stripe-react-native'
 import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Alert, Text, View } from 'react-native'
+import { ActivityIndicator, Alert, View } from 'react-native'
 import { styles } from './styles'
 import ButtonDefault from '/components/common/ButtonDefault'
 import { api } from '/services/api'
@@ -9,11 +9,11 @@ import { variables } from '/styles'
 import { StackScreenProps } from '@react-navigation/stack'
 
 type RootStackParamList = {
-  SubscriptionsCheckout: { priceId: string }
+  SubscriptionPayment: { priceId: string }
 }
-type Props = StackScreenProps<RootStackParamList, 'SubscriptionsCheckout'>
+type Props = StackScreenProps<RootStackParamList, 'SubscriptionPayment'>
 
-const SubscriptionsCheckout = ({ route }: Props) => {
+const SubscriptionPayment = ({ route }: Props) => {
   const priceId = route.params?.priceId
   const { initPaymentSheet, presentPaymentSheet } = useStripe()
   const [paymentSheetEnabled, setPaymentSheetEnabled] = useState(false)
@@ -106,4 +106,4 @@ const SubscriptionsCheckout = ({ route }: Props) => {
   )
 }
 
-export default SubscriptionsCheckout
+export default SubscriptionPayment

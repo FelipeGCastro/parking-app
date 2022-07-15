@@ -70,6 +70,9 @@ export const phrases = {
     subscriptionFooter: 'depois {price} por mês. Cancele a qualquer momento.',
     goToCheckout: 'Ir Para Checkout',
   },
+  subscriptionCheckout: {
+    subscribe: 'Inscrever-se',
+  },
   signInCTA: {
     title: 'Ops! você precisa estar logado!',
     signIn: 'Entrar',

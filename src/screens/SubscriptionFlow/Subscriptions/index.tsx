@@ -53,7 +53,7 @@ const Subscriptions = ({ navigation }) => {
   if (!user.id) {
     return (
       <View style={styles.container}>
-        <HeaderDefault title="GOLD" onPress={navigation.toggleDrawer} />
+        <HeaderDefault title="GOLD" leftButtonPress={navigation.toggleDrawer} />
         <SignInCTA />
         <View></View>
       </View>
