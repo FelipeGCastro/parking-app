@@ -11,19 +11,35 @@ import { api } from '/services/api'
 import { variables } from '/styles'
 import SubscriptionsList from '../SubscriptionsList'
 import SubscriptionDetails from '../SubscriptionDetails'
+import { DrawerScreenProps } from '@react-navigation/drawer'
+import { StripeSubscription } from '../SubscriptionDetails/row'
 
-const Subscriptions = ({ navigation }) => {
+type Params = {
+  Subscriptions: undefined
+}
+
+type Props = DrawerScreenProps<Params, 'Subscriptions'>
+
+const Subscriptions = ({ navigation }: Props) => {
   const [styles] = useStylesContext(stylesheet)
   const [loading, setLoading] = useState(true)
-  const [subscription, setSubscription] = useState({} as Stripe.Subscription)
+  const [subscription, setSubscription] = useState({} as StripeSubscription)
   const [hasSubscription, setHasSubscription] = useState(true)
   const t = usePolyglot('subscriptions')
   const { user } = useAuth()
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (user.id) {
+        getSubscription()
+      }
+    })
+    return unsubscribe
+  }, [])
+
   const getSubscription = useCallback(async () => {
     try {
-      console.log('getSubscription')
-      const response = await api.get<{ subscription: Stripe.Subscription }>(
+      const response = await api.get<{ subscription: StripeSubscription }>(
         'subscription',
       )
       console.log('response')
@@ -44,12 +60,6 @@ const Subscriptions = ({ navigation }) => {
     }
   }, [])
 
-  useEffect(() => {
-    if (user.id && !subscription.id) {
-      getSubscription()
-    }
-  }, [])
-
   if (!user.id) {
     return (
       <View style={styles.container}>
@@ -65,6 +75,7 @@ const Subscriptions = ({ navigation }) => {
       <SubscriptionDetails
         subscription={subscription}
         navigation={navigation}
+        getSubscription={getSubscription}
       />
     ) : (
       <SubscriptionsList navigation={navigation} />

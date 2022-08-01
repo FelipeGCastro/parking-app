@@ -9,7 +9,7 @@ import { UserLocationProvider } from '/hooks/location'
 import { MarkersProvider } from '/hooks/markers'
 import { I18n } from 'react-polyglot'
 import { phrases as en } from '/translations/en'
-import { phrases as pt } from '/translations/en'
+import { phrases as pt } from '/translations/pt'
 import { MainNavigator } from '/navigation/MainNavigator'
 import { ModalProvider } from '/hooks/modal'
 import { AuthProvider } from '/hooks/auth'
@@ -22,9 +22,41 @@ import {
 } from '@expo-google-fonts/roboto'
 import Stripe from '/hooks/stripe'
 import { StylesProvider } from '/hooks/styles'
+import { useStripe } from '@stripe/stripe-react-native'
+import * as Linking from 'expo-linking'
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false)
+  const { handleURLCallback } = useStripe()
+
+  const handleDeepLink = useCallback(
+    async (url: string | null) => {
+      if (url && url.includes('safepay')) {
+        await handleURLCallback(url)
+        // Add extra handling here as you see fit
+      }
+    },
+    [handleURLCallback],
+  )
+
+  useEffect(() => {
+    const getUrlAsync = async () => {
+      const initialUrl = await Linking.getInitialURL()
+      handleDeepLink(initialUrl)
+    }
+
+    getUrlAsync()
+
+    const deepLinkListener = Linking.addEventListener(
+      'url',
+      (event: { url: string }) => {
+        handleDeepLink(event.url)
+      },
+    )
+
+    return () => deepLinkListener.remove()
+  }, [handleDeepLink])
+
   useEffect(() => {
     async function prepare() {
       try {
@@ -69,7 +101,6 @@ export default function App() {
     'pt-BR': en,
   }
   const locale = Localization.locale
-
   const messages = translations[locale] || translations.en
 
   return (

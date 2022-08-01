@@ -48,14 +48,16 @@ export const HomeNavigator = () => {
         }}
         component={OnBoarding}
       />
-      <Drawer.Screen
-        name="SubscriptionsNav"
-        options={{
-          headerShown: false,
-          title: t('screens.subscriptions'),
-        }}
-        component={SubscriptionsNavigator}
-      />
+      {process.env.ENV === 'development' && (
+        <Drawer.Screen
+          name="SubscriptionsNav"
+          options={{
+            headerShown: false,
+            title: t('screens.subscriptions'),
+          }}
+          component={SubscriptionsNavigator}
+        />
+      )}
     </Drawer.Navigator>
   )
 }

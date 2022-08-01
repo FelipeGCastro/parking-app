@@ -11,7 +11,7 @@ const styles = (variables: AllVariablesType) =>
         justifyContent: 'space-between',
         paddingHorizontal: variables.marginHorizontal,
         paddingBottom: variables.bottomSafeArea + variables.marginVertical / 2,
-        paddingTop: variables.topSafeArea,
+        paddingTop: variables.topSafeArea + variables.marginVertical,
       },
       subscriptionList: {
         marginTop: variables.marginVertical,

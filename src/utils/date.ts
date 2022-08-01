@@ -1,4 +1,4 @@
-import { formatDistanceToNowStrict } from 'date-fns'
+import { format, formatDistanceToNowStrict, fromUnixTime } from 'date-fns'
 import localeBr from 'date-fns/locale/pt-BR'
 
 export const formatDistanceLocal = (date: string) => {
@@ -45,4 +45,8 @@ export const formatDistanceLocal = (date: string) => {
       formatDistance,
     },
   })
+}
+
+export const formatTimestamp = (timestamp: number) => {
+  return format(fromUnixTime(timestamp), 'dd LLL yyyy')
 }

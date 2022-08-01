@@ -7,8 +7,8 @@ const styles = (variables: AllVariablesType) =>
       container: {
         flexGrow: 1,
         backgroundColor: variables.white_two,
-        paddingTop: variables.topSafeArea + variables.marginVertical / 2,
-        paddingBottom: variables.bottomSafeArea,
+        paddingTop: variables.topSafeArea + variables.marginVertical,
+        paddingBottom: variables.bottomSafeArea + variables.marginVertical,
         justifyContent: 'space-between',
         paddingHorizontal: variables.marginHorizontal,
       },
@@ -89,10 +89,10 @@ const styles = (variables: AllVariablesType) =>
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: variables.marginHorizontal / 2,
-        paddingRight: variables.marginHorizontal,
+        paddingRight: variables.marginHorizontal / 1.5,
       },
       benefitText: {
-        ...text.bodyLRegular,
+        ...text.bodyMRegular,
         color: variables.primaryTextColor,
         marginLeft: variables.marginHorizontal / 2,
       },

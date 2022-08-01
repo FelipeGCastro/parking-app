@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { StripeProvider } from '@stripe/stripe-react-native'
 import { api } from '/services/api'
+import { Platform } from 'react-native'
 
 // import { Container } from './styles';
-
+const isAndroid = Platform.OS === 'android'
 const Stripe = ({ children }) => {
   const [publishableKey, setPublishableKey] = useState('')
 
@@ -23,7 +24,10 @@ const Stripe = ({ children }) => {
   return (
     <StripeProvider
       publishableKey={publishableKey}
-      merchantIdentifier="merchant.identifier">
+      urlScheme={
+        isAndroid ? 'com.spotyparking://' : 'com.luizcastro.spotyparking://'
+      }
+      merchantIdentifier="merchant.com.spotyparking">
       {children}
     </StripeProvider>
   )

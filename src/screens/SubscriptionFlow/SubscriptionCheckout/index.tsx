@@ -6,7 +6,6 @@ import stylesheets from './styles'
 import { DrawerScreenProps } from '@react-navigation/drawer'
 import Stripe from 'stripe'
 import ButtonAction from '/components/common/ButtonAction'
-import HeaderDefault from '/components/common/HeaderDefault'
 import logo from 'assets/logo.png'
 import Icon from '/components/common/Icon'
 import { variables } from '/styles'
@@ -31,7 +30,7 @@ const SubscriptionCheckout = ({ navigation, route }: Props) => {
   const renderBenefitItem = (text: string) => (
     <View style={styles.benefitItem}>
       <Icon name="check-decagram" color={variables.activeColor} />
-      <Text style={styles.benefitText}>{text}</Text>
+      <Text style={styles.benefitText}>{t(text)}</Text>
     </View>
   )
   return (
@@ -62,13 +61,13 @@ const SubscriptionCheckout = ({ navigation, route }: Props) => {
         <View style={styles.cardContainer}>
           <View style={styles.priceContainer}>
             <Text style={styles.priceSymbol}>€</Text>
-            <Text style={styles.priceText}>499</Text>
+            <Text style={styles.priceText}>{`${price.unit_amount / 100}`}</Text>
           </View>
           <View style={styles.benefitsContainer}>
-            {renderBenefitItem("User's Pins")}
-            {renderBenefitItem("Collaborator's Pins")}
-            {renderBenefitItem('Cancel anytime')}
-            {renderBenefitItem('14 trial')}
+            {renderBenefitItem('userPins')}
+            {renderBenefitItem('collaboratorPins')}
+            {renderBenefitItem('cancelAnytime')}
+            {renderBenefitItem('fourteenDaysTrial')}
           </View>
         </View>
       </View>

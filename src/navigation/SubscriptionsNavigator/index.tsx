@@ -15,6 +15,9 @@ export const SubscriptionsNavigator = () => {
       />
       <Stack.Screen
         name="SubscriptionPayment"
+        options={{
+          gestureEnabled: false,
+        }}
         component={SubscriptionPayment}
       />
     </Stack.Navigator>
